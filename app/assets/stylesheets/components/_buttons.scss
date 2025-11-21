@@ -1,60 +1,4 @@
-// .btn-1-nav {
-//   background-color: $blue !important;
-//   color: $white !important;
-//   opacity: 1 !important;
-//   visibility: visible !important;
-//   border: none !important;
-//   border-radius: 12px;
-//   padding: 8px;
-
-//   &:hover {
-//     background-color: darken($blue, 10%) !important;
-//   }
-// }
-
-// .btn-1 {
-//   background-color: $blue !important;
-//   color: $white !important;
-//   border: none !important;
-//   border-radius: 12px;
-//   padding: 10px 32px;
-//   font-size: 22px;
-//   font-weight: 400;
-//   text-align: center;
-//   transition: background-color 0.3s ease;
-//   cursor: pointer;
-
-//   &:hover {
-//     background-color: darken($blue, 10%) !important;
-//   }
-// }
-
-
-// .btn-g-w {
-//   display: inline-block;
-//   padding: 10px 32px;
-//   color: #fff;
-//   background: transparent;
-//   border: 2px solid #fff;
-//   border-radius: 12px;
-//   font-size: 22px;
-//   font-weight: 400;
-//   text-align: center;
-//   text-decoration: none;
-//   transition: background 0.3s, color 0.3s;
-//   cursor: pointer;
-// }
-
-// .btn-ghost:hover,
-// .btn-ghost:focus {
-//   background: rgba(255,255,255,0.12);
-//   color: #fff;
-//   outline: none;
-//   border: 2px solid #fff;
-// }
-
 .custom-btn {
-  border-radius: 15px;
   padding: 12px 38px;
   font-size: 22px;
   font-weight: 400;
@@ -70,5 +14,26 @@
 .nav-btn {
   padding: 8px 18px;
   font-size: 16px;
-  border-radius: 10px;
+}
+
+.outline-d-btn {
+  border: 2px solid;
+}
+
+// Custom change fill color inside `btn-outline-dark` button.
+// .btn-outline-dark:hover,
+// .btn-outline-dark:focus {
+//   background-color: #e9e8e8;
+//   color: #212529;
+//   border-color: #212529;
+// }
+
+// Github icon link hover grow effect.
+.github-btn i {
+  transition: transform 0.3s cubic-bezier(0.2,0.84,0.5,1);
+}
+
+.github-btn:hover i,
+.github-btn:focus i {
+  transform: scale(1.25); // Icon grows to 125%
 }

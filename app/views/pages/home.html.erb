@@ -1,25 +1,63 @@
-<div class="hero-banner d-flex justify-content-center align-items-center text-center">
-  <div class="container">
-    <div>
+<!-- Hero banner -->
+<section id="hero-banner" class="d-flex justify-content-center align-items-start text-center">
+  <div class="container mt-5">
+    <div class="mt-5">
       <h1 class="text-light">
         Hi,<br>
         I'm Louis,<br>
         web developer
       </h1>
-      <hr>
       <h2 class="gray">Fullstack Developer / Ruby-on-Rails</h2>
-      <%= link_to "Contact Me", "#", class: "btn btn-primary btn-lg custom-btn" %>
-      <%= link_to "My Projects", "#", class: "btn btn-outline-light btn-lg custom-btn" %>
+      <div class="mt-4">
+        <%= link_to "Contact Me", "#", class: "btn btn-primary btn-lg custom-btn rounded-5" %>
+        <%= link_to "My Projects", "#featured-projects", class: "btn btn-outline-light btn-lg rounded-5 custom-btn" %>
+      </div>
     </div>
+    <a href="#featured-projects" class="chevron-scroll d-flex flex-column align-items-center justify-content-center scroll">
+      <i class="fas fa-angle-double-down chevron"></i>
+    </a>
   </div>
-</div>
+</section>
 <div class="container">
-  <h2>Featured projects</h2>
-  <div class="row">
-    <div class="card col-12 col-md-6 col-lg-4">
-      <%= image_tag "japan-temple-2", alt: "Japan temple" %>
-      <h3>Japan App</h3>
-      <p>Awesome app about japan's temples, history, and location.</p>
+  <!-- Featured Projects -->
+  <section id="featured-projects">
+    <div class="row">
+      <h2 class="mt-5 mb-4">Featured projects</h2>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-project shadow-sm rounded-4 mb-4">
+          <div class="card-body">
+            <h3 class="card-title fw-bold mb-2">Sipfolio</h3>
+            <p class="card-text small text-muted mb-3">
+              A social cocktail app where users discover, create, and share AI-enhanced recipes, with gamified rewards to drive engagement.
+            </p>
+            <%= image_tag "dark-waves", alt: "Sipfolio project screenshot", class: "img-fluid rounded-4 mb-3" %>
+            <p class="mb-3 text-secondary text-tech-stack">
+              Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              <%= link_to "https://github.com/chifury/rails-mister-cocktail", class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
+                <i class="fa-brands fa-github fs-4 text-dark"></i>
+              <% end %>
+              <%= link_to "Live Demo", "https://sipfolio.rocks", class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
+  <!-- Demo day -->
+  <section id="demo-day">
+  </section>
+  <!-- Technologies and skills -->
+  <section id="technology-and-skills">
+  </section>
+  <!-- Certifications -->
+  <section id="certifications">
+  </section>
+  <!-- About me -->
+  <section id="about-me">
+  </section>
+  <!-- Contact -->
+  <section id="contact">
+  </section>
 </div>
