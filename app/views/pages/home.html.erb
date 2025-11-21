@@ -1,11 +1,25 @@
 <div class="hero-banner d-flex justify-content-center align-items-center text-center">
   <div class="container">
     <div>
-      <h1 class="text-light">Hi,</h1>
-      <h1 class="text-light">I'm Louis,</h1>
-      <h1 class="text-light">web developer</h1>
-      <br>
+      <h1 class="text-light">
+        Hi,<br>
+        I'm Louis,<br>
+        web developer
+      </h1>
+      <hr>
       <h2 class="gray">Fullstack Developer / Ruby-on-Rails</h2>
+      <%= link_to "Contact Me", "#", class: "btn btn-primary btn-lg custom-btn" %>
+      <%= link_to "My Projects", "#", class: "btn btn-outline-light btn-lg custom-btn" %>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <h2>Featured projects</h2>
+  <div class="row">
+    <div class="card col-12 col-md-6 col-lg-4">
+      <%= image_tag "japan-temple-2", alt: "Japan temple" %>
+      <h3>Japan App</h3>
+      <p>Awesome app about japan's temples, history, and location.</p>
     </div>
   </div>
 </div>
