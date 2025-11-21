@@ -1,26 +1,32 @@
 <!-- Featured Projects -->
-  <section id="featured-projects">
-    <div class="row">
-      <h2 class="mt-5 mb-4">Featured projects</h2>
+<section id="featured-projects">
+  <div class="row">
+    <h2 class="mt-5 mb-4">Featured projects</h2>
+    <% projects.each do |project| %>
       <div class="col-12 col-md-6 col-lg-4">
         <div class="card card-project shadow-sm rounded-4 mb-4">
           <div class="card-body p-4">
-            <h3 class="card-title fw-bold mb-2">Sipfolio</h3>
+            <h3 class="card-title fw-bold mb-2"><%= project[:title] %></h3>
             <p class="card-text small text-muted mb-3">
-              A social cocktail app where users discover, create, and share AI-enhanced recipes, with gamified rewards to drive engagement.
+              <%= project[:description] %>
             </p>
-            <%= image_tag "dark-waves", alt: "Sipfolio project screenshot", class: "img-fluid rounded-4 mb-3" %>
-            <p class="mb-4 text-secondary text-tech-stack">
+            <%= image_tag project[:img_url], alt: "Sipfolio project screenshot", class: "img-fluid rounded-4 mb-3" %>
+            <!-- <p class="mb-4 text-secondary text-tech-stack">
               Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
+            </p> -->
+            <p class="mb-4 text-secondary text-tech-stack">
+              <%= project[:tech_stack] %>
             </p>
             <div class="d-flex justify-content-between align-items-center mt-2">
-              <%= link_to "https://github.com/chifury/rails-mister-cocktail", class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
+              <%= link_to project[:github_url], class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
                 <i class="fa-brands fa-github fs-3 text-dark"></i>
               <% end %>
-              <%= link_to "Live Demo", "https://www.sipfolio.rocks", class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+              <%= link_to "Live Demo", project[:project_url], class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    <% end %>
+  </div>
+    <%= link_to "See more projects...", "#" %>
+</section>

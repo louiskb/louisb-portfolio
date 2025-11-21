@@ -1,0 +1,23 @@
+.social-vertical {
+  position: absolute;
+  left: 24px;
+  bottom: 0px;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0);
+  border-radius: 18px;
+  padding: 12px 0;
+  z-index: 10;
+}
+
+.social-vertical a {
+  color: #f5f5f5;
+  font-size: 1.30rem;
+  transition: transform 0.3s, color 0.2s;
+  display: block;
+}
+
+.social-vertical a:hover,
+.social-vertical a:focus {
+  color: #00acee;
+  transform: scale(1.2);
+}

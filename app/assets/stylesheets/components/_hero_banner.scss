@@ -14,19 +14,27 @@ html {
   // background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.5)), image-url('cosmos-laptop.png');
   background-size: cover;
   background-position: center;
-  position:relative;
+  position: relative;
 }
 
-.scroll {
+.chevron-scroll {
   position: absolute;
-  bottom: 30px;
   left: 50%;
-  transform: translateX(-50%);
+  bottom: 30px;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0);
   z-index: 20;
-  text-decoration: none;
 }
 
-.chevron {
-  font-size: 2rem;
-  color: $white;
+.chevron-scroll a {
+  color: #f5f5f5;
+  font-size: 1.55rem;
+  transition: transform 0.3s, color 0.2s;
+  display: block;
+}
+
+.chevron-scroll a:hover,
+.chevron-scroll a:focus {
+  color: #bebebe;
+  transform: scale(1.2);
 }

@@ -1,5 +1,6 @@
 <!-- Hero banner -->
 <section id="hero-banner" class="d-flex justify-content-center align-items-start text-center">
+  <%= render "social_vertical_bar" %>
   <div class="container mt-5">
     <div class="mt-5">
       <h1 class="text-light">
@@ -10,11 +11,15 @@
       <h2 class="gray">Fullstack Developer / Ruby-on-Rails</h2>
       <div class="mt-4">
         <%= link_to "Contact Me", "#", class: "btn btn-primary btn-lg custom-btn rounded-5" %>
+        <!-- Once there are more than 6 projects add `Project` page to NavBar and change hero banner secondary button to "Key Projects". -->
+        <!-- <%#= link_to "Key Projects", "#featured-projects", class: "btn btn-outline-light btn-lg rounded-5 custom-btn" %> -->
         <%= link_to "My Projects", "#featured-projects", class: "btn btn-outline-light btn-lg rounded-5 custom-btn" %>
       </div>
     </div>
-    <a href="#featured-projects" class="chevron-scroll d-flex flex-column align-items-center justify-content-center scroll">
-      <i class="fas fa-angle-double-down chevron"></i>
-    </a>
+    <div class="chevron-scroll">
+      <%= link_to "#featured-projects", class: "d-flex flex-column align-items-center justify-content-center text-decoration-none" do %>
+        <i class="fas fa-angle-double-down"></i>
+      <% end %>
+    </div>
   </div>
 </section>
