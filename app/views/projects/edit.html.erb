@@ -1,0 +1,18 @@
+<div class="container">
+  <section id="edit-project">
+    <h1 class="my-4">Edit Project: <%= @project.title.capitalize %></h1>
+    <%= simple_form_for @project do |f| %>
+      <%= f.input :title, label: "Project Title" %>
+      <%= f.input :personal_project, label: "Personal Project?" %>
+      <%= f.input :description, as: :text, label: "Project Description", hint: "If more than 2 'non-personal' projects, describe briefly open source contribution focus." %>
+      <%= f.input :tech_stack, label: "Tech Stack", hint: "Separate each tech with '.'", placeholder: "Ruby-on-Rails . Ruby . JavaScript . HTML . CSS . PostgreSQL" %>
+      <%= f.input :img_url, label: "Image URL", hint: "Preference is to use images already in the project folder but can use an external URL link instead.", placeholder: "sipfolio-screenshot" %>
+      <%= f.input :github_url, label: "Github URL", placeholder: "https://github.com/chifury/rails-mister-cocktail" %>
+      <%= f.input :project_url, label: "Project URL", placeholder: "https://www.sipfolio.rocks" %>
+      <div class="d-inline-flex justify-content-end my-4 gap-2">
+        <%= f.button :submit, "Edit Project", class: "btn btn-primary rounded-4 p-2" %>
+        <%= link_to "Cancel", projects_path, class: "btn btn-outline-dark rounded-4 p-2" %>
+      <% end %>
+    </div>
+  </section>
+</div>

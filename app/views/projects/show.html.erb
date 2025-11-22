@@ -1,0 +1,38 @@
+<div class="container">
+  <h1 class="mt-4 mb-3">Project: <%= @project.title.capitalize %></h1>
+  <% if @project.personal_project == true %>
+    <h2 class="mt-2">Personal project</h2>
+  <% else %>
+    <h2 class="mt-2">Open source contributions</h2>
+  <% end %>
+  <ul class="text-dark">
+    <li>
+      <% if @project.personal_project == true %>
+        Personal project: <span class="text-success fw-bold"><%= @project.personal_project %></span>
+      <% else %>
+        Personal project: <span class="text-danger fw-bold"><%= @project.personal_project %></span>
+      <% end %>
+    </li>
+    <li>
+      Project description: <span class="text-primary"><%= @project.description %></span>
+    </li>
+    <li>
+      Tech stack: <span class="text-primary"><%= @project.tech_stack %></span>
+    </li>
+    <li>
+      Image url: <span class="text-primary"><%= @project.img_url %></span>
+    </li>
+    <li>
+      Github url: <span class="text-primary"><%= @project.github_url %></span>
+    </li>
+    <li>
+      Project url: <span class="text-primary"><%= @project.project_url %></span>
+    </li>
+  </ul>
+  <div class="d-inline-flex justify-content-end align-items-center gap-2 my-3">
+    <%= link_to "Edit", edit_project_path(@project), class: "btn btn-secondary" %>
+    <%= link_to project_path(@project), data: { turbo_method: :delete, turbo_confirm: "Delete project ?" }  do %>
+      <i class="fa-regular fa-trash-can text-danger fs-3"></i>
+    <% end %>
+  </div>
+</div>

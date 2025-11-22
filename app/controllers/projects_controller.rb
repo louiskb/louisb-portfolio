@@ -5,6 +5,10 @@ class ProjectsController < ApplicationController
     @projects = Project.all
   end
 
+  def show
+    @project = Project.find(params[:id])
+  end
+
   def new
     @project = Project.new
   end
@@ -21,7 +25,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = Project.find_by(params[:id])
+    @project = Project.find(params[:id])
   end
 
   def update

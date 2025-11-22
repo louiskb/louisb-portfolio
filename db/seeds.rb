@@ -7,3 +7,6 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+
+# EVERY TIME YOU CREATE A NEW PROJECT, SCREENSHOT THE PROJECT CARD IN CASE YOUR DATABASE ON HEROKU GETS ACCIDENTALLY WIPED.
