@@ -1,0 +1,66 @@
+<!-- Featured Projects -->
+<section id="featured-projects">
+  <div class="row justify-content-between align-items-center">
+    <h2 class="mt-5 mb-4">Featured projects</h2>
+    <% @projects.each do |project| %>
+      <% if project.personal_project == true %>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card card-project shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+              <h3 class="card-title fw-bold mb-2"><%= project.title %></h3>
+              <p class="card-text small text-muted mb-3">
+                <%= project.description %>
+              </p>
+              <%= image_tag project.img_url, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3" %>
+              <!-- <p class="mb-4 text-secondary text-tech-stack">
+              Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
+            </p> -->
+              <p class="mb-4 text-secondary text-tech-stack">
+                <%= project.tech_stack %>
+              </p>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
+                  <i class="fa-brands fa-github fs-3 text-dark"></i>
+                <% end %>
+                <%= link_to "Live Demo", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <%= link_to "See more projects...", "#" %>
+      </div>
+      <hr class="my-5">
+      <!-- Open Source Project Contributions-->
+    <% else %>
+      <div class="row justify-content-center align-items-top">
+        <h2 class="mt-5 mb-4">Open source contributions</h2>
+        <div class="col-12 col-md-6">
+          <div class="card card-project shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+              <h3 class="card-title fw-bold mb-2"><%= project.title %></h3>
+              <!-- If this is not a personal_project, add reminder / hint to talk a little bit about your contribution focus to the "open source" project in the 'form field'. IF more than 2 non personal_projects -->
+              <p class="card-text small text-muted mb-3">
+                <%= project.description %>
+              </p>
+              <%= image_tag project.img_url, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3" %>
+              <!-- <p class="mb-4 text-secondary text-tech-stack">
+              Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
+            </p> -->
+              <p class="mb-4 text-secondary text-tech-stack">
+                <%= project.tech_stack %>
+              </p>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
+                  <i class="fa-brands fa-github fs-3 text-dark"></i>
+                <% end %>
+                <%= link_to "View Project", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+</section>
