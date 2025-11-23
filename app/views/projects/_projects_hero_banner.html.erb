@@ -2,6 +2,8 @@
   <div class="container">
     <h1 class="mt-5 mb-4 fs-1">Projects <i class="fa-solid fa-folder-open"></i></h1>
     <p>A portfolio highlighting my projects, including contributions to open source projects.</p>
-    <%= link_to "Create", new_project_path, class: "btn btn-primary rounded-4 p-2 mt-1" %>
+    <% if user_signed_in? %>
+      <%= link_to "Create", new_project_path, class: "btn btn-primary rounded-4 p-2 mt-1" %>
+    <% end %>
   </div>
 </div>

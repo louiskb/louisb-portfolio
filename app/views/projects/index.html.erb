@@ -27,7 +27,7 @@
                   <%= link_to "Live Demo", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
                 </div>
                 <!-- If user is signed-in show the 'Edit' button -->
-                <% if user_signed_in? == true %>
+                <% if user_signed_in? %>
                   <div class="d-flex justify-content-end mt-4 mb-2">
                     <%= link_to project_path(project), class: "btn btn-secondary rounded-4" do %>
                       <i class="fa-solid fa-pen-to-square fs-5"></i>
@@ -64,7 +64,7 @@
                   <%= link_to "View Project", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
                 </div>
                 <!-- If user is signed-in show the 'Edit' button -->
-                <% if user_signed_in? == true %>
+                <% if user_signed_in? %>
                   <div class="d-flex justify-content-end mt-4 mb-2">
                     <%= link_to project_path(project), class: "btn btn-secondary rounded-4" do %>
                       <i class="fa-solid fa-pen-to-square fs-5"></i>

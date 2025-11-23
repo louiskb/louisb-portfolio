@@ -36,6 +36,7 @@ li {
 .gray-link {
   color: $gray;
   transition: color 0.3s;
+  // text-decoration: none; // omitted because should be optional as a bootstrap style class.
 }
 
 .gray-link:hover,
