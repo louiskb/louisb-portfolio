@@ -31,17 +31,17 @@
           </li>
         <% else %>
           <li class="nav-item active">
-            <%= link_to "Portfolio", root_path, class: "nav-link text-light" %>
+            <%= link_to "Portfolio", root_path, class: nav_link_class(root_path) %>
           </li>
           <!-- Once there are more than 6 projects add `Project` page to NavBar and change hero banner secondary button to "Key Projects". -->
           <!-- <li class="nav-item">
             <%#= link_to "Projects", "#", class: "nav-link text-light" %>
           </li> -->
           <li class="nav-item">
-            <%= link_to "Projects", projects_path, class: "nav-link text-light" %>
+            <%= link_to "Projects", projects_path, class: nav_link_class(projects_path) %>
           </li>
           <li class="nav-item">
-            <%= link_to "Blog", "#", class: "nav-link text-light" %>
+            <%= link_to "Blog", "#", class: nav_link_class %>
           </li>
           <li class="nav-item me-3 ms-2">
             <%#= link_to "Contact Me", "#", class: "nav-link btn btn-primary" %>
