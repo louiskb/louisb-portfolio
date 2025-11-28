@@ -2,7 +2,8 @@ class ProjectsController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :index ]
 
   def index
-    @projects = Project.all
+    @personal_projects = filter_personal_projects(Project.all)
+    @open_source_projects = filter_open_source_projects(Project.all)
   end
 
   def show
@@ -53,4 +54,17 @@ class ProjectsController < ApplicationController
   def project_params
     params.require(:project).permit(:title, :description, :img_url, :tech_stack, :project_url, :github_url, :user_id, :personal_project)
   end
+
+  def filter_personal_projects(projects)
+    projects.select do |project|
+      project.personal_project
+    end
+  end
+
+  def filter_open_source_projects(projects)
+    projects.select do |project|
+      !project.personal_project
+    end
+  end
+
 end
