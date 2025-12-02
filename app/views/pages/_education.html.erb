@@ -8,30 +8,53 @@
       <div class="col-12 col-md-6 col-lg-3">
         <div class="d-flex justify-content-start align-items-top gap-3 mb-3">
           <%= image_tag "lb-color", alt: "Le Wagon logo", class: "w-25" %>
-          <p>Le Wagon: AI software development bootcamp, 2025 ?</p>
+          <div>
+            <%= link_to "https://www.lewagon.com/", class: "text-decoration-none", target: "_blank" do %>
+            <h5 class="gray-link ">Le Wagon</h5>
+            <% end %>
+            <p>AI software development bootcamp, Tokyo Japan, 2025 ?</p>
+          </div>
         </div>
       </div>
       <!-- Nucamp certification -->
       <div class="col-12 col-md-6 col-lg-3">
         <div class="d-flex justify-content-start align-items-top gap-3 mb-3">
           <%= image_tag "lb-color", alt: "Nucamp logo", class: "w-25" %>
-          <p>Nucamp: Full-stack web and mobile development bootcamp, 2023-2024 ?</p>
+          <div>
+            <%= link_to "https://www.nucamp.co/", class: "text-decoration-none", target: "_blank" do %>
+            <h5 class="gray-link">Nucamp</h5>
+            <% end %>
+            <p>Full-stack web and mobile development, Online, 2023-2024 ?</p>
+          </div>
         </div>
       </div>
       <!-- Digital Marketing Institute certification -->
       <div class="col-12 col-md-6 col-lg-3">
         <div class="d-flex justify-content-start align-items-top gap-3 mb-3">
           <%= image_tag "lb-color", alt: "Digital Marketing Institute logo", class: "w-25" %>
-          <p>Digital Marketing Institute: Digital marketing diploma, 2017-2018</p>
+          <div>
+            <%= link_to "https://digitalmarketinginstitute.com/", class: "text-decoration-none", target: "_blank" do %>
+            <h5 class="gray-link">DMI</h5>
+            <% end %>
+            <p>Professional diploma in digital marketing, Online, 2017-2018 ?</p>
+          </div>
         </div>
       </div>
       <!-- Newcastle University certification -->
       <div class="col-12 col-md-6 col-lg-3">
         <div class="d-flex justify-content-start align-items-top gap-3 mb-3">
           <%= image_tag "lb-color", alt: "Newcastle University logo", class: "w-25" %>
-          <p>Newcastle University: Bachelor of science in marine biology, 2008-2011</p>
+          <div>
+            <%= link_to "https://www.ncl.ac.uk/", class: "text-decoration-none", target: "_blank" do %>
+            <h5 class="gray-link">Newcastle University</h5>
+            <% end %>
+            <p>Bachelor of science in marine biology, Newcastle Upon-Tyne UK, 2008-2011</p>
+          </div>
         </div>
       </div>
     </div>
+    <%= link_to "#", class: "btn btn-outline-dark btn-lg rounded-5 my-3" do %>
+      <i class="fa-solid fa-download"></i> Download Full Resume
+    <% end %>
   </div>
 </section>
