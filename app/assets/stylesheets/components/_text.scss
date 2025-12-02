@@ -1,49 +1,58 @@
 // Element tag styles
 // Light mode default
 h1 {
-  color: $black;
+  color: #000000;
 }
 
 h2 {
-  color: $dark-gray;
+  color: #333333;
 }
 
 h3 {
-  color: $gray;
+  color: #666666;
 }
 
 h4 {
-  color: #979696;
+  // color: #979696;
+  color: #666666;
+}
+
+h5 {
+  // color: #bcbcbc;
+  color: #999999;
 }
 
 p {
-  color: $gray;
+  color: #999999;
 }
 
 li {
-  // color: #919090;
   color: #e5782a;
 }
 
-// Dark mode
+// Dark background - progressive lightening from <h1> (brightest) to <p> (medium gray)
 .h1-d {
-  color: $white;
+  color: #ffffff;
 }
 
 .h2-d {
-  color: $light-gray;
+  color: #f5f5f7;
 }
 
 .h3-d {
-  color: #e3e2e2;
+  color: #e8e8ed;
 }
 
 .h4-d {
-  color: #cfcfcf;
+  color: #d4d4d8;
+}
+
+.h5-d {
+  color: #c1c2c5;
 }
 
 .p-d {
-  color: $light-gray;
+  color: #a1a1aa;
 }
 
 // Custom text styles
