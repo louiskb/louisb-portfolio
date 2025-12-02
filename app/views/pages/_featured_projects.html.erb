@@ -1,68 +1,70 @@
 <!-- Featured Projects -->
 <section id="featured-projects">
-  <div class="row justify-content-between align-items-center">
-    <!-- Personal projects -->
-    <h2 class="mt-5 mb-4">Featured projects</h2>
-    <% @personal_projects.each do |project| %>
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card card-project shadow-sm rounded-4 mb-4">
-          <div class="card-body p-4">
-            <h3 class="card-title fw-bold mb-2"><%= project.title.capitalize %></h3>
-            <p class="card-text small text-muted mb-3">
-              <%= project.description %>
-            </p>
-            <%= image_tag project.img_url, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-            <!-- <p class="mb-4 text-secondary text-tech-stack">
+  <div class="container">
+    <div class="row justify-content-between align-items-center">
+      <!-- Personal projects -->
+      <h2 class="mt-5 mb-4">Featured projects</h2>
+      <% @personal_projects.each do |project| %>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card card-project shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+              <h3 class="card-title fw-bold mb-2"><%= project.title.capitalize %></h3>
+              <p class="card-text small text-muted mb-3">
+                <%= project.description %>
+              </p>
+              <%= image_tag project.img_url, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+              <!-- <p class="mb-4 text-secondary text-tech-stack">
               Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
             </p> -->
-            <p class="mb-4 text-secondary text-tech-stack">
-              <%= project.tech_stack %>
-            </p>
-            <div class="d-flex justify-content-between align-items-center mt-2">
-              <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                <i class="fa-brands fa-github fs-3 text-dark"></i>
-              <% end %>
-              <%= link_to "Live Demo", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+              <p class="mb-4 text-secondary text-tech-stack">
+                <%= project.tech_stack %>
+              </p>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
+                  <i class="fa-brands fa-github fs-3 text-dark"></i>
+                <% end %>
+                <%= link_to "Live Demo", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    <% end %>
-  </div>
-  <div>
-    <%= link_to "See more projects...", projects_path, class: "text-decoration-none fs-5 gray-link" %>
-  </div>
-  <hr class="my-5">
-  <!-- Open Source Project Contributions-->
-  <div class="row justify-content-center align-items-top">
-    <% @open_source_projects.each do |project| %>
-      <div class="col-12 col-md-6">
-        <h2 class="text-start">Open source contributions</h2>
-        <h4 class="text-start mb-5">Most contributions focused on snapshot testing with <span class="text-dark">Vitest</span> to test if the rendered components had not changed on load.</h4>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="card card-project shadow-sm rounded-4 mb-4">
-          <div class="card-body p-4">
-            <h3 class="card-title fw-bold mb-2"><%= project.title.capitalize %></h3>
-            <p class="card-text small text-muted mb-3">
-              <%= project.description %>
-            </p>
-            <%= image_tag project.img_url, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-            <!-- <p class="mb-4 text-secondary text-tech-stack">
+      <% end %>
+    </div>
+    <div>
+      <%= link_to "See more projects...", projects_path, class: "text-decoration-none fs-5 gray-link" %>
+    </div>
+    <hr class="my-5">
+    <!-- Open Source Project Contributions-->
+    <div class="row justify-content-center align-items-top">
+      <% @open_source_projects.each do |project| %>
+        <div class="col-12 col-md-6">
+          <h2 class="text-start mb-3">Open source contributions</h2>
+          <h4 class="text-start mb-5">Most contributions focused on snapshot testing with Vitest to test if the rendered components had not changed on load.</h4>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="card card-project shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+              <h3 class="card-title fw-bold mb-2"><%= project.title.capitalize %></h3>
+              <p class="card-text small text-muted mb-3">
+                <%= project.description %>
+              </p>
+              <%= image_tag project.img_url, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+              <!-- <p class="mb-4 text-secondary text-tech-stack">
               Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
             </p> -->
-            <p class="mb-4 text-secondary text-tech-stack">
-              <%= project.tech_stack %>
-            </p>
-            <div class="d-flex justify-content-between align-items-center mt-2">
-              <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                <i class="fa-brands fa-github fs-3 text-dark"></i>
-              <% end %>
-              <%= link_to "View Project", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+              <p class="mb-4 text-secondary text-tech-stack">
+                <%= project.tech_stack %>
+              </p>
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
+                  <i class="fa-brands fa-github fs-3 text-dark"></i>
+                <% end %>
+                <%= link_to "View Project", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 </section>

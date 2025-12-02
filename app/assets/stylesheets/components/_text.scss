@@ -1,4 +1,5 @@
 // Element tag styles
+// Light mode default
 h1 {
   color: $black;
 }
@@ -22,6 +23,27 @@ p {
 li {
   // color: #919090;
   color: #e5782a;
+}
+
+// Dark mode
+.h1-d {
+  color: $white;
+}
+
+.h2-d {
+  color: $light-gray;
+}
+
+.h3-d {
+  color: #e3e2e2;
+}
+
+.h4-d {
+  color: #cfcfcf;
+}
+
+.p-d {
+  color: $light-gray;
 }
 
 // Custom text styles
