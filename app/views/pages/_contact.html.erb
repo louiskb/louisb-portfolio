@@ -11,12 +11,19 @@
           <br>
           Currently available for full-time roles and exciting opportunities, while accepting <%= link_to "Fiverr", "https://www.fiverr.com/s/YR5qwel", target: "_blank", class: "text-decoration-none" %> orders to build your Ruby on Rails app, MVP, or custom project.
         </p>
-        <form action="" class="mb-2">
-          <input type="text">
-        </form>
-        <%#= simple_form_for @model do |f| %>
-
-        <%# end %>
+       <%= simple_form_for @contact, class: "mb-2" do |f| %>
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <%= f.input :first_name, label: "First Name" %>
+          </div>
+          <div class="col-12 col-md-6">
+            <%= f.input :last_name, label: "Last Name" %>
+          </div>
+        </div>
+        <%= f.input :email, label: "Your Email" %>
+        <%= f.input :message, as: :text, rows: 6, label: "Message" %>
+        <%= f.button :submit, "Send Message", class: "btn btn-primary btn-lg rounded-5 mb-4 mt-3" %>
+       <% end %>
       </div>
     </div>
   </div>
