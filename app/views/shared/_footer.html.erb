@@ -2,7 +2,7 @@
   <div class="row g-4">
     <!-- Left: Nav Links -->
     <div class="col-12 col-md-4">
-      <div class="d-flex justify-content-center justify-content-md-start align-items-center gap-4">
+      <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-center gap-3 gap-md-4">
         <% if !user_signed_in? && current_page?("/") %>
           <%= link_to "Login", new_user_session_path, class: "gray-link text-decoration-none" %>
         <% elsif user_signed_in? %>
