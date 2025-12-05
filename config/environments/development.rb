@@ -1,40 +1,29 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.action_mailer.default_url_options = { host: ENV['APP_HOST'] || 'localhost:3000' }
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # For Letter Opener (default development testing): (Toggle line below on/off to inspect email content when contact form is submitted with Letter Opener Gem). Don't forget to restart server after toggle. Also toggle off the development Proton smtp_settings and smtp delivery_method and vice versa if you need Letter Opener on.
+  # For Letter Opener (default development testing):
+  # Toggle gem "letter_opener" in gem file and run `bundle install`.
+  #(Toggle line below on/off to inspect email content when contact form is submitted with Letter Opener Gem). Don't forget to restart server after toggle. Also toggle off the development Proton smtp_settings and smtp delivery_method and vice versa if you need Letter Opener on.
   # config.action_mailer.delivery_method = :letter_opener
 
   # Toggle off the code SMTP code below when using Letter Opener Gem (toggle on code line above). After restart server.
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: 'smtp.protonmail.ch',
-    port: 587,
-    domain: ENV['APP_HOST'] || 'localhost.localdomain',
-    user_name: ENV['SMTP_USERNAME'],
-    password: ENV['SMTP_PASSWORD'],
-    authentication: 'plain',
-    enable_starttls_auto: true
+    address: "127.0.0.1",
+    port: 1025,
+    user_name: ENV["PM_USERNAME"],
+    password: ENV["PM_PASSWORD"],
+    authentication: :plain,
+    enable_starttls_auto: false # Bridge handles encryption already
   }
 
-  # Mailtrap sandbox configuration with ENV Vars
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = {
-  # address: 'sandbox.smtp.mailtrap.io',
-  # host: 'sandbox.smtp.mailtrap.io',
-  # port: 2525,
-  # user_name: ENV['MAILTRAP_USERNAME'],
-  # password: ENV['MAILTRAP_PASSWORD'],
-  # authentication: :login,
-  # enable_starttls_auto: true
-  # }
+  # Toggle the below line if `deliver_later` is used in the `contact_controller`. The `queue_adapter` is the "worker" that runs background jobs and thus the queued emails if `deliver_later` is set. Ideal for development but not recommended for production (since it dies when the server restarts). It's recommended to use a real worker like `Sidekiq` in production.
+  # config.active_job.queue_adapter = :async
 
-  # FIX: Run jobs immediately (no background queue needed)
-  config.active_job.queue_adapter = :inline
-
-  # -----------------------------------------
+  # ------------------ End of email configuration settings ---------------------
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development

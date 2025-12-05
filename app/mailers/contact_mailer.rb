@@ -8,7 +8,7 @@ class ContactMailer < ApplicationMailer
   def received_email
     @contact = params[:contact]
     mail(
-      to: "dev@louisbourne.me",
+      to: ENV["SMTP_USERNAME"],
       subject: "New Contact: #{@contact.first_name} #{@contact.last_name}",
       reply_to: @contact.email
     )
@@ -23,8 +23,8 @@ class ContactMailer < ApplicationMailer
     @contact = params[:contact]
     mail(
       to: @contact.email,
-      from: "dev@louisbourne.me",
-      subject: "Thank you for your message!"
+      from: ENV["SMTP_USERNAME"],
+      subject: "Message received!"
     )
   end
 end

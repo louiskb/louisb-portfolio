@@ -10,11 +10,11 @@ class ContactsController < ApplicationController
     if @contact.save
       # flash[:notice] = "Contact saved! ID: #{@contact.id}"  # ← Debug
 
-      ContactMailer.with(contact: @contact).received_email.deliver_later
+      ContactMailer.with(contact: @contact).received_email.deliver_now
 
       # flash[:notice] += " | Received email sent"  # ← Debug
 
-      ContactMailer.with(contact: @contact).confirmation_email.deliver_later
+      ContactMailer.with(contact: @contact).confirmation_email.deliver_now
 
       # flash[:notice] += " | Confirmation sent"    # ← Debug
 
