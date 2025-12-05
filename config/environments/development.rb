@@ -31,19 +31,6 @@ Rails.application.configure do
   # enable_starttls_auto: true
   # }
 
-  # Mailtrap sandbox configuration without ENV Vars
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = {
-  #   user_name: '6f881397632a86',
-  #   password: 'f52dd6cd83a72c',
-  #   address: 'sandbox.smtp.mailtrap.io',
-  #   port: 2525,
-  #   authentication: :login,
-  #   enable_starttls_auto: true
-  # }
-
-  # config.action_mailer.default_url_options = { host: 'localhost:3000' }
-
   # FIX: Run jobs immediately (no background queue needed)
   config.active_job.queue_adapter = :inline
 
