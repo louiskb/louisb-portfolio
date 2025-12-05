@@ -20,8 +20,11 @@ Rails.application.configure do
     enable_starttls_auto: false # Bridge handles encryption already
   }
 
-  # Toggle the below line if `deliver_later` is used in the `contact_controller`. The `queue_adapter` is the "worker" that runs background jobs and thus the queued emails if `deliver_later` is set. Ideal for development but not recommended for production (since it dies when the server restarts). It's recommended to use a real worker like `Sidekiq` in production.
+  # Toggle the line below if `deliver_later` is used in the `contact_controller`. The `queue_adapter` is the "worker" that runs background jobs and thus the queued emails if `deliver_later` is set. Ideal for development but not recommended for production (since it dies when the server restarts). It's recommended to use a real worker like `Sidekiq` in production.
   # config.active_job.queue_adapter = :async
+
+  # Toggling the line below executes enqueued jobs immediately in the same process rather than queuing them for later processing. When paired with `deliver_later` (e.g., `ContactMailer.with(contact: @contact).confirmation_email.deliver_later` in the `contact_controller`), this configuration causes the email delivery job to run synchronously right away, mimicking `deliver_now` behavior instead of deferring to a background queue.
+  # config.active_job.queue_adapter = :inline
 
   # ------------------ End of email configuration settings ---------------------
 

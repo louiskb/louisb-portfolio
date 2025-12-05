@@ -1,18 +1,20 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.action_mailer.default_url_options = { host: ENV['APP_HOST'] }
+  config.action_mailer.default_url_options = { host: "louisbourne.me", protocol: "https" }
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: "smtp.protonmail.ch",
-    port: 587,
-    domain: ENV["APP_HOST"],
+    address: ENV["SMTP_ADDRESS"],
+    port: ENV["SMTP_PORT"],
+    domain: "louisbourne.me",
     user_name: ENV["SMTP_USERNAME"],
     password: ENV["SMTP_PASSWORD"],
-    authentication: "plain",
-    enable_starttls_auto: true
+    authentication: :plain,
+    enable_starttls_auto: true,
+    open_timeout: 5,
+    read_timeout: 5
   }
 
   # Code is not reloaded between requests.
@@ -86,8 +88,8 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  # Set this to true and configure the email server for immediate delivery to raise delivery errors. Value was previously assigned to false by default.
+  config.action_mailer.raise_delivery_errors = true
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
