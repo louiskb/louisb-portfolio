@@ -1,7 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.action_mailer.default_url_options = { host: "https://www.louisbourne.me" }
+  config.action_mailer.default_url_options = { host: ENV['APP_HOST'] }
   # Settings specified here will take precedence over those in config/application.rb.
 
   config.action_mailer.delivery_method = :smtp
@@ -10,7 +10,7 @@ Rails.application.configure do
     port: 587,
     domain: ENV["APP_HOST"],
     user_name: ENV["SMTP_USERNAME"],
-    password: ENV["SMTP_PASSWORD"]
+    password: ENV["SMTP_PASSWORD"],
     authentication: "plain",
     enable_starttls_auto: true
   }

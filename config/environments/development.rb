@@ -1,10 +1,53 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.action_mailer.default_url_options = { host: "http://localhost:3000" }
+  config.action_mailer.default_url_options = { host: ENV['APP_HOST'] || 'localhost:3000' }
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.action_mailer.delivery_method = :letter_opener
+  # For Letter Opener (default development testing): (Toggle line below on/off to inspect email content when contact form is submitted with Letter Opener Gem). Don't forget to restart server after toggle. Also toggle off the development Proton smtp_settings and smtp delivery_method and vice versa if you need Letter Opener on.
+  # config.action_mailer.delivery_method = :letter_opener
+
+  # Toggle off the code SMTP code below when using Letter Opener Gem (toggle on code line above). After restart server.
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.protonmail.ch',
+    port: 587,
+    domain: ENV['APP_HOST'] || 'localhost.localdomain',
+    user_name: ENV['SMTP_USERNAME'],
+    password: ENV['SMTP_PASSWORD'],
+    authentication: 'plain',
+    enable_starttls_auto: true
+  }
+
+  # Mailtrap sandbox configuration with ENV Vars
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  # address: 'sandbox.smtp.mailtrap.io',
+  # host: 'sandbox.smtp.mailtrap.io',
+  # port: 2525,
+  # user_name: ENV['MAILTRAP_USERNAME'],
+  # password: ENV['MAILTRAP_PASSWORD'],
+  # authentication: :login,
+  # enable_starttls_auto: true
+  # }
+
+  # Mailtrap sandbox configuration without ENV Vars
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   user_name: '6f881397632a86',
+  #   password: 'f52dd6cd83a72c',
+  #   address: 'sandbox.smtp.mailtrap.io',
+  #   port: 2525,
+  #   authentication: :login,
+  #   enable_starttls_auto: true
+  # }
+
+  # config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
+  # FIX: Run jobs immediately (no background queue needed)
+  config.active_job.queue_adapter = :inline
+
+  # -----------------------------------------
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development

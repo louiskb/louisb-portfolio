@@ -4,6 +4,7 @@ class PagesController < ApplicationController
   def home
     @personal_projects = filter_personal_projects(Project.all)
     @open_source_projects = filter_open_source_projects(Project.all)
+    @contact = Contact.new
   end
 
   def profile
