@@ -24,8 +24,7 @@
         <%= f.input :email, label: "Your Email" %>
         <%= f.input :message, as: :text, rows: 6, label: "Message" %>
         <!-- Styled-hidden honeypot input and speed checks for hidden captcha -->
-        <%= invisible_captcha_field %>
-        <%= time_limit_field minimum_time: 5 %>
+        <%= invisible_captcha %>
         <!-- Submit button -->
         <%= f.button :submit, "Send Message", class: "btn btn-primary btn-lg rounded-5 mb-4 mt-4" %>
        <% end %>
