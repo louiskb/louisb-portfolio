@@ -151,6 +151,8 @@ GEM
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
+    invisible_captcha (2.3.0)
+      rails (>= 5.2)
     io-console (0.8.1)
     irb (1.15.3)
       pp (>= 0.6.0)
@@ -345,6 +347,7 @@ DEPENDENCIES
   dotenv-rails
   font-awesome-sass (~> 6.1)
   importmap-rails
+  invisible_captcha
   jbuilder
   pg (~> 1.1)
   puma (>= 5.0)
