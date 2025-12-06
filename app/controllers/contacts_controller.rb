@@ -32,6 +32,10 @@ class ContactsController < ApplicationController
 
   private
 
+  def invisible_captcha_error_message
+    "Sorry, try again slowly." # Custom message on spam block instead of default "Spam detected!" if user submit's the form too fast (under 5 seconds).
+  end
+
   def contact_params
     params.require(:contact).permit(:first_name, :last_name, :email, :message)
   end
