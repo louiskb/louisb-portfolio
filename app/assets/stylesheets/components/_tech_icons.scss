@@ -1,3 +1,9 @@
 .tech-icon {
   width: 100px;
+  transition: transform 0.3s;
+}
+
+.tech-icon:hover,
+.tech-icon:focus {
+  transform: scale(1.2);
 }

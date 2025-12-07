@@ -7,19 +7,35 @@
       <div class="col-6 col-md-6">
         <h5 class="fs-6">Frontend</h5>
         <div class="d-flex justify-content-start align-items-center">
-          <%= image_tag "javascript", alt: "JavaScript icon", class: "tech-icon p-3" %>
-          <%= image_tag "html5", alt: "HTML 5 icon", class: "tech-icon p-3" %>
-          <%= image_tag "css3", alt: "CSS 3 icon", class: "tech-icon p-3" %>
-          <%= image_tag "sass", alt: "Sass icon", class: "tech-icon p-3" %>
-          <%= image_tag "bootstrap", alt: "Bootstrap icon", class: "tech-icon p-3" %>
+          <%= link_to "https://developer.mozilla.org/en-US/docs/Web/JavaScript", target: "_blank", rel: "noopner" do %>
+            <%= image_tag "javascript", alt: "JavaScript icon", class: "tech-icon p-3" %>
+          <% end %>
+          <%= link_to "https://developer.mozilla.org/en-US/docs/Web/HTML", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "html5", alt: "HTML 5 icon", class: "tech-icon p-3" %>
+          <% end %>
+          <%= link_to "https://developer.mozilla.org/en-US/docs/Web/CSS", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "css3", alt: "CSS 3 icon", class: "tech-icon p-3" %>
+          <% end %>
+          <%= link_to "https://sass-lang.com/", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "sass", alt: "Sass icon", class: "tech-icon p-3" %>
+          <% end %>
+          <%= link_to "https://getbootstrap.com/", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "bootstrap", alt: "Bootstrap icon", class: "tech-icon p-3" %>
+          <% end %>
         </div>
       </div>
       <div class="col-12 col-md-6">
         <h5 class="fs-6">Backend</h5>
         <div class="d-flex justify-content-start align-items-center">
-          <%= image_tag "ruby", alt: "Ruby icon", class: "tech-icon p-3" %>
-          <%= image_tag "postgresql", alt: "PostgreSQL icon", class: "tech-icon p-3" %>
-          <%= image_tag "rspec", alt: "Rspec icon", class: "tech-icon p-3" %>
+          <%= link_to "https://www.ruby-lang.org/en/", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "ruby", alt: "Ruby icon", class: "tech-icon p-3" %>
+          <% end %>
+          <%= link_to "https://www.postgresql.org/", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "postgresql", alt: "PostgreSQL icon", class: "tech-icon p-3" %>
+          <% end %>
+          <%= link_to "https://rspec.info/", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "rspec", alt: "Rspec icon", class: "tech-icon p-3" %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -27,14 +43,20 @@
       <div class="col-12 col-md-6">
         <h5 class="fs-6 mt-3">Frameworks & libraries</h5>
         <div class="d-flex justify-content-start align-items-center">
-          <%= image_tag "ruby-on-rails", alt: "Ruby-on-rails icon", class: "tech-icon p-3" %>
+          <%= link_to "https://rubyonrails.org/", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "ruby-on-rails", alt: "Ruby-on-rails icon", class: "tech-icon p-3" %>
+          <% end %>
         </div>
       </div>
       <div class="col-12 col-md-6">
         <h5 class="fs-6 mt-3">Tools</h5>
         <div class="d-flex justify-content-start align-items-center">
-          <%= image_tag "github", alt: "Github icon", class: "tech-icon p-3" %>
-          <%= image_tag "figma", alt: "Figma icon", class: "tech-icon p-3" %>
+          <%= link_to "https://www.github.com/", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "github", alt: "Github icon", class: "tech-icon p-3" %>
+          <% end %>
+          <%= link_to "https://www.figma.com/", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "figma", alt: "Figma icon", class: "tech-icon p-3" %>
+          <% end %>
         </div>
       </div>
     </div>
@@ -43,8 +65,12 @@
       <div class="col-12 col-md-6">
         <h5 class="fs-6">Frameworks & libraries</h5>
         <div class="d-flex justify-content-start align-items-center">
-          <%= image_tag "react", alt: "React icon", class: "tech-icon p-3" %>
-          <%= image_tag "vuejs", alt: "Vue.js icon", class: "tech-icon p-3" %>
+          <%= link_to "https://react.dev", target: "_blank", rel: "noopener" do %>
+            <%= image_tag "react", alt: "React icon", class: "tech-icon p-3" %>
+          <% end %>
+          <%= link_to "https://vuejs.org", target: "_blank", rel: "noopener" do  %>
+            <%= image_tag "vuejs", alt: "Vue.js icon", class: "tech-icon p-3" %>
+          <% end %>
         </div>
       </div>
     </div>
