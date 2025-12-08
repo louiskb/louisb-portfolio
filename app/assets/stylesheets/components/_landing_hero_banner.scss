@@ -2,7 +2,7 @@
   width: 100%;
   height: 100vh; // Full viewport height
   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
-    image-url("lb-banner-light-show.png");
+    image-url("black-hole-1.png");
   // background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.5)), image-url('cosmos-laptop.png');
   background-size: cover;
   background-position: center;
@@ -39,4 +39,18 @@
 .chevron-scroll a:focus {
   color: #bebebe;
   transform: scale(1.2);
+}
+
+.bg-waves-1 {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
+    image-url("abstract-waves-purple.png");
+     background-size: cover;
+  background-position: center;
+}
+
+.bg-waves-2 {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
+    image-url("abstract-waves.png");
+     background-size: cover;
+  background-position: center;
 }
