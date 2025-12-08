@@ -52,7 +52,7 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :img_url, :tech_stack, :project_url, :github_url, :user_id, :personal_project, :private)
+    params.require(:project).permit(:title, :description, :img_url, :tech_stack, :project_url, :github_url, :user_id, :personal_project, :private_repo)
   end
 
   def filter_personal_projects(projects)
@@ -66,5 +66,4 @@ class ProjectsController < ApplicationController
       !project.personal_project
     end
   end
-
 end

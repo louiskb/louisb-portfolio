@@ -12,13 +12,14 @@
             <li><span class="text-dark">Total projects created in app:</span> <%= @projects_total %></li>
             <li><span class="text-dark">Personal projects created:</span> <%= @personal_projects_count %></li>
             <li><span class="text-dark">Open source projects contributed to:</span> <%= @non_personal_projects_count %></li>
+            <li><span class="text-dark">Public Github repos:</span> <%= @public_repo_count %></li>
+            <li><span class="text-dark">Private Github repos:</span> <%= @private_repo_count %></li>
           </ul>
           <div class="d-flex justify-content-start">
             <%= link_to "Edit", edit_user_registration_path, class: "btn btn-outline-dark rounded-4" %>
           </div>
         </div>
       </div>
-
       <!-- Project list -->
       <div class="col-12 col-md-6">
         <div class="my-5">
@@ -30,10 +31,18 @@
           </p>
           <ul>
             <% @projects.each do |project| %>
-              <% if project.personal_project == true %>
-                <li class="text-success"><%= project.title %></li>
+              <% if project.personal_project %>
+                <% if project.private_repo %>
+                  <li class="text-success"><%= project.title %>, <span class="text-warning">private</span></li>
+                <% else %>
+                  <li class="text-success"><%= project.title %>, <span class="text-primary">public</span></li>
+                <% end %>
               <% else %>
-                <li class="text-danger"><%= project.title %></li>
+                <% if project.private_repo %>
+                  <li class="text-danger"><%= project.title %>, <span class="text-warning">private</span></li>
+                <% else %>
+                  <li class="text-success"><%= project.title %>, <span class="text-primary">public</span></li>
+                <% end %>
               <% end %>
             <% end %>
           </ul>

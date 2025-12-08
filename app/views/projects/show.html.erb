@@ -12,7 +12,14 @@
         <% if @project.personal_project == true %>
           Personal project: <span class="text-success fw-semibold">YES</span>
         <% else %>
-          Personal project: <span class="text-danger fw-semibold">NO</span>
+          Personal project: <span class="text-info fw-semibold">NO</span>
+        <% end %>
+      </li>
+      <li class="text-dark">
+        <% if @project.private_repo %>
+          Github Repo: <span class="text-danger fw-semibold">Private</span>
+        <% else %>
+          Github Repo: <span class="text-primary fw-semibold">Public</span>
         <% end %>
       </li>
       <li>

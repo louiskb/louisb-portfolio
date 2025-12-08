@@ -13,6 +13,8 @@ class PagesController < ApplicationController
     @projects_total = Project.all.count
     @personal_projects_count = Project.where(personal_project: true).count
     @non_personal_projects_count = Project.where(personal_project: false).count
+    @private_repo_count = Project.where(private_repo: true).count
+    @public_repo_count = @projects.count - @private_repo_count
   end
 
   private
@@ -28,5 +30,4 @@ class PagesController < ApplicationController
       !project.personal_project
     end
   end
-
 end
