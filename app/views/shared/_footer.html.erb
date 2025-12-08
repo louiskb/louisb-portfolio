@@ -3,10 +3,8 @@
     <!-- Left: Nav Links -->
     <div class="col-12 col-md-4">
       <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-center gap-3 gap-md-4">
-        <% if !user_signed_in? && current_page?("/") %>
+        <% if !user_signed_in? && current_page?("/projects") %>
           <%= link_to "Login", new_user_session_path, class: "gray-link text-decoration-none" %>
-        <% elsif user_signed_in? %>
-          <%= link_to "Logout", destroy_user_session_path, data: {turbo_method: :delete}, class: "gray-link text-decoration-none" %>
         <% end %>
         <%= link_to "Terms of Use", "#", class: "gray-link text-decoration-none" %>
         <%= link_to "Privacy Policy", "#", class: "gray-link text-decoration-none" %>
