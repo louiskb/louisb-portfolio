@@ -36,6 +36,7 @@ sipfolio = Project.create!(
   project_url: "https://www.sipfolio.rocks/",
   github_url: "https://github.com/louiskb/rails-mister-cocktail",
   personal_project: true,
+  private: false,
   user: user_1
 )
 projects << sipfolio
@@ -51,6 +52,7 @@ market_sensei = Project.create!(
   # Github repo is private so need to make this dynamic on the frontend.
   github_url: "#",
   personal_project: true,
+  private: true,
   user: user_1
 )
 projects << market_sensei
@@ -64,6 +66,7 @@ dokodemo_fit = Project.create!(
   project_url: "https://dokodemo-fit-66811301c708.herokuapp.com/",
   github_url: "https://github.com/louiskb/DokodemoFit",
   personal_project: true,
+  private: false,
   user: user_1
 )
 projects << dokodemo_fit
@@ -83,6 +86,7 @@ find_a_doc = Project.create!(
   project_url: "https://www.findadoc.jp/",
   github_url: "https://github.com/ourjapanlife",
   personal_project: false,
+  private: false,
   user: user_1
 )
 projects << find_a_doc
