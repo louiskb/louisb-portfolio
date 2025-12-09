@@ -1,0 +1,9 @@
+<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.7)), url(<%= asset_path('abstract-waves-purple.png') %>);">
+  <div class="container">
+    <h1 class="mt-5 mb-4 fs-1">Blog <i class="fa-solid fa-folder-open"></i></h1>
+    <p>My blog posts</p>
+    <% if user_signed_in? %>
+      <%= link_to "Create", new_blog_post_path, class: "btn btn-primary rounded-4 p-2 mt-1" %>
+    <% end %>
+  </div>
+</div>

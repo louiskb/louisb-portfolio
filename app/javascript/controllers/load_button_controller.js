@@ -4,7 +4,7 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
 
   connect() {
-    console.log("load_button stimulus controller connected!");
+    console.log("load_button connected!");
   }
 
   loader(event) {

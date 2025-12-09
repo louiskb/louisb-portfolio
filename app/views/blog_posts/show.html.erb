@@ -1,7 +1,8 @@
-<%= render "blog_post_banner", blog_post: @blog_post %>
+<%= render "blog_post_hero_banner", blog_post: @blog_post %>
 <div class="container">
-  <article data-controller="html-inject" data-action="DOMContentLoaded->html-inject#convertHtmlString" class="mt-5 mb-4" hidden>
-    <!-- textContent that's inside <article> element -->
-    <%= @blog_post.html_content %>
+  <article data-controller="html-inject" class="mt-5 mb-4" hidden>
+    <!-- textContent (HTML string) that's inside <article> element -->
+    <!-- Rails `sanitize` helper method cleans + marks safe → Rails ERB automatically converts any sanitized (or html_safe marked) HTML string to DOM → Stimulus just un-hides on connect(). This renders sanitized HTML directly on page load via Stimulus connect() -->
+    <%= sanitize @blog_post.html_content %>
   </article>
 </div>
