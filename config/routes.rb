@@ -15,5 +15,7 @@ Rails.application.routes.draw do
 
   resources :projects
 
+  resources :blog_posts
+
   resources :contacts, only: [:new, :create]
 end
