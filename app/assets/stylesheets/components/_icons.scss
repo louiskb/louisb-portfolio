@@ -1,0 +1,8 @@
+.trash-grow {
+  transition: transform 0.3s;
+}
+
+.trash-grow:hover,
+.trash-grow:focus {
+  transform: scale(1.2);
+}

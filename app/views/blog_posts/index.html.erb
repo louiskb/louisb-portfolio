@@ -1,18 +1,25 @@
 <%= render "blog_posts_hero_banner" %>
 <div class="container">
   <section id="blog-posts-index">
-    <h2 class="mt-5 mb-4">Blog Posts</h2>
-    <ul>
+    <div class="row justify-content-start align-items-center">
+      <h2 class="mt-5 mb-4">Blog Posts</h2>
       <% @blog_posts.each do |blog_post| %>
-        <li>
-          <%= link_to blog_post_path(blog_post) do %>
-            <%= blog_post.title %>
-          <% end %>
-        </li>
+        <%= link_to blog_post_path(blog_post), class: "text-decoration-none" do %>
+          <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <div class="card card-blog-post card-grow shadow-sm rounded-4 mb-4">
+              <div class="card-body p-4">
+                <%= image_tag blog_post.img_url, alt: "Blog post featured image", class: "img-fluid rounded-4 mb-3 border border-secondary"%>
+                <h3 class="card-title fw-bold my-2"><%= blog_post.title %></h3>
+                <p class="card-text small text-muted"><%= blog_post.description.capitalize %></p>
+                <hr class="my-3">
+                <p class="text-blog-tags">
+                  <%= blog_post.tags %>
+                </p>
+              </div>
+            </div>
+          </div>
+        <% end %>
       <% end %>
-    </ul>
-    <p>Ruby on Rails, often called Rails, is a web application framework built with the Ruby programming language. Created by David Heinemeier Hansson in the early 2000s, the framework was originally extracted from the codebase of Basecamp, a project management tool developed by 37signals (now known as Basecamp). Hansson released Rails as open source in 2004, allowing developers around the world to contribute and build upon its foundations.
-    Before Rails, web development was often tedious, requiring developers to write boilerplate code for repetitive tasks like database queries, request handling, and routing. Rails introduced a revolutionary principle: Convention over Configuration. This meant developers could focus on building features instead of managing endless setup files. Combined with Don’t Repeat Yourself (DRY), Rails promoted clean, maintainable, and efficient code.
-    By the mid-2000s, Rails had gained massive attention for its ability to help teams build web apps faster than ever. Iconic web platforms like GitHub, Shopify, and Airbnb were early adopters, proving Rails could scale beyond small projects. Its integrated tools for database migrations, scaffolding, and testing made it a complete ecosystem for startups and enterprises alike.</p>
+    </div>
   </section>
 </div>

@@ -3,6 +3,16 @@
 <div class="container">
   <section id="edit-blog-post">
     <h2 class="mt-5 mb-4">Edit blog post</h2>
-    
+    <%= simple_form_for @blog_post do |f| %>
+      <%= f.input :title, label: "Blog Post Title" %>
+      <%= f.input :description, as: :text, label: "Blog Post Description", hint: "Make the description 30-60 words long to optimally fill out the blog post cards." %>
+      <%= f.input :img_url, label: "Featured Image URL", hint: "Preference is to use images already in the project folder (omit .png or file extensions). Careful! Typos will break the app. Can also use an external URL starting with HTTPS://", placeholder: "abstract-waves" %>
+      <%= f.input :tags, label: "Tags", hint: "Add tags to categorize the blog post. Show 2-5 tags (capitalized) and separating each one with ' . '" %>
+      <%= f.input :html_content, as: :text, rows: 12, label: "HTML Code For Your Blog Post", hint: "Guide: (1) Use single quotes ' ' for HTML attribute values and escape any apostrophes inside with a 'backslash' in front, (2) can use bootstrap and custom classes as well as inline styles, (3) the <style> element doesn't work and is meant to be in the <head>, (4) the attribute target='_blank' attribute doesn't work and may be sanitized, (5) adding plain text without any HTML won't break the web app, (6) your HTML code is already wrapped inside the following elements: <div class='container'><article>[YOUR CODE]</article></div>, (7) keep to a consistent style & familiar structure, (8) start the blog post with a <h2> tag (<h1> is already used once at the top of the page), and (9) no <script> elements.", placeholder: "<h1 class='text-primary'>Ruby on Rails History</h1> <p style='color: black; font-size: 16px text-align: left;'>Before <a href='https://rubyonrails.org/' target='_blank' title='Can\'t open this'>Rails</a>, web development was often tedious, requiring developers to write boilerplate code for repetitive tasks like database queries, request handling, and routing. Rails introduced a revolutionary principle: Convention over Configuration.</p>" %>
+      <div class="d-flex justify-content-end my-4 gap-3">
+        <%= f.button :submit, "Submit", class: "btn btn-primary rounded-4 p-2" %>
+        <%= link_to "Cancel", blog_posts_path, class: "btn btn-outline-dark rounded-4 p-2" %>
+      </div>
+    <% end %>
   </section>
 </div>
