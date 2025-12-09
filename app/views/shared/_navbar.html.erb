@@ -25,7 +25,7 @@
             </a>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <%= link_to "Create Project", new_project_path, class: nav_link_dropdown_class(new_project_path) %>
-              <%= link_to "Create AI Post", "#", class: nav_link_dropdown_class %>
+              <%= link_to "Create Blog Post", new_blog_post_path, class: nav_link_dropdown_class(new_blog_post_path) %>
               <%= link_to "Profile", profile_path, class: nav_link_dropdown_class(profile_path) %>
               <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item text-dark" %>
             </div>
@@ -34,10 +34,6 @@
           <li class="nav-item active">
             <%= link_to "Portfolio", root_path, class: nav_link_class(root_path) %>
           </li>
-          <!-- Once there are more than 6 projects add `Project` page to NavBar and change hero banner secondary button to "Key Projects". -->
-          <!-- <li class="nav-item">
-            <%#= link_to "Projects", "#", class: "nav-link text-light" %>
-          </li> -->
           <li class="nav-item">
             <%= link_to "Projects", projects_path, class: nav_link_class(projects_path) %>
           </li>

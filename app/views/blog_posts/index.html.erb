@@ -1,14 +1,15 @@
+<!-- Blog posts index -->
 <%= render "blog_posts_hero_banner" %>
 <div class="container">
   <section id="blog-posts-index">
     <div class="row justify-content-start align-items-center">
       <h2 class="mt-5 mb-4">Blog Posts</h2>
       <% @blog_posts.each do |blog_post| %>
-        <%= link_to blog_post_path(blog_post), class: "text-decoration-none" do %>
-          <div class="col-12 col-md-6 col-lg-4 mb-2">
+        <div class="col-12 col-md-6 col-lg-4">
+          <%= link_to blog_post_path(blog_post), class: "text-decoration-none" do %>
             <div class="card card-blog-post card-grow shadow-sm rounded-4 mb-4">
               <div class="card-body p-4">
-                <%= image_tag blog_post.img_url, alt: "Blog post featured image", class: "img-fluid rounded-4 mb-3 border border-secondary"%>
+                <%= image_tag blog_post.img_url, alt: "Blog post featured image", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
                 <h3 class="card-title fw-bold my-2"><%= blog_post.title %></h3>
                 <p class="card-text small text-muted"><%= blog_post.description.capitalize %></p>
                 <hr class="my-3">
@@ -17,8 +18,8 @@
                 </p>
               </div>
             </div>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
       <% end %>
     </div>
   </section>
