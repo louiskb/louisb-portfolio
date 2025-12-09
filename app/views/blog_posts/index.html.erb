@@ -1,9 +1,13 @@
-<h1>Blog Posts</h1>
-<ul>
-  <% @blog_posts.each do |blog_post| %>
-    <li>
-      <%= link_to blog_post_path(blog_post) do %>
-      <%= blog_post.title %>
-      <% end %>
-    </li>
-</ul>
+<%= render "blog_posts_banner" %>
+<div class="container">
+  <h2 class="mt-5 mb-4">Blog Posts</h2>
+  <ul>
+    <% @blog_posts.each do |blog_post| %>
+      <li>
+        <%= link_to blog_post_path(blog_post) do %>
+          <%= blog_post.title %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

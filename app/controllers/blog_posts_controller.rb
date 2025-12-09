@@ -1,4 +1,5 @@
 class BlogPostsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [ :index, :show ]
   def index
     @blog_posts = BlogPost.all
   end
@@ -48,5 +49,7 @@ class BlogPostsController < ApplicationController
 
   private
 
-  params.require(:blog_post).permit(:title, :description, :img_url, :tags, :html_content, :user_id)
+  def blog_post_params
+    params.require(:blog_post).permit(:title, :description, :img_url, :tags, :html_content, :user_id)
+  end
 end

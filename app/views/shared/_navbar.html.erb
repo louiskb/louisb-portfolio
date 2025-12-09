@@ -16,9 +16,9 @@
           <li class="nav-item">
             <%= link_to "Projects", projects_path, class: nav_link_class(projects_path) %>
           </li>
-          <!-- <li class="nav-item me-1"> -->
-            <%#= link_to "Blog", "#", class: nav_link_class %>
-          <!-- </li> -->
+          <li class="nav-item me-1">
+            <%= link_to "Blog", blog_posts_path, class: nav_link_class %>
+          </li>
           <li class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle ms-2" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <%= image_tag "dog2", class: "avatar", alt: "Dropdown menu and user avatar image." %>
@@ -41,9 +41,9 @@
           <li class="nav-item">
             <%= link_to "Projects", projects_path, class: nav_link_class(projects_path) %>
           </li>
-          <!-- <li class="nav-item"> -->
-            <%#= link_to "Blog", "#", class: nav_link_class %>
-          <!-- </li> -->
+          <li class="nav-item">
+            <%= link_to "Blog", blog_posts_path, class: nav_link_class %>
+          </li>
           <li class="nav-item me-3 ms-2">
             <%= link_to "Contact Me", root_path(anchor: "contact"), class: "btn btn-primary btn-sm rounded-5 btn-nav" %>
           </li>
