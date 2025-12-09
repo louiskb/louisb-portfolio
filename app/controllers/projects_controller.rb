@@ -33,7 +33,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
 
     if @project.update(project_params)
-      redirect_to project_path(@project)
+      redirect_to project_path(@project), notice: "Project was successfully edited!"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -43,7 +43,7 @@ class ProjectsController < ApplicationController
     @project = Project.find(params[:id])
 
     if @project.destroy
-      redirect_to projects_path, status: :see_other
+      redirect_to projects_path, notice: "Project was successfully deleted!", status: :see_other
     else
       render :show, status: :unprocessable_entity
     end
