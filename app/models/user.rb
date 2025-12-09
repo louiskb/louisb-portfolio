@@ -5,7 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   # Associations
-  has_many :projects # creates a method `user.projects`, that shows all the `projects` the `user owns / created.
+  has_many :projects # creates a method `user.projects`, that shows all the `projects` the `user` owns / created.
+  has_many :blog_posts # creates a method `user.blog_posts`, that shows ll the `blog_posts` the `user` owns / created
 
   # Validations
   # Use `validate` (single) with a custom method (symbol) for your own validation logic. You pass the name of a method (symbol) that will be called to perform validations manually.
