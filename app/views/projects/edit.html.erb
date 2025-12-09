@@ -1,8 +1,8 @@
-<!-- Project Edit -->
+<!-- Project edit -->
 <%= render "edit_hero_banner", project: @project %>
 <div class="container">
   <section id="edit-project">
-    <h2 class="mt-5 mb-4">Edit Project</h2>
+    <h2 class="mt-5 mb-4">Edit project</h2>
     <%= simple_form_for @project do |f| %>
       <%= f.input :title, label: "Project Title", hint: "Capitalize the appropriate letters manually." %>
       <%= f.input :personal_project, label: "Personal Project" %>
