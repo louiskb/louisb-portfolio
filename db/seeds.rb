@@ -17,9 +17,10 @@ puts "Creating user..."
 users = []
 
 user_1 = User.create!(
-  email: "firesun.wuc5g@slmails.com",
-  password: "jqJykyf5Lvuv2#wkUqVtXtuLl73z2AQ9"
+  email: ENV["USER_1_USERNAME"],
+  password: ENV["USER_1_PASSWORD"]
 )
+# Update the password in the web app or in `rails console` after seeding completes.
 users << user_1
 
 puts "#{users.count} user created!"
