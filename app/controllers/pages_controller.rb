@@ -17,6 +17,12 @@ class PagesController < ApplicationController
     @public_repo_count = @projects.count - @private_repo_count
   end
 
+  def terms_of_service
+  end
+
+  def privacy_policy
+  end
+
   private
 
   def filter_personal_projects(projects)

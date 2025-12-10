@@ -1,17 +1,19 @@
 <div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.7)), url(<%= asset_path(blog_post.img_url) %>);">
   <div class="container">
-    <h1 class="mt-5 mb-2 fs-1"><%= blog_post.title %></h1>
-    <p class="text-light small">Posted on <%= blog_post.created_at.strftime("%B %d, %Y") %></p>
-    <% if user_signed_in? %>
-      <div class="d-flex justify-content-between align-items-center">
-        <%= link_to "Back to Blog", blog_posts_path, class: "btn btn-outline-light rounded-4 p-2 mt-3" %>
-        <div class="d-flex gap-4 justify-content-start align-items-center">
-          <%= link_to "Edit Post", edit_blog_post_path, class: "btn btn-primary rounded-4 p-2 mt-3" %>
-          <%= link_to blog_post_path(@blog_post), data: { turbo_method: :delete, turbo_confirm: "Delete blog post ?" } do %>
-            <i class="fa-regular fa-trash-can text-danger trash-grow fs-2 mt-3"></i>
-          <% end %>
+    <header>
+      <h1 class="mt-5 mb-2 fs-1"><%= blog_post.title %></h1>
+      <p class="text-light small">Posted on <%= blog_post.created_at.strftime("%B %d, %Y") %></p>
+      <% if user_signed_in? %>
+        <div class="d-flex justify-content-between align-items-center">
+          <%= link_to "Back to Blog", blog_posts_path, class: "btn btn-outline-light rounded-4 p-2 mt-3" %>
+          <div class="d-flex gap-4 justify-content-start align-items-center">
+            <%= link_to "Edit Post", edit_blog_post_path, class: "btn btn-primary rounded-4 p-2 mt-3" %>
+            <%= link_to blog_post_path(@blog_post), data: { turbo_method: :delete, turbo_confirm: "Delete blog post ?" } do %>
+              <i class="fa-regular fa-trash-can text-danger trash-grow fs-2 mt-3"></i>
+            <% end %>
+          </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </header>
   </div>
 </div>

@@ -13,20 +13,20 @@
 
     <%= link_to "Skip to main content", "#main-content", class: "visually-hidden-focusable" %>
 
-    <header>
-      <%= render "shared/navbar" %>
-    </header>
+    <!-- NavBar -->
+    <%= render "shared/navbar" %>
 
-    <main>
-      <%= render "shared/flashes" %>
-      <%= yield %>
-    </main>
+    <!-- Flashes and app notifications -->
+    <%= render "shared/flashes" %>
+
+    <!-- View content -->
+    <%= yield %>
 
     <!-- <p class="notice"><%#= notice %></p> -->
     <!-- <p class="alert"><%#= alert %></p> -->
 
-    <footer>
-      <%= render "shared/footer" %>
-    </footer>
+    <!-- Footer -->
+    <%= render "shared/footer" %>
+
   </body>
 </html>

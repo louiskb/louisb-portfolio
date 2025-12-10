@@ -1,40 +1,42 @@
 <div class="container-fluid bg-dark p-4 mt-5">
-  <div class="row g-4">
-    <!-- Left: Nav Links -->
-    <div class="col-12 col-md-4">
-      <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-center gap-3 gap-md-4">
-        <% if !user_signed_in? && current_page?("/projects") %>
-          <%= link_to "Login", new_user_session_path, class: "gray-link text-decoration-none" %>
-        <% end %>
-        <%= link_to "Terms of Use", "#", class: "gray-link text-decoration-none" %>
-        <%= link_to "Privacy Policy", "#", class: "gray-link text-decoration-none" %>
+  <footer>
+    <div class="row g-4">
+      <!-- Left: Nav Links -->
+      <div class="col-12 col-md-4">
+        <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-center gap-3 gap-md-4">
+          <% if !user_signed_in? && current_page?("/projects") %>
+            <%= link_to "Login", new_user_session_path, class: "gray-link text-decoration-none" %>
+          <% end %>
+          <%= link_to "Terms of Use", terms_of_service_path, class: "gray-link text-decoration-none" %>
+          <%= link_to "Privacy Policy", privacy_policy_path, class: "gray-link text-decoration-none" %>
+        </div>
+      </div>
+      <!-- Center: Copyright -->
+      <div class="col-12 col-md-4 text-center">
+        <div class="gray-non-link">
+          © 2025 Louis Bourne. All rights reserved.
+        </div>
+      </div>
+      <!-- Right: Social Icons -->
+      <div class="col-12 col-md-4">
+        <div class="social-horizontal d-flex justify-content-center justify-content-md-end align-items-center gap-4">
+          <%= link_to "https://github.com/louiskb", target: "_blank", rel: "noopener" do %>
+            <i class="fa-brands fa-github fs-5"></i>
+          <% end %>
+          <%= link_to "https://www.linkedin.com/in/louis-bourne/", target: "_blank", rel: "noopener" do %>
+            <i class="fa-brands fa-linkedin fs-5"></i>
+          <% end %>
+          <%= link_to "https://www.fiverr.com/s/LdGw534", target: "_blank", rel: "noopener" do %>
+            <i class="fa-solid fa-briefcase fs-5"></i>
+          <% end %>
+          <%= link_to "https://discord.com/users/brothercap", target: "_blank", rel: "noopener" do %>
+            <i class="fa-brands fa-discord fs-5"></i>
+          <% end %>
+          <%= link_to "mailto:dev@louisbourne.me", target: "_blank", rel: "noopener" do %>
+            <i class="fa-solid fa-envelope fs-5"></i>
+          <% end %>
+        </div>
       </div>
     </div>
-    <!-- Center: Copyright -->
-    <div class="col-12 col-md-4 text-center">
-      <div class="gray-non-link">
-        © 2025 Louis Bourne. All rights reserved.
-      </div>
-    </div>
-    <!-- Right: Social Icons -->
-    <div class="col-12 col-md-4">
-      <div class="social-horizontal d-flex justify-content-center justify-content-md-end align-items-center gap-4">
-        <%= link_to "https://github.com/louiskb", target: "_blank", rel: "noopener" do %>
-          <i class="fa-brands fa-github fs-5"></i>
-        <% end %>
-        <%= link_to "https://www.linkedin.com/in/louis-bourne/", target: "_blank", rel: "noopener" do %>
-          <i class="fa-brands fa-linkedin fs-5"></i>
-        <% end %>
-        <%= link_to "https://www.fiverr.com/s/LdGw534", target: "_blank", rel: "noopener" do %>
-          <i class="fa-solid fa-briefcase fs-5"></i>
-        <% end %>
-        <%= link_to "https://discord.com/users/brothercap", target: "_blank", rel: "noopener" do %>
-          <i class="fa-brands fa-discord fs-5"></i>
-        <% end %>
-        <%= link_to "mailto:dev@louisbourne.me", target: "_blank", rel: "noopener" do %>
-          <i class="fa-solid fa-envelope fs-5"></i>
-        <% end %>
-      </div>
-    </div>
-  </div>
+  </footer>
 </div>
