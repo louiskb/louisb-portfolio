@@ -11,26 +11,28 @@
 
 .social-vertical a {
   color: #f5f5f5;
-  font-size: 1.30rem;
+  font-size: 1.3rem;
   transition: transform 0.3s, color 0.2s;
   display: block;
 }
 
 .social-vertical a:hover,
 .social-vertical a:focus {
-  color: #00acee;
+  // color: #00acee; // Original color.
+  color: $cyan;
   transform: scale(1.2);
 }
 
 .social-horizontal a {
   color: $gray;
-  font-size: 1.30rem;
+  font-size: 1.3rem;
   transition: transform 0.3s, color 0.2s;
   display: block;
 }
 
 .social-horizontal a:hover,
 .social-horizontal a:focus {
-  color: #00acee;
+  color: #00acee; // Original color.
+  // color: $cyan;
   transform: scale(1.2);
 }

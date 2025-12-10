@@ -1,23 +1,14 @@
 #hero-banner {
   width: 100%;
   height: 100vh; // Full viewport height
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
-    image-url("black-hole-1.png");
-  // background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.5)), image-url('cosmos-laptop.png');
+  // background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
+  //   image-url("black-hole-2.png"); // Original background-image settings.
+  background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0)),
+    image-url("black-hole-3-zoom-out-s.png");
   background-size: cover;
   background-position: center;
   position: relative;
 }
-
-// #demo-day {
-//   width: 100%;
-//   // height: 100vh; // Full viewport height
-//   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
-//     image-url("abstract-waves.png");
-//   background-size: cover;
-//   background-position: center;
-//   position: relative;
-// }
 
 .chevron-scroll {
   position: absolute;
@@ -45,7 +36,7 @@
 .bg-waves-1 {
   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
     image-url("abstract-waves-purple.png");
-     background-size: cover;
+  background-size: cover;
   background-position: center;
 }
 
@@ -53,6 +44,6 @@
 .bg-waves-2 {
   background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
     image-url("abstract-waves.png");
-     background-size: cover;
+  background-size: cover;
   background-position: center;
 }
