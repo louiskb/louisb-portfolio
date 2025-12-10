@@ -5,6 +5,7 @@ puts "Cleaning the Database..."
 
 User.destroy_all
 Project.destroy_all
+BlogPost.destroy_all
 
 puts "Database cleaned!"
 
@@ -95,3 +96,21 @@ open_source << find_a_doc
 puts "#{open_source.count} project(s) with open source contributions created! "
 
 puts "#{projects.count} total projects created!"
+
+puts "Creating blog posts..."
+
+blog_posts = []
+
+blog_post_1 = BlogPost.create!(
+  title: "Build Rails Contact Forms",
+  description: "Step‑by‑step guide to creating a Ruby on Rails contact form that validates input, sends notification and confirmation emails with Action Mailer, and shows success or error alerts on your page.",
+  img_url: "contact-form-ruby",
+  tags: "Rails 7 . ActionMailer . Gmail . Heroku . Contact Form . Tutorial",
+  html_content: "<h2>How to Build a Ruby on Rails Contact Form With Action Mailer</h2> <p>A well-designed contact form is essential for any Ruby on Rails portfolio or production app. In this guide you will build a contact form that saves submissions, shows clear success and error alerts, emails you when someone gets in touch, and sends the user a confirmation email so they know their message was received.</p> <p>This tutorial uses Action Mailer in Rails 7+, Simple Form for cleaner form markup, and an SMTP provider (such as Proton, Gmail, or another service) for sending email.</p>",
+  # Edit this blog post with the rest of the code in the web app after seeds have run successfully!
+  user: user_1
+)
+blog_posts << blog_post_1
+
+puts "#{blog_posts.count} blog post(s) created!"
+puts "🤓 Remember to 'edit' the first blog_post with the rest of the code (:html_content) in the web app."

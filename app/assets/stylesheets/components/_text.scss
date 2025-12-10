@@ -23,11 +23,17 @@ h5 {
 }
 
 p {
-  color: #999999;
+  // color: #999999; // original lighter gray.
+  color: #8c8c8c;
 }
 
 li {
-  color: #e5782a;
+  // color: #e5782a; // original color
+  color: #8c8c8c;
+}
+
+code {
+  // color: $blue;
 }
 
 // Dark background - progressive lightening from <h1> (brightest) to <p> (medium gray)
