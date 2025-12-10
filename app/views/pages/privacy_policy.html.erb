@@ -1,4 +1,68 @@
 <!-- Privacy policy -->
+<header>
+  <%= render "privacy_policy_hero_banner" %>
+</header>
 <div class="container">
-
+  <main>
+    <section>
+      <p class="my-5">
+        Your privacy is important. This Privacy Policy explains what information is collected and how it is used on
+        <%= link_to "www.louisbourne.me", root_path, class: "text-decoration-none fw-medium" %>.
+      </p>
+    </section>
+    <section class="mb-5">
+      <h2 class="mb-4 mt-5">1. Information Collected</h2>
+      <ul class="mb-0">
+        <li><span class="fw-semibold">Contact Form:</span class="fw-semibold"> When you submit the contact form, you provide your name, email address, and message. This information is used only to reply to your inquiry.</li>
+        <li><span class="fw-semibold">Browsing:</span class="fw-semibold"> You can view the Site, read the blog, view projects, and download the resume without providing any personal information.</li>
+        <li><span class="fw-semibold">Admin Account:</span class="fw-semibold"> Only one account exists for administrative purposes, accessible solely by the Site owner (Louis Bourne).</li>
+      </ul>
+    </section>
+    <section class="mb-5">
+      <h2 class="mb-4 mt-5">2. Use of Information</h2>
+      <p class="mb-0">
+        Information collected through the contact form is used exclusively for direct communication with you.
+        It will not be shared, sold, or disclosed to third parties unless required by law.
+      </p>
+    </section>
+    <section class="mb-5">
+      <h2 class="mb-4 mt-5">3. Data Storage and Security</h2>
+      <p class="mb-0">
+        Messages may be stored securely within the Site's database or email system.
+        Reasonable security measures are applied to protect this data, though no system is entirely immune to breach.
+      </p>
+    </section>
+    <section class="mb-5">
+      <h2 class="mb-4 mt-5">4. Cookies and Tracking</h2>
+      <p class="fst-italic mb-0">
+        <%= link_to "www.louisbourne.me", root_path, class: "text-decoration-none" %> does <span class="fw-semibold">not</span> use cookies, analytics services, or third-party tracking tools.
+      </p>
+    </section>
+    <section class="mb-5">
+      <h2 class="mb-4 mt-5">5. External Links</h2>
+      <p class="mb-0">
+        Blog posts or project pages may include links to other websites.
+        Louis Bourne is not responsible for the content or privacy practices of those external sites.
+      </p>
+    </section>
+    <section class="mb-5">
+      <h2 class="mb-4 mt-5">6. Your Rights</h2>
+      <p class="mb-0">
+        If you have submitted a message through the contact form, you can request deletion of that correspondence
+        by contacting the Site owner directly.
+      </p>
+    </section>
+    <section class="mb-5">
+      <h2 class="mb-4 mt-5">7. Changes</h2>
+      <p class="mb-0">
+        This Privacy Policy may be updated from time to time. Updates will be posted on this page with the date of last modification.
+      </p>
+    </section>
+    <section class="text-center mt-5 pt-5 border-top border-secondary-subtle">
+      <p class="text-muted mb-0">
+        Questions about privacy?
+        <%= link_to "Contact Louis Bourne", root_path(anchor: "contact"), class: "text-decoration-none fw-medium" %>.
+      </p>
+    </section>
+  </main>
 </div>
