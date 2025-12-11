@@ -3,9 +3,11 @@
     <header>
       <h1 class="mt-5 mb-2 fs-1"><%= blog_post.title %></h1>
       <p class="text-light small">Posted on <%= blog_post.created_at.strftime("%B %d, %Y") %></p>
+      <!-- Share button --> 
       <%= link_to "#", class: "btn btn-outline-light rounded-4 p-2 my-2" do %>
         <i class="fa-solid fa-arrow-up-from-bracket"></i> Share
       <% end %>
+      <!-- Edit buttons for signed in user -->
       <% if user_signed_in? %>
         <div class="d-flex justify-content-between align-items-center">
           <%= link_to "Back to Blog", blog_posts_path, class: "btn btn-secondary rounded-4 p-2 mt-3" %>
