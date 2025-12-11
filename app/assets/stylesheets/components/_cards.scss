@@ -3,17 +3,31 @@
 // }
 
 .card-project {
-  width: 100%;
+  height: 540px;
+  // width: 100%;
   max-width: 400px;
-  aspect-ratio: 3/4;
+  // aspect-ratio: 3/4; // w:h
 }
 
 .card-blog-post {
-  width: 100%;
+  height: 630px;
+  // width: 100%;
   max-width: 400px;
-  aspect-ratio: 3/4;
-  // max-height: 600px;
+  // aspect-ratio: 3/4; // w:h
 }
+
+.card-education {
+  height: 130px;
+  width: 100%;
+  // max-width: 400px;
+}
+
+.card-skills {
+  height: 160px;
+  width: 100%;
+  // max-width: 400px;
+}
+
 
 // .card-grow {
 //   transition: transform 0.3s, background-image 4.0s;
