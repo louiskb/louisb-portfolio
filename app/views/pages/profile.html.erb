@@ -30,21 +30,21 @@
           <p class="text-dark">
             <span class="text-success">Green</span> = Personal projects
             <span class="text-black">|</span>
-            <span class="text-danger">Red</span> = Open source projects
+            <span class="text-warning">Orange</span> = Open source projects
           </p>
           <ul>
             <% @projects.each do |project| %>
               <% if project.personal_project %>
                 <% if project.private_repo %>
-                  <li class="text-success"><%= project.title %>, <span class="text-warning">private</span></li>
+                  <li class="text-success"><%= project.title %> <span class="text-dark">-</span> <span class="text-danger">private</span></li>
                 <% else %>
-                  <li class="text-success"><%= project.title %>, <span class="text-primary">public</span></li>
+                  <li class="text-success"><%= project.title %> <span class="text-dark">-</span> <span class="text-primary">public</span></li>
                 <% end %>
               <% else %>
                 <% if project.private_repo %>
-                  <li class="text-danger"><%= project.title %>, <span class="text-warning">private</span></li>
+                  <li class="text-warning"><%= project.title %> <span class="text-dark">-</span> <span class="text-danger">private</span></li>
                 <% else %>
-                  <li class="text-success"><%= project.title %>, <span class="text-primary">public</span></li>
+                  <li class="text-warning"><%= project.title %> <span class="text-dark">-</span> <span class="text-primary">public</span></li>
                 <% end %>
               <% end %>
             <% end %>
