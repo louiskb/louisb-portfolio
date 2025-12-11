@@ -10,13 +10,13 @@
       <div class="col-12 col-md-6 d-flex align-items-center">
         <%= image_tag "dog2", alt: "Fun dog", class: "rounded-circle border border-dark avatar-profile me-3", style: "height: 20vh; width: auto;" %>
         <div>
-          <p class="soft-orange"><span class="text-dark">Email:</span> <%= @user.email %></p>
+          <p class="text-dark">Email: <span class="fst-italic purple"><%= @user.email %></span></p>
           <ul>
-            <li><span class="text-dark">Total projects created in app:</span> <%= @projects_total %></li>
-            <li><span class="text-dark">Personal projects created:</span> <%= @personal_projects_count %></li>
-            <li><span class="text-dark">Open source projects contributed to:</span> <%= @non_personal_projects_count %></li>
-            <li><span class="text-dark">Public Github repos:</span> <%= @public_repo_count %></li>
-            <li><span class="text-dark">Private Github repos:</span> <%= @private_repo_count %></li>
+            <li class="purple"><span class="text-dark">Total projects created in app:</span> <%= @projects_total %></li>
+            <li class="purple"><span class="text-dark">Personal projects created:</span> <%= @personal_projects_count %></li>
+            <li class="purple"><span class="text-dark">Open source projects contributed to:</span> <%= @non_personal_projects_count %></li>
+            <li class="purple"><span class="text-dark">Public Github repos:</span> <%= @public_repo_count %></li>
+            <li class="purple"><span class="text-dark">Private Github repos:</span> <%= @private_repo_count %></li>
           </ul>
           <div class="d-flex justify-content-start">
             <%= link_to "Edit", edit_user_registration_path, class: "btn btn-outline-dark rounded-4" %>
@@ -26,7 +26,7 @@
       <!-- Project list -->
       <div class="col-12 col-md-6">
         <div class="my-5">
-          <h3>List of all <span class="soft-orange"><%= @projects_total %></span> projects</h3>
+          <h3>List of all <span class="purple"><%= @projects_total %></span> projects</h3>
           <p class="text-dark">
             <span class="text-success">Green</span> = Personal projects
             <span class="text-black">|</span>
