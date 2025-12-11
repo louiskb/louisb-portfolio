@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [ :home ]
+  skip_before_action :authenticate_user!, only: [ :home, :terms_of_service, :privacy_policy ]
 
   def home
     @personal_projects = filter_personal_projects(Project.all)
