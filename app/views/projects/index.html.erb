@@ -43,7 +43,9 @@
                       <i class="fa-brands fa-github fs-3 text-dark"></i>
                     <% end %>
                   <% end %>
-                  <%= link_to "Live Demo", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+                  <%= link_to project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" do %>
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+                  <% end %>
                 </div>
                 <!-- If user is signed-in show the 'Edit' button and if 'Project' is featured. -->
                 <% if user_signed_in? %>
@@ -102,7 +104,9 @@
                       <i class="fa-brands fa-github fs-3 text-dark"></i>
                     <% end %>
                   <% end %>
-                  <%= link_to "View Project", project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" %>
+                  <%= link_to project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" do %>
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> View Project
+                  <% end %>
                 </div>
                 <!-- If user is signed-in show the 'Edit' button and if 'Project' is featured. -->
                 <% if user_signed_in? %>
