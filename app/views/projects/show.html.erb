@@ -20,9 +20,16 @@
         </li>
         <li class="text-dark">
           <% if @project.private_repo %>
-            Github Repo: <span class="text-danger fw-semibold">Private</span>
+            Github repo: <span class="text-danger fw-semibold">Private</span>
           <% else %>
-            Github Repo: <span class="text-primary fw-semibold">Public</span>
+            Github repo: <span class="text-primary fw-semibold">Public</span>
+          <% end %>
+        </li>
+        <li class="text-dark">
+          <% if @project.featured %>
+            Featured project: <span class="text-success">Yes</span>
+          <% else %>
+            Featured project: <span class="text-secondary">No</span>
           <% end %>
         </li>
         <li>
