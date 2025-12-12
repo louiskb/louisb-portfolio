@@ -16,7 +16,7 @@
         <!-- Featured project end -->
         <%= f.input :description, as: :text, label: "Project Description", hint: "If more than 2 'non-personal' projects, describe briefly open source contribution focus." %>
         <%= f.input :tech_stack, label: "Tech Stack", hint: "Show 3-6 main technologies (capitalized) and separating each one with ' . '", placeholder: "Ruby-on-Rails . Bootstrap . StimulusJS . PostgreSQL . Active Record" %>
-        <%= f.input :img_url, label: "Feature Image URL", hint: "Preference is to use images already in the project folder (omit .png or file extensions). Careful! Typos will break the app. Can also use an external URL starting with HTTPS://", placeholder: "<name-feature-screenshot> eg. sipfolio-cocktail-screenshot" %>
+        <%= f.input :img_url, label: "Feature Image URL", hint: "Preference is to use images already in the project folder (omit .jpg, .png, or file extensions). Careful! Typos will break the app. Can also use an external URL starting with HTTPS://", placeholder: "<name-feature-screenshot> eg. sipfolio-cocktail-screenshot" %>
         <%= f.input :github_url, label: "Github URL", placeholder: "https://github.com/louiskb/rails-mister-cocktail", hint: "Prefix 'https://'" %>
         <%= f.input :project_url, label: "Project URL", placeholder: "https://www.sipfolio.rocks", hint: "Prefix 'https://'" %>
         <div class="d-flex justify-content-end my-4 gap-3">

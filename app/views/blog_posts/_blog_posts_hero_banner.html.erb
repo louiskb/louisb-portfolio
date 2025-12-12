@@ -1,7 +1,7 @@
-<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.7)), url(<%= asset_path('abstract-coral-2.png') %>);">
+<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.7)), url(<%= asset_path('abstract-coral-2.jpg') %>);">
   <div class="container">
     <header>
-      <h1 class="mt-5 mb-4 fs-1">Blog <i class="fa-solid fa-feather"></i></h1>
+      <h1 class="mt-5 mb-4 fs-1"><i class="fa-solid fa-feather"></i> Blog</h1>
       <p>Explore practical tutorials and coding insights from my blog.</p>
       <% if user_signed_in? %>
         <%= link_to "Create", new_blog_post_path, class: "btn btn-primary rounded-4 p-2 mt-1" %>
