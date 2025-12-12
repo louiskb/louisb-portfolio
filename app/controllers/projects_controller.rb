@@ -12,6 +12,8 @@ class ProjectsController < ApplicationController
 
   def new
     @project = Project.new
+    @featured_personal_projects_count = filter_featured_personal_projects(Project.all)
+    @featured_open_source_projects_count = filter_featured_open_source_projects(Project.all)
   end
 
   def create
@@ -27,6 +29,8 @@ class ProjectsController < ApplicationController
 
   def edit
     @project = Project.find(params[:id])
+    @featured_personal_projects_count = filter_featured_personal_projects(Project.all)
+    @featured_open_source_projects_count = filter_featured_open_source_projects(Project.all)
   end
 
   def update
@@ -65,5 +69,19 @@ class ProjectsController < ApplicationController
     projects.select do |project|
       !project.personal_project
     end
+  end
+
+  def filter_featured_personal_projects(projects)
+    featured_projects = projects.select do |project|
+      project.personal_project && project.featured
+    end
+    featured_projects.count
+  end
+
+  def filter_featured_open_source_projects(projects)
+    featured_projects = projects.select do |project|
+      !project.personal_project && project.featured
+    end
+    featured_projects.count
   end
 end

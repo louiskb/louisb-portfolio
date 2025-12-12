@@ -5,6 +5,7 @@
 <div class="container">
   <main>
     <section id="projects-index">
+      <!-- Personal projects -->
       <div class="row justify-content-start align-items-center">
         <h2 class="mt-5 mb-4">My projects</h2>
         <% @personal_projects.each do |project| %>
@@ -48,7 +49,9 @@
                 <% if user_signed_in? %>
                   <div class="d-flex justify-content-between mt-4 mb-2">
                     <% if project.featured %>
-                      <p class="text-success small">Featured</p>
+                      <p class="text-success small"><i class="fa-solid fa-eye"></i> Featured</p>
+                    <% else %>
+                      <p class="text-warning small"><i class="fa-solid fa-eye-slash"></i> Not Featured</p>
                     <% end %>
                     <%= link_to project_path(project), class: "btn btn-secondary rounded-4" do %>
                       <i class="fa-solid fa-pen-to-square fs-5"></i>
@@ -61,7 +64,7 @@
         <% end %>
       </div>
       <hr class="mt-5 mb-3">
-      <!-- Open Source Project Contributions-->
+      <!-- Open source project contributions-->
       <% @open_source_projects.each do |project| %>
         <div class="row justify-content-start align-items-center">
           <h2 class="mt-5 mb-4">Open source contributions</h2>
@@ -105,7 +108,9 @@
                 <% if user_signed_in? %>
                   <div class="d-flex justify-content-between mt-4 mb-2">
                     <% if project.featured %>
-                      <p class="text-success small">Featured</p>
+                      <p class="text-success small"><i class="fa-solid fa-eye"></i> Featured</p>
+                    <% else %>
+                      <p class="text-warning small"><i class="fa-solid fa-eye-slash"></i> Not Featured</p>
                     <% end %>
                     <%= link_to project_path(project), class: "btn btn-secondary rounded-4" do %>
                       <i class="fa-solid fa-pen-to-square fs-5"></i>

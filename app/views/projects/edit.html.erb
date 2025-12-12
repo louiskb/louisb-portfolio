@@ -10,7 +10,10 @@
         <%= f.input :title, label: "Project Title", hint: "Capitalize the appropriate letters manually." %>
         <%= f.input :personal_project, label: "Personal Project" %>
         <%= f.input :private_repo, label: "Private Github Repo" %>
+        <!-- Featured project start -->
         <%= f.input :featured, label: "Featured Project", hint: "Have up to 3 featured personal projects and 3 featured open source projects at anyone time for optimal homepage layout." %>
+        <p class="text muted small">Featured <span class="text-decoration-underline">Personal</span> Projects: <span class="text-success"><%= @featured_personal_projects_count %></span> <span class="text-dark">/ 3</span> | Featured <span class="text-decoration-underline">Open Source</span> Projects: <span class="text-success"><%= @featured_open_source_projects_count %></span> <span class="text-dark">/ 3</span> = <span class="text-decoration-underline">Total</span> Featured Projects: <span class="text-primary"><%= @featured_personal_projects_count + @featured_open_source_projects_count %></span> <span class="text-dark">/ 6</span></p>
+        <!-- Featured project end -->
         <%= f.input :description, as: :text, label: "Project Description", hint: "If more than 2 'non-personal' projects, describe briefly open source contribution focus." %>
         <%= f.input :tech_stack, label: "Tech Stack", hint: "Show 3-6 main technologies (capitalized) and separating each one with ' . '", placeholder: "Ruby-on-Rails . Bootstrap . StimulusJS . PostgreSQL . Active Record" %>
         <%= f.input :img_url, label: "Feature Image URL", hint: "Preference is to use images already in the project folder (omit .png or file extensions). Careful! Typos will break the app. Can also use an external URL starting with HTTPS://", placeholder: "<name-feature-screenshot> eg. sipfolio-cocktail-screenshot" %>

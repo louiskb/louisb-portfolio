@@ -27,13 +27,13 @@ class PagesController < ApplicationController
 
   def filter_personal_projects(projects)
     projects.select do |project|
-      project.personal_project
+      project.personal_project && project.featured
     end
   end
 
   def filter_open_source_projects(projects)
     projects.select do |project|
-      !project.personal_project
+      !project.personal_project && project.featured
     end
   end
 end
