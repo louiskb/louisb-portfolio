@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :create ]
   invisible_captcha only: [:create]
-  
+
   def new
     @contact = Contact.new
   end
@@ -10,15 +10,15 @@ class ContactsController < ApplicationController
     @contact = Contact.new(contact_params)
 
     if @contact.save
-      # flash[:notice] = "Contact saved! ID: #{@contact.id}"  # ← Debug
+      # flash[:notice] = "Contact saved! ID: #{@contact.id}" - Debug
 
       ContactMailer.with(contact: @contact).received_email.deliver_now
 
-      # flash[:notice] += " | Received email sent"  # ← Debug
+      # flash[:notice] += " | Received email sent" - Debug
 
       ContactMailer.with(contact: @contact).confirmation_email.deliver_now
 
-      # flash[:notice] += " | Confirmation sent"    # ← Debug
+      # flash[:notice] += " | Confirmation sent" - Debug
 
       redirect_to root_path(anchor: "contact"), notice: "Message sent! Check your email for confirmation."
     else
