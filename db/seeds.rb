@@ -33,7 +33,7 @@ personal_projects = []
 sipfolio = Project.create!(
   title: "Sipfolio",
   description: "A social cocktail app where users discover, create, and share AI-enhanced recipes, with gamified rewards to drive engagement.",
-  img_url: "sipfolio-cocktail-screenshot",
+  img_url: "sipfolio-cocktail-screenshot.jpg",
   tech_stack: "Ruby-on-Rails . Bootstrap . StimulusJS . PostgreSQL . Active Record",
   project_url: "https://www.sipfolio.rocks/",
   github_url: "https://github.com/louiskb/rails-mister-cocktail",
@@ -47,7 +47,7 @@ personal_projects << sipfolio
 market_sensei = Project.create!(
   title: "Market Sensei",
   description: "A crypto trading platform that integrates AI-driven education and intuitive tools to make trading simpler and more accessible.",
-  img_url: "market-sensei-dashboard-screenshot",
+  img_url: "market-sensei-dashboard-screenshot.jpg",
   tech_stack: "Ruby-on-Rails . Bootstrap . StimulusJS . PostgreSQL . Active Record . OpenAI",
   project_url: "https://www.marketsensei.app/",
   # github_url: "https://github.com/louiskb/market-sensei",
@@ -63,7 +63,7 @@ personal_projects << market_sensei
 dokodemo_fit = Project.create!(
   title: "Dokedemo Fit",
   description: "An AI-powered app creating personalized exercise routines based on home equipment, with multiple plans for any occasion.",
-  img_url: "dokodemo-fit-routines-screenshot",
+  img_url: "dokodemo-fit-routines-screenshot.jpg",
   tech_stack: "Ruby-on-Rails . Bootstrap . StimulusJS . PostgreSQL . Active Record . OpenAI",
   project_url: "https://dokodemo-fit-66811301c708.herokuapp.com/",
   github_url: "https://github.com/louiskb/DokodemoFit",
@@ -83,7 +83,7 @@ open_source = []
 find_a_doc = Project.create!(
   title: "Find a Doc Japan ",
   description: "An app that connects expats living in Japan with the right doctors.",
-  img_url: "findadoc-map-screenshot",
+  img_url: "findadoc-map-screenshot.jpg",
   tech_stack: "Vue.js . JavaScript . Vitest",
   project_url: "https://www.findadoc.jp/",
   github_url: "https://github.com/ourjapanlife",
@@ -105,7 +105,7 @@ blog_posts = []
 blog_post_1 = BlogPost.create!(
   title: "Build Rails Contact Forms",
   description: "Step‑by‑step guide to creating a Ruby on Rails contact form that validates input, sends notification and confirmation emails with Action Mailer, and shows success or error alerts on your page.",
-  img_url: "contact-form-ruby",
+  img_url: "contact-form-ruby.jpg",
   tags: "Rails 7 . ActionMailer . Gmail . Heroku . Contact Form . Tutorial",
   html_content: "<h2>How to Build a Ruby on Rails Contact Form With Action Mailer</h2> <p>A well-designed contact form is essential for any Ruby on Rails portfolio or production app. In this guide you will build a contact form that saves submissions, shows clear success and error alerts, emails you when someone gets in touch, and sends the user a confirmation email so they know their message was received.</p> <p>This tutorial uses Action Mailer in Rails 7+, Simple Form for cleaner form markup, and an SMTP provider (such as Proton, Gmail, or another service) for sending email.</p>",
   # Edit this blog post with the rest of the code in the web app after seeds have run successfully!
