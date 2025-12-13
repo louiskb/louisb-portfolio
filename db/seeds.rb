@@ -39,6 +39,7 @@ sipfolio = Project.create!(
   github_url: "https://github.com/louiskb/rails-mister-cocktail",
   personal_project: true,
   private_repo: false,
+  featured: true,
   user: user_1
 )
 projects << sipfolio
@@ -55,6 +56,7 @@ market_sensei = Project.create!(
   github_url: "https://github.com/louiskb/market-sensei",
   personal_project: true,
   private_repo: true,
+  featured: true,
   user: user_1
 )
 projects << market_sensei
@@ -69,6 +71,7 @@ dokodemo_fit = Project.create!(
   github_url: "https://github.com/louiskb/DokodemoFit",
   personal_project: true,
   private_repo: false,
+  featured: true,
   user: user_1
 )
 projects << dokodemo_fit
@@ -89,6 +92,7 @@ find_a_doc = Project.create!(
   github_url: "https://github.com/ourjapanlife",
   personal_project: false,
   private_repo: false,
+  featured: true,
   user: user_1
 )
 projects << find_a_doc
