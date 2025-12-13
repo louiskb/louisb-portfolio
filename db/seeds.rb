@@ -23,7 +23,7 @@ users << user_1
 puts "#{users.count} user created!"
 
 # For security, edit the user password in the app after seeding (live & local environments).
-puts "🔐 Reminder: edit the user password in the app after seeding (live / local env accordingly)."
+puts "🔐 Reminder: Edit the user password in the app after seeding (live / local env accordingly)."
 
 # Personal Projects
 puts "Creating personal projects..."
@@ -118,5 +118,5 @@ blog_post_1 = BlogPost.create!(
 blog_posts << blog_post_1
 
 puts "#{blog_posts.count} blog post(s) created!"
-puts "🤓 Reminder: edit the first blog_post with the rest of the code (:html_content) in the web app."
+puts "🤓 Reminder: Edit the first blog_post with the rest of the code (:html_content) in the web app."
 puts "Seed successful! ✅"
