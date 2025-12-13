@@ -115,3 +115,4 @@ blog_posts << blog_post_1
 
 puts "#{blog_posts.count} blog post(s) created!"
 puts "🤓 Remember to 'edit' the first blog_post with the rest of the code (:html_content) in the web app."
+puts "Seed successful! ✅"
