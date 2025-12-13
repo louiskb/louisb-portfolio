@@ -1,0 +1,8 @@
+pre code[style*="display:block"] {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap; // Optional: wraps very long lines
+  word-wrap: break-word;
+}
+
+// This rule pre code[style*="display:block"] selects <code> elements inside <pre> tags whose style attribute contains the substring "display:block" anywhere within it. The [style*="display:block"] is an attribute substring selector—the *= means "attribute value contains this text," matching HTML with inline style like style='display:block; padding:1rem; ...'.
