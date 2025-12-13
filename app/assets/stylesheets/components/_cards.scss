@@ -3,14 +3,14 @@
 // }
 
 .card-project {
-  height: 540px;
+  height: 530px;
   // width: 100%;
   max-width: 400px;
   // aspect-ratio: 3/4; // w:h
 }
 
 .card-blog-post {
-  height: 630px;
+  height: 690px;
   // width: 100%;
   max-width: 400px;
   // aspect-ratio: 3/4; // w:h
@@ -40,11 +40,12 @@
 //   transform: scale(1.02);
 // }
 
-.card-grow {
-  transition: transform 0.3s;
-}
+//  Make the card grow on hover
+// .card-grow {
+//   transition: transform 0.3s;
+// }
 
-.card-grow:hover,
-.card-grow:focus {
-  transform: scale(1.02);
-}
+// .card-grow:hover,
+// .card-grow:focus {
+//   transform: scale(1.02);
+// }
