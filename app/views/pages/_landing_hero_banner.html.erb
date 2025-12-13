@@ -10,8 +10,16 @@
       </h1>
       <h2 class="lighter-gray mb-4">Fullstack Developer / Ruby-on-Rails</h2>
       <div class="d-flex justify-content-center align-items-center gap-3">
-        <%= link_to "Contact Me", "#contact", class: "btn btn-primary btn-lg custom-btn rounded-5" %>
-        <%= link_to "Key Projects", "#featured-projects", class: "btn btn-outline-light btn-lg rounded-5 custom-btn" %>
+        <!-- CTA Button -->
+        <!-- Desktop: large button (hidden on mobile) -->
+        <%= link_to "Contact Me", "#contact", class: "btn btn-primary btn-lg rounded-5 custom-btn d-none d-sm-block" %>
+        <!-- Mobile: Small button (hidden on desktop) -->
+        <%= link_to "Contact Me", "#contact", class: "btn btn-primary btn-sm rounded-5 custom-btn d-block d-sm-none"  %>
+        <!-- Secondary Button -->
+        <!-- Desktop: large button (hidden on mobile) -->
+        <%= link_to "Key Projects", "#featured-projects", class: "btn btn-outline-light btn-lg rounded-5 custom-btn d-none d-sm-block" %>
+        <!-- Mobile: Small button (hidden on desktop) -->
+        <%= link_to "Key Projects", "#featured-projects", class: "btn btn-outline-light btn-sm rounded-5 custom-btn d-block d-sm-none" %>
       </div>
     </div>
     <div class="chevron-scroll">
