@@ -9,9 +9,6 @@ BlogPost.destroy_all
 
 puts "Database cleaned!"
 
-# For security, edit the user password in the app after seeding (live & local environments).
-puts "Reminder: edit the user password in the app after seeding (live / local env accordingly)."
-
 # User
 puts "Creating user..."
 users = []
@@ -24,6 +21,9 @@ user_1 = User.create!(
 users << user_1
 
 puts "#{users.count} user created!"
+
+# For security, edit the user password in the app after seeding (live & local environments).
+puts "🔐 Reminder: edit the user password in the app after seeding (live / local env accordingly)."
 
 # Personal Projects
 puts "Creating personal projects..."
