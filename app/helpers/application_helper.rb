@@ -4,6 +4,6 @@ module ApplicationHelper
   end
 
   def nav_link_dropdown_class(path = "#")
-    current_page?(path) ? "dropdown-item active fs-6" : "dropdown-item fs-6"
+    current_page?(path) ? "dropdown-item active fs-5" : "dropdown-item fs-5"
   end
 end
