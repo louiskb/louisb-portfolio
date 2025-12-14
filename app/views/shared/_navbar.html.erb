@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark navbar-lb" style="background-color: rgba(0, 0, 0, 0.5);">
+<nav class="navbar navbar-expand-sm navbar-dark navbar-lb" style="background-color: rgba(0, 0, 0, 0.90);">
   <div class="container-fluid">
     <%= link_to "/", class: "navbar-brand ms-2" do %>
       <%= image_tag "lb-circle-logo-light-tp.png", alt: "Logo" %>
@@ -26,21 +26,22 @@
               <%= link_to "Create Project", new_project_path, class: nav_link_dropdown_class(new_project_path) %>
               <%= link_to "Create Blog Post", new_blog_post_path, class: nav_link_dropdown_class(new_blog_post_path) %>
               <%= link_to "Profile", profile_path, class: nav_link_dropdown_class(profile_path) %>
-              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item text-dark" %>
+              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item text-dark fs-6" %>
             </div>
           </li>
         <% else %>
           <li class="nav-item active">
+            <!-- Desktop -->
             <%= link_to "Portfolio", root_path, class: nav_link_class(root_path) %>
           </li>
           <li class="nav-item">
             <%= link_to "Projects", projects_path, class: nav_link_class(projects_path) %>
           </li>
-          <li class="nav-item">
+          <li class="nav-item me-2">
             <%= link_to "Blog", blog_posts_path, class: nav_link_class %>
           </li>
-          <li class="nav-item me-3 ms-2">
-            <%= link_to "Contact Me", root_path(anchor: "contact"), class: "btn btn-primary btn-sm rounded-5 btn-nav" %>
+          <li class="nav-item me-2 my-1">
+            <%= link_to "Contact Me", root_path(anchor: "contact"), class: "btn btn-primary fs-5 btn-lg rounded-5 btn-nav" %>
           </li>
         <% end %>
       </ul>
