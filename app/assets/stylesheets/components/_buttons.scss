@@ -1,6 +1,6 @@
 .btn-outline-light.custom-btn:hover,
 .btn-outline-light.custom-btn:focus {
-  background-color: rgba(225,255,255,0.15); // Transparent white fill.
+  background-color: rgba(225, 255, 255, 0.15); // Transparent white fill.
   color: $white;
   border-color: $white;
 }
@@ -24,7 +24,7 @@
 
 // Github icon link hover grow effect.
 .github-btn i {
-  transition: transform 0.3s cubic-bezier(0.2,0.84,0.5,1);
+  transition: transform 0.3s cubic-bezier(0.2, 0.84, 0.5, 1);
 }
 
 .github-btn:hover i,

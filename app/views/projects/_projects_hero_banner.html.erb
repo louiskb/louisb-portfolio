@@ -1,7 +1,7 @@
 <div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.7)), url(<%= asset_path('abstract-shapes-2.jpg') %>);">
   <div class="container">
     <h1 class="mt-5 mb-4 fs-1"><i class="fa-solid fa-folder-open"></i> Projects</h1>
-    <p>A portfolio highlighting my projects, including contributions to open source projects.</p>
+    <p>A portfolio showcasing my personal projects and open source contributions.</p>
     <% if user_signed_in? %>
       <%= link_to "Create", new_project_path, class: "btn btn-primary rounded-4 p-2 mt-1" %>
     <% end %>
