@@ -63,7 +63,7 @@ projects << market_sensei
 personal_projects << market_sensei
 
 dokodemo_fit = Project.create!(
-  title: "Dokedemo Fit",
+  title: "Dokodemo Fit",
   description: "An AI-powered app creating personalized exercise routines based on home equipment, with multiple plans for any occasion.",
   img_url: "dokodemo-fit-routines-screenshot.jpg",
   tech_stack: "Ruby-on-Rails . Bootstrap . StimulusJS . PostgreSQL . Active Record . OpenAI",
