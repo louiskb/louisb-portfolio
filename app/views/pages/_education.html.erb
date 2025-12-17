@@ -2,8 +2,8 @@
 <section id="education">
   <div class="container">
     <h3 class="mb-3">Education & certifications</h3>
-    <p>My education background and key certifications sorted by relevance first.</p>
-    <div class="row">
+    <p>My education background and key certifications sorted by most recent first.</p>
+    <div class="row justify-content-center">
       <!-- Le Wagon certification -->
       <div class="col-12 col-lg-6">
         <div class="card card-education shadow-sm rounded-4 my-3">
@@ -38,6 +38,23 @@
           </div>
         </div>
       </div>
+      <!-- LearnToTrade UK -->
+      <div class="col-12 col-lg-6">
+        <div class="card card-education shadow-sm rounded-4 my-3">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-start align-items-top gap-4">
+              <%= image_tag "learntotrade.jpg", alt: "Learn to trade online", class: "img-fluid w-25 rounded-3" %>
+              <div>
+                <%= link_to "https://learntotradegroup.com/", class: "text-decoration-none fs-5", target: "_blank" do %>
+                  LearnToTrade, UK <i class="fa-solid fa-chart-simple"></i>
+                <% end %>
+                <p class="card-text text-muted small">Unlimited Wealth Program <br>
+                  <span class="small">Online 👨‍💻 · 2020-2021</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- Digital Marketing Institute certification -->
       <div class="col-12 col-lg-6">
         <div class="card card-education shadow-sm rounded-4 my-3">
@@ -49,7 +66,7 @@
                   Digital Marketing Institute <i class="fa-solid fa-bullhorn"></i>
                 <% end %>
                 <p class="card-text text-muted small">Professional Diploma in Digital Marketing <br>
-                  <span class="small"> Online 👨‍💻 · 2018</span></p>
+                  <span class="small">Online 👨‍💻 · 2018</span></p>
               </div>
             </div>
           </div>
@@ -74,9 +91,9 @@
       </div>
     </div>
     <!-- Download full resume button -->
-   <!-- <div class="d-flex justify-content-center align-items-center"> -->
-      <%#= link_to "/docs/test-resume.pdf", download: "text-resume.pdf", class: "btn btn-outline-dark btn-lg rounded-5 mb-3 mt-5" do %>
-        <!-- <i class="fa-solid fa-download"></i> Download Full Resume -->
+    <!-- <div class="d-flex justify-content-center align-items-center"> -->
+    <%#= link_to "/docs/test-resume.pdf", download: "text-resume.pdf", class: "btn btn-outline-dark btn-lg rounded-5 mb-3 mt-5" do %>
+      <!-- <i class="fa-solid fa-download"></i> Download Full Resume -->
       <%# end %>
     </div>
   </section>
