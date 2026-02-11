@@ -1,1 +1,1 @@
-Rails app generated with [lewagon/rails-templates](https://github.com/lewagon/rails-templates), created by the [Le Wagon coding bootcamp](https://www.lewagon.com) team.
+Louis' portfolio website that's also a web app and blog. Logged in user can create blog posts and manage resources to showcase throughout the app. 
