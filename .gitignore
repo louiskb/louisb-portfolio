@@ -39,3 +39,8 @@
 # Ignore Mac and Linux file system files
 *.swp
 .DS_Store
+
+# Ignore portfolio images
+lb-portfolio.jpeg
+mt-cook-ta.jpg
+rails-dev-1.jpg
