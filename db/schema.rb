@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_01_090005) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_01_090007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,6 +52,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_090005) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "blog_post_tags", force: :cascade do |t|
+    t.bigint "blog_post_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["blog_post_id", "tag_id"], name: "index_blog_post_tags_on_blog_post_id_and_tag_id", unique: true
+    t.index ["blog_post_id"], name: "index_blog_post_tags_on_blog_post_id"
+    t.index ["tag_id"], name: "index_blog_post_tags_on_tag_id"
+  end
+
   create_table "blog_posts", force: :cascade do |t|
     t.boolean "ai_generated", default: false
     t.string "author"
@@ -67,7 +77,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_090005) do
     t.datetime "scheduled_at"
     t.string "slug"
     t.integer "status", default: 2, null: false
-    t.string "tags"
     t.string "title"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
@@ -226,6 +235,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_090005) do
     t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email", default: "", null: false
@@ -240,6 +256,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_01_090005) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "blog_post_tags", "blog_posts"
+  add_foreign_key "blog_post_tags", "tags"
   add_foreign_key "blog_posts", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

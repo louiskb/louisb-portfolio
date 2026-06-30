@@ -1,0 +1,14 @@
+rails7:
+  name: Rails 7
+
+actionmailer:
+  name: ActionMailer
+
+heroku:
+  name: Heroku
+
+deployment:
+  name: Deployment
+
+postgresql:
+  name: PostgreSQL

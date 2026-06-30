@@ -16,5 +16,7 @@ Rails.application.routes.draw do
     collection { patch :reorder }
   end
 
+  resources :tags, only: [:create, :destroy]
+
   resources :contacts, only: [:new, :create]
 end

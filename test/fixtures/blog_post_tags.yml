@@ -1,0 +1,23 @@
+welcome_rails7:
+  blog_post: welcome
+  tag: rails7
+
+welcome_actionmailer:
+  blog_post: welcome
+  tag: actionmailer
+
+welcome_heroku:
+  blog_post: welcome
+  tag: heroku
+
+deploying_heroku:
+  blog_post: deploying
+  tag: heroku
+
+deploying_deployment:
+  blog_post: deploying
+  tag: deployment
+
+deploying_postgresql:
+  blog_post: deploying
+  tag: postgresql

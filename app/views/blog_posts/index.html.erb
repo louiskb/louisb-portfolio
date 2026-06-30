@@ -25,7 +25,7 @@
                 <p class="card-text text-muted"><%= blog_post.description.capitalize %></p>
                 <hr class="my-3">
                 <p class="text-blog-tags">
-                  <%= blog_post.tags %>
+                  <%= blog_post.tags.map(&:name).join(" · ") %>
                 </p>
                 <div class="d-flex justify-content-center align-items-center">
                   <%= link_to "View Full Post", blog_post_path(blog_post), class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium w-100 my-3" %>

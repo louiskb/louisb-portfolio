@@ -7,6 +7,9 @@ class BlogPost < ApplicationRecord
   # Associations
   belongs_to :user # creates a method `blog_post.users` that shows who the owner / creator of the blog_post is.
 
+  has_many :blog_post_tags, dependent: :destroy
+  has_many :tags, through: :blog_post_tags
+
   # Uploaded media (Cloudinary in production, Disk in dev/test). Variant
   # processing is disabled — originals are rendered directly.
   has_one_attached :featured_image
@@ -39,6 +42,20 @@ class BlogPost < ApplicationRecord
     words = text.split.size
     minutes = [(words / 200.0).ceil, 1].max
     "#{minutes} min read"
+  end
+
+  # Up to 3 recent published posts that share at least one tag with this post.
+  # Returns an empty relation when this post has no tags.
+  def related_posts
+    return BlogPost.none if tag_ids.empty?
+
+    BlogPost.published
+            .joins(:tags)
+            .where(tags: { id: tag_ids })
+            .where.not(id: id)
+            .distinct
+            .order(created_at: :desc)
+            .limit(3)
   end
 
   # Returns a display label for AI involvement, shown to Louis only.

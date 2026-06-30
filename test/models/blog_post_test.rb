@@ -60,6 +60,19 @@ class BlogPostTest < ActiveSupport::TestCase
     assert_includes post.errors[:base].to_sentence, "only have rich text content or HTML content"
   end
 
+  test "related_posts finds published posts sharing a tag" do
+    # welcome and deploying both carry the "Heroku" tag (see fixtures).
+    related = blog_posts(:welcome).related_posts
+    assert_includes related, blog_posts(:deploying)
+    assert_not_includes related, blog_posts(:welcome), "must exclude itself"
+    assert_operator related.size, :<=, 3
+  end
+
+  test "related_posts is empty when the post has no tags" do
+    post = BlogPost.create!(title: "Tagless", html_content: "<p>Hi.</p>", user: users(:louis))
+    assert_empty post.related_posts
+  end
+
   test "reading_time returns a string" do
     assert_kind_of String, blog_posts(:welcome).reading_time
     assert_match(/min read/, blog_posts(:welcome).reading_time)
@@ -76,7 +89,6 @@ class BlogPostTest < ActiveSupport::TestCase
       title: "My First Rails Post",
       description: "A description.",
       img_url: "lb-portfolio.jpeg",
-      tags: "Ruby",
       html_content: "<p>Body.</p>",
       user: users(:louis)
     )

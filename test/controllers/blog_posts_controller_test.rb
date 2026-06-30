@@ -13,7 +13,6 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
       title: "Secret Draft Post",
       description: "Still drafting.",
       img_url: "lb-portfolio.jpeg",
-      tags: "Ruby",
       html_content: "<p>Draft body.</p>",
       user: users(:louis),
       status: :draft
@@ -36,7 +35,6 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
         title: "Post With Upload",
         description: "Has an uploaded image.",
         img_url: "lb-portfolio.jpeg",
-        tags: "Ruby",
         html_content: "<p>Body.</p>",
         featured_image: fixture_file_upload("test_image.png", "image/png")
       } }
@@ -54,7 +52,6 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
       title: "Resolving By Slug",
       description: "A description.",
       img_url: "lb-portfolio.jpeg",
-      tags: "Ruby",
       html_content: "<p>Body.</p>",
       user: users(:louis)
     )
@@ -111,7 +108,6 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
         title: "A brand new post",
         description: "Something I learned today.",
         img_url: "lb-portfolio.jpeg",
-        tags: "Ruby . Testing",
         html_content: "<p>The body of the post.</p>"
       } }
     end
