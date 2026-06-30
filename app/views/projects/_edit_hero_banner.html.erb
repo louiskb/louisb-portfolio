@@ -1,4 +1,11 @@
-<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.7)), url(<%= asset_path(project.img_url) %>);">
+<%
+  hero_src = if project.featured_image.attached?
+    url_for(project.featured_image)
+  elsif project.img_url.present?
+    asset_path(project.img_url)
+  end
+%>
+<div class="banner" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.7))<%= ", url(#{hero_src})" if hero_src %>;">
   <div class="container">
     <h1 class="mt-5 mb-4 fs-1"><i class="fa-solid fa-pen-to-square text-info"></i> <%= project.title %></h1>
   </div>
