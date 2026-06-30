@@ -366,4 +366,58 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_url
     assert scheduled.reload.scheduled?
   end
+
+  # ---- Cross-user ownership (IDOR) ----
+  # A SIGNED-IN intruder acting on records owned by louis. The guards scope every
+  # lookup to current_user, so the intruder finds nothing (RecordNotFound -> 404)
+  # and never mutates louis's records. These catch reverting that scoping.
+
+  test "reorder only touches the intruder's own projects, never another owner's" do
+    louis_project = Project.create!(
+      title: "Louis Only Reorder Project",
+      user: users(:louis),
+      status: :draft,
+      position: 5
+    )
+    intruder_project = projects(:intruder_project)
+
+    sign_in users(:intruder)
+    patch reorder_projects_url, params: { ids: [ louis_project.id, intruder_project.id ] }, as: :json
+    assert_response :success
+
+    assert_equal 5, louis_project.reload.position, "an intruder must not reorder louis's projects"
+    assert_equal 1, intruder_project.reload.position, "the intruder may reorder their own project"
+  end
+
+  test "publish on a project owned by another user is not found for the intruder" do
+    louis_project = Project.create!(title: "Louis Only Publish Project", user: users(:louis), status: :draft)
+
+    sign_in users(:intruder)
+    patch publish_project_url(louis_project)
+    assert_response :not_found
+    assert louis_project.reload.draft?, "a non-owner must not be able to publish the project"
+  end
+
+  test "schedule on a project owned by another user is not found for the intruder" do
+    louis_project = Project.create!(title: "Louis Only Schedule Project", user: users(:louis), status: :draft)
+
+    sign_in users(:intruder)
+    patch schedule_project_url(louis_project), params: { scheduled_at: 1.day.from_now.strftime("%Y-%m-%dT%H:%M") }
+    assert_response :not_found
+    assert louis_project.reload.draft?, "a non-owner must not be able to schedule the project"
+  end
+
+  test "cancel_schedule on a project owned by another user is not found for the intruder" do
+    louis_project = Project.create!(
+      title: "Louis Only Cancel Project",
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: 1.day.from_now
+    )
+
+    sign_in users(:intruder)
+    patch cancel_schedule_project_url(louis_project)
+    assert_response :not_found
+    assert louis_project.reload.scheduled?, "a non-owner must not be able to cancel the schedule"
+  end
 end

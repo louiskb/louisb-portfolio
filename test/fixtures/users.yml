@@ -4,3 +4,12 @@ louis:
   encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
   created_at: <%= 1.year.ago %>
   updated_at: <%= 1.year.ago %>
+
+# A second account ONLY for cross-user (IDOR) ownership tests. The app enforces
+# a single user via a `validate ... on: :create` rule, but fixtures are inserted
+# with raw SQL and bypass validations — so this is safe and never reachable in prod.
+intruder:
+  email: intruder@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+  created_at: <%= 1.year.ago %>
+  updated_at: <%= 1.year.ago %>

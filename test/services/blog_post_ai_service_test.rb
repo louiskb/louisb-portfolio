@@ -17,6 +17,17 @@ class BlogPostAiServiceTest < ActiveSupport::TestCase
     def ask(*) = @response
   end
 
+  # A real Net::HTTPSuccess subclass so `response.is_a?(Net::HTTPSuccess)` passes,
+  # with a canned body — lets us drive fetch_image_html's markup branch in tests.
+  class FakeHttpSuccess < Net::HTTPSuccess
+    def initialize(body)
+      super("1.1", "200", "OK")
+      @fake_body = body
+    end
+
+    def body = @fake_body
+  end
+
   setup do
     @user = users(:louis)
     @service = BlogPostAiService.new(@user)
@@ -64,6 +75,21 @@ class BlogPostAiServiceTest < ActiveSupport::TestCase
     assert_equal "Louis Bourne", post.author, "author is stamped by the model"
   end
 
+  test "create_from_prompt with a scheduled status and future time builds a scheduled post" do
+    future = 3.days.from_now.change(usec: 0)
+
+    post = nil
+    RubyLLM.stub(:chat, FakeChat.new(ai_payload)) do
+      @service.stub(:fetch_unsplash_data, nil) do
+        post = @service.create_from_prompt("Topic", status: :scheduled, scheduled_at: future)
+      end
+    end
+
+    assert post.persisted?
+    assert post.scheduled?, "the requested scheduled status must be honoured, not silently published"
+    assert_equal future.to_i, post.scheduled_at.to_i, "the requested publish time must be persisted"
+  end
+
   test "create_from_prompt skips Unsplash when a custom image_url is supplied" do
     post = nil
     RubyLLM.stub(:chat, FakeChat.new(ai_payload)) do
@@ -104,6 +130,26 @@ class BlogPostAiServiceTest < ActiveSupport::TestCase
     assert post.body.to_plain_text.blank?, "the rich-text body should be cleared after AI revision"
     assert post.ai_generated?, "ai_generated should be true after revision"
     assert post.human_generated?, "human_generated should be true after revision"
+  end
+
+  test "revise_blog_post with a scheduled status and future time schedules the post" do
+    post = BlogPost.create!(
+      title: "Draft To Revise And Schedule",
+      html_content: "<p>Original.</p>",
+      user: @user,
+      status: :draft
+    )
+    future = 4.days.from_now.change(usec: 0)
+
+    RubyLLM.stub(:chat, FakeChat.new(ai_payload)) do
+      @service.stub(:fetch_unsplash_data, nil) do
+        @service.revise_blog_post(post, "revise it", status: :scheduled, scheduled_at: future)
+      end
+    end
+
+    post.reload
+    assert post.scheduled?, "the requested scheduled status must be honoured"
+    assert_equal future.to_i, post.scheduled_at.to_i, "the requested publish time must be persisted"
   end
 
   test "revise_blog_post preserves the existing scheduled_at when scheduled with no new time" do
@@ -192,6 +238,45 @@ class BlogPostAiServiceTest < ActiveSupport::TestCase
       assert post.persisted?
       assert_nil post.img_url
       assert_not_includes post.html_content, "<!-- IMAGE:", "image placeholder is stripped to empty when no key"
+    end
+  end
+
+  # --- XSS hardening: hostile Unsplash fields ------------------------------
+  test "figcaption_html escapes a hostile photographer name and collapses non-http hrefs" do
+    data = {
+      url: "https://images.unsplash.com/ok.jpg",
+      photographer: '"><script>alert(1)</script>',
+      photographer_url: "javascript:alert(1)",
+      photo_url: "javascript:alert(document.cookie)"
+    }
+
+    html = @service.send(:figcaption_html, data)
+
+    assert_not_includes html, "<script>", "the photographer name must be HTML-escaped, not raw"
+    assert_includes html, "&lt;script&gt;", "the script tag must appear escaped"
+    assert_not_includes html, "javascript:", "non-http(s) hrefs must collapse to #"
+    assert_includes html, "href='#'", "a javascript: scheme must become #"
+  end
+
+  test "fetch_image_html escapes hostile Unsplash fields and collapses non-http schemes" do
+    hostile_json = {
+      "urls" => { "regular" => "javascript:alert(1)" },
+      "user" => {
+        "name" => '"><script>alert(1)</script>',
+        "links" => { "html" => "javascript:alert(2)" }
+      },
+      "links" => { "html" => "javascript:alert(3)" }
+    }.to_json
+
+    with_env("UNSPLASH_ACCESS_KEY", "test-unsplash-key") do
+      Net::HTTP.stub(:start, ->(*) { FakeHttpSuccess.new(hostile_json) }) do
+        html = @service.send(:fetch_image_html, '"><script>q</script>')
+
+        assert_includes html, "<figure", "the success markup branch must have executed"
+        assert_not_includes html, "<script>", "hostile fields must be HTML-escaped, not raw"
+        assert_includes html, "&lt;script&gt;", "the script tag must appear escaped"
+        assert_not_includes html, "javascript:", "non-http(s) src/href must collapse to #"
+      end
     end
   end
 end

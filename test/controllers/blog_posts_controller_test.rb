@@ -453,4 +453,103 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_url
     assert scheduled.reload.scheduled?
   end
+
+  # ---- Cross-user ownership (IDOR) ----
+  # These act as a SIGNED-IN intruder against records owned by louis. The guards
+  # scope every lookup to current_user, so the intruder's request finds nothing
+  # (RecordNotFound -> 404) and never mutates louis's records. An unscoped lookup
+  # would find and mutate them — these tests catch reverting that scoping.
+
+  test "reorder only touches the intruder's own posts, never another owner's" do
+    louis_post = BlogPost.create!(
+      title: "Louis Only Reorder",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft,
+      position: 5
+    )
+    intruder_post = blog_posts(:intruder_post)
+
+    sign_in users(:intruder)
+    # If reorder weren't scoped, louis_post (index 0) would become position 0.
+    patch reorder_blog_posts_url, params: { ids: [ louis_post.id, intruder_post.id ] }, as: :json
+    assert_response :success
+
+    assert_equal 5, louis_post.reload.position, "an intruder must not reorder louis's posts"
+    assert_equal 1, intruder_post.reload.position, "the intruder may reorder their own post"
+  end
+
+  test "publish on a post owned by another user is not found for the intruder" do
+    louis_post = BlogPost.create!(
+      title: "Louis Only Publish",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+
+    sign_in users(:intruder)
+    patch publish_blog_post_url(louis_post)
+    assert_response :not_found
+    assert louis_post.reload.draft?, "a non-owner must not be able to publish the post"
+  end
+
+  test "schedule on a post owned by another user is not found for the intruder" do
+    louis_post = BlogPost.create!(
+      title: "Louis Only Schedule",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+
+    sign_in users(:intruder)
+    patch schedule_blog_post_url(louis_post), params: { scheduled_at: 1.day.from_now.strftime("%Y-%m-%dT%H:%M") }
+    assert_response :not_found
+    assert louis_post.reload.draft?, "a non-owner must not be able to schedule the post"
+  end
+
+  test "cancel_schedule on a post owned by another user is not found for the intruder" do
+    louis_post = BlogPost.create!(
+      title: "Louis Only Cancel",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: 1.day.from_now
+    )
+
+    sign_in users(:intruder)
+    patch cancel_schedule_blog_post_url(louis_post)
+    assert_response :not_found
+    assert louis_post.reload.scheduled?, "a non-owner must not be able to cancel the schedule"
+  end
+
+  test "ai_revise on a post owned by another user is not found for the intruder" do
+    louis_post = BlogPost.create!(
+      title: "Louis Only AI Revise",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+
+    sign_in users(:intruder)
+    with_env("ANTHROPIC_API_KEY", "sk-ant-test") do
+      get ai_revise_blog_post_url(louis_post)
+    end
+    assert_response :not_found
+  end
+
+  test "revise_with_ai on a post owned by another user is not found for the intruder" do
+    louis_post = BlogPost.create!(
+      title: "Louis Only Revise With AI",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+
+    sign_in users(:intruder)
+    with_env("ANTHROPIC_API_KEY", "sk-ant-test") do
+      patch revise_with_ai_blog_post_url(louis_post), params: { blog_post: { prompt: "rewrite" } }
+    end
+    assert_response :not_found
+    assert louis_post.reload.title == "Louis Only Revise With AI", "a non-owner must not revise the post"
+  end
 end

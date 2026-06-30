@@ -18,3 +18,15 @@ deploying:
   user: louis
   created_at: <%= 2.weeks.ago %>
   updated_at: <%= 2.weeks.ago %>
+
+# Owned by the intruder account — used only by cross-user ownership tests.
+# Kept a draft so it never affects published-count or visitor-index assertions.
+intruder_post:
+  title: Intruder's Own Post
+  description: A post owned by the second account.
+  img_url: lb-portfolio.jpeg
+  html_content: "<p>Intruder's own content.</p>"
+  status: 0
+  user: intruder
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.week.ago %>

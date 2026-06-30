@@ -38,9 +38,13 @@
                 input_html: { accept: "image/*" },
                 hint: "Upload a hero image, or leave blank and the AI fetches a relevant photo from Unsplash." %>
 
+          <%# Give an explicit value: image_url is a virtual field, so without one
+              simple_form calls @blog_post.image_url (no such column) and 500s the
+              422 re-render when a failed AI result is rendered back into this form. %>
           <%= f.input :image_url,
                 label: "Fallback image URL (optional)",
                 placeholder: "https://example.com/photo.jpg",
+                input_html: { value: @blog_post&.img_url },
                 hint: "Used only if no file is uploaded and the Unsplash fetch fails." %>
 
           <%# Phase 3 keeps this simple — new AI posts are saved as drafts.

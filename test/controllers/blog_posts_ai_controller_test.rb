@@ -12,6 +12,15 @@ class BlogPostsAiControllerTest < ActionDispatch::IntegrationTest
     def revise_blog_post(*, **) = @post
   end
 
+  # A stand-in whose AI methods raise — exercises the controller's rescue path
+  # (handle_ai_error) so an exception becomes a generic 422 alert, not a 500.
+  class RaisingAiService
+    INTERNAL_MESSAGE = "secret internal failure detail"
+
+    def create_from_prompt(*, **) = raise StandardError, INTERNAL_MESSAGE
+    def revise_blog_post(*, **) = raise StandardError, INTERNAL_MESSAGE
+  end
+
   setup { @blog_post = blog_posts(:welcome) }
 
   # --- ai_new --------------------------------------------------------------
@@ -100,5 +109,73 @@ class BlogPostsAiControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to blog_post_url(@blog_post)
+  end
+
+  # --- AI unhappy paths ----------------------------------------------------
+  test "POST create_with_ai re-renders ai_new with 422 when the AI result is invalid" do
+    sign_in users(:louis)
+    invalid = BlogPost.new(title: "", user: users(:louis)) # unpersisted, title missing
+    invalid.valid? # populate errors so the failure flash has content
+
+    with_env("ANTHROPIC_API_KEY", "sk-ant-test") do
+      BlogPostAiService.stub(:new, StubAiService.new(invalid)) do
+        post create_with_ai_blog_posts_url, params: { blog_post: { prompt: "Write about Rails" } }
+      end
+    end
+
+    assert_response :unprocessable_entity
+    assert_select "form[action=?]", create_with_ai_blog_posts_path
+    # The apostrophe in the flash is HTML-escaped, so match an apostrophe-free fragment.
+    assert_includes response.body, "The AI response"
+  end
+
+  test "PATCH revise_with_ai re-renders ai_revise with 422 when the AI result is invalid" do
+    sign_in users(:louis)
+    invalid = BlogPost.create!( # persisted (so the form path resolves) but carrying an error
+      title: "Persisted But Invalid",
+      html_content: "<p>x</p>",
+      user: users(:louis)
+    )
+    invalid.errors.add(:base, "AI revision rejected")
+
+    with_env("ANTHROPIC_API_KEY", "sk-ant-test") do
+      BlogPostAiService.stub(:new, StubAiService.new(invalid)) do
+        patch revise_with_ai_blog_post_url(@blog_post),
+          params: { blog_post: { prompt: "Make it punchier" } }
+      end
+    end
+
+    assert_response :unprocessable_entity
+    assert_select "form[action=?]", revise_with_ai_blog_post_path(invalid)
+    # The apostrophe in the flash is HTML-escaped, so match an apostrophe-free fragment.
+    assert_includes response.body, "The AI revision"
+  end
+
+  test "POST create_with_ai renders a generic 422 alert without leaking a raised error" do
+    sign_in users(:louis)
+    with_env("ANTHROPIC_API_KEY", "sk-ant-test") do
+      BlogPostAiService.stub(:new, RaisingAiService.new) do
+        post create_with_ai_blog_posts_url, params: { blog_post: { prompt: "Write about Rails" } }
+      end
+    end
+
+    assert_response :unprocessable_entity
+    assert_includes response.body, "The AI encountered an error"
+    assert_not_includes response.body, RaisingAiService::INTERNAL_MESSAGE,
+      "the raw exception message must not leak to the user"
+  end
+
+  test "PATCH revise_with_ai renders a generic 422 alert without leaking a raised error" do
+    sign_in users(:louis)
+    with_env("ANTHROPIC_API_KEY", "sk-ant-test") do
+      BlogPostAiService.stub(:new, RaisingAiService.new) do
+        patch revise_with_ai_blog_post_url(@blog_post), params: { blog_post: { prompt: "x" } }
+      end
+    end
+
+    assert_response :unprocessable_entity
+    assert_includes response.body, "The AI encountered an error"
+    assert_not_includes response.body, RaisingAiService::INTERNAL_MESSAGE,
+      "the raw exception message must not leak to the user"
   end
 end
