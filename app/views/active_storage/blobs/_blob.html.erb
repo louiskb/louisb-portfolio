@@ -1,0 +1,17 @@
+<%# Overrides the default Active Storage blob partial. Variant processing is
+    intentionally disabled (no image_processing gem), so we render the ORIGINAL
+    blob instead of calling blob.representation/variant, which would raise. %>
+<figure class="attachment attachment--<%= blob.image? ? "preview" : "file" %> attachment--<%= blob.filename.extension %>">
+  <% if blob.image? %>
+    <%= image_tag blob.url, loading: "lazy" %>
+  <% end %>
+
+  <figcaption class="attachment__caption">
+    <% if caption = blob.try(:caption) %>
+      <%= caption %>
+    <% else %>
+      <span class="attachment__name"><%= blob.filename %></span>
+      <span class="attachment__size"><%= number_to_human_size blob.byte_size %></span>
+    <% end %>
+  </figcaption>
+</figure>

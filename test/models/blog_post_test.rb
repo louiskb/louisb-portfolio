@@ -17,6 +17,17 @@ class BlogPostTest < ActiveSupport::TestCase
     assert_includes BlogPost.ancestors, Publishable
   end
 
+  test "can attach a featured image via the :test service" do
+    post = blog_posts(:welcome)
+    post.featured_image.attach(
+      io: file_fixture("test_image.png").open,
+      filename: "test_image.png",
+      content_type: "image/png"
+    )
+
+    assert post.featured_image.attached?
+  end
+
   test "generates a slug from the title" do
     post = BlogPost.create!(
       title: "My First Rails Post",

@@ -7,6 +7,11 @@ class BlogPost < ApplicationRecord
   # Associations
   belongs_to :user # creates a method `blog_post.users` that shows who the owner / creator of the blog_post is.
 
+  # Uploaded media (Cloudinary in production, Disk in dev/test). Variant
+  # processing is disabled — originals are rendered directly.
+  has_one_attached :featured_image
+  has_many_attached :photos
+
   # Validations
   validates :title, presence: true
   validates :description, presence: true
