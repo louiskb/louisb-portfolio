@@ -11,9 +11,11 @@ class BlogPostsController < ApplicationController
   end
 
   # PATCH /blog_posts/reorder — persists drag-and-drop order (owner only).
+  # Scoped to current_user.blog_posts so a request can only reorder records it
+  # owns (defense-in-depth IDOR guard, even though this is a single-user app).
   def reorder
-    reorder_params.fetch(:ids, []).each_with_index do |id, index|
-      BlogPost.where(id: id).update_all(position: index)
+    reorder_params.fetch(:ids, []).map(&:to_i).each_with_index do |id, index|
+      current_user.blog_posts.where(id: id).update_all(position: index)
     end
     head :ok
   end
