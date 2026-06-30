@@ -23,6 +23,19 @@ module ActiveSupport
     ensure
       original.nil? ? ENV.delete(key) : ENV[key] = original
     end
+
+    # Stubs the module-level PostHog.capture for the duration of the block and
+    # records every call's keyword options. Because the real method is replaced,
+    # NO analytics request ever leaves the test process — the assertions run
+    # purely against the recorded calls. Returns the array of recorded option
+    # hashes (each like { distinct_id:, event:, properties: }).
+    def capture_posthog_events
+      recorded = []
+      PostHog.stub(:capture, ->(*_args, **kwargs) { recorded << kwargs }) do
+        yield recorded
+      end
+      recorded
+    end
   end
 end
 

@@ -1,5 +1,7 @@
 class PagesController < ApplicationController
-  skip_before_action :authenticate_user!, only: [ :home, :terms_of_service, :privacy_policy ]
+  skip_before_action :authenticate_user!, only: [ :home, :terms_of_service, :privacy_policy, :resume ]
+
+  RESUME_PATH = Rails.root.join("public/docs/louis-bourne-full-stack-developer-resume-feb-2026.pdf").freeze
 
   def home
     # Owner sees everything; visitors only see published projects.
@@ -23,6 +25,15 @@ class PagesController < ApplicationController
   end
 
   def privacy_policy
+  end
+
+  # GET /resume — streams the resume PDF as an attachment and fires a
+  # visitor-only `resume_downloaded` analytics event. Public so the public can
+  # download it (and so the event is instrumented at a real endpoint rather than
+  # a static asset link).
+  def resume
+    track_event("resume_downloaded")
+    send_file RESUME_PATH, type: "application/pdf", disposition: "attachment"
   end
 
   private

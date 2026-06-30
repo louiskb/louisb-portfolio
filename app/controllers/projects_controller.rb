@@ -11,6 +11,11 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.friendly.find(params[:id])
+
+    track_event("project_viewed", {
+      title: @project.title,
+      slug: @project.slug
+    })
   end
 
   # PATCH /projects/reorder — persists drag-and-drop order (owner only).

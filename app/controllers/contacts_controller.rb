@@ -20,6 +20,9 @@ class ContactsController < ApplicationController
 
       # flash[:notice] += " | Confirmation sent" - Debug
 
+      # PostHog: track a successful (visitor-only) contact form submission.
+      track_event("contact_submitted")
+
       redirect_to root_path(anchor: "contact"), notice: "Message sent! Check your email for confirmation."
     else
       # redirect_to root_path, alert: "Message failed to send!" - this line of code works the same as the two lines below for your reference.

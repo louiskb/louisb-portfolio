@@ -29,6 +29,13 @@ class BlogPostsController < ApplicationController
 
   def show
     @blog_post = BlogPost.friendly.find(params[:id])
+
+    track_event("blog_post_viewed", {
+      title: @blog_post.title,
+      slug: @blog_post.slug,
+      tags: @blog_post.tags.pluck(:name),
+      ai_generated: @blog_post.ai_generated?
+    })
   end
 
   # PATCH /blog_posts/reorder — persists drag-and-drop order (owner only).
