@@ -97,7 +97,7 @@
       <% if @blog_post.scheduled? %>
         <p class="small text-warning w-100 mb-1">
           <i class="fa-regular fa-clock me-1"></i>
-          Scheduled to publish on <%= @blog_post.scheduled_at.strftime("%d %b %Y at %H:%M") %>
+          Scheduled to publish on <%= @blog_post.scheduled_at&.strftime("%d %b %Y at %H:%M") %>
           &mdash; use the dropdown to reschedule or change status.
         </p>
       <% elsif @blog_post.published? %>

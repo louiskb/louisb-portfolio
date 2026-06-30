@@ -200,6 +200,22 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select "button[data-action*='publish-form#saveChanges']"
   end
 
+  test "edit renders for a scheduled project with a nil scheduled_at without crashing" do
+    sign_in users(:louis)
+    # A scheduled project can legitimately have a nil scheduled_at (no validation
+    # enforces it). The form must not call strftime on nil and 500 the edit page.
+    project = Project.create!(
+      title: "Scheduled Nil Time Project",
+      img_url: "lb-portfolio.jpeg",
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: nil
+    )
+
+    get edit_project_url(project)
+    assert_response :success
+  end
+
   # ---- Phase 4: publish-intent on create/update ----
 
   test "create with status published publishes the project" do

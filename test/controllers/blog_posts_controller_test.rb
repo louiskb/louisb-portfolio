@@ -243,6 +243,23 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_select "button[data-action*='publish-form#saveChanges']"
   end
 
+  test "edit renders for a scheduled post with a nil scheduled_at without crashing" do
+    sign_in users(:louis)
+    # A scheduled post can legitimately have a nil scheduled_at (no validation
+    # enforces it). The form must not call strftime on nil and 500 the edit page.
+    post = BlogPost.create!(
+      title: "Scheduled Nil Time",
+      img_url: "lb-portfolio.jpeg",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: nil
+    )
+
+    get edit_blog_post_url(post)
+    assert_response :success
+  end
+
   # ---- Phase 4: publish-intent on create/update ----
 
   test "create with status published publishes the post" do
