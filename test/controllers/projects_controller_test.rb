@@ -126,6 +126,26 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
+  # ---- Phase 4: split publish-button UI ----
+
+  test "new renders the split publish button and schedule modal" do
+    sign_in users(:louis)
+    get new_project_url
+    assert_response :success
+    assert_select "form[data-controller~=publish-form]"
+    assert_select "input[data-publish-form-target=statusInput]"
+    assert_select "input[type=datetime-local][data-publish-form-target=scheduleInput]"
+    assert_select "button[data-action*='publish-form#publishNow']"
+    assert_select "#schedulePostModal"
+  end
+
+  test "edit renders the split publish button" do
+    sign_in users(:louis)
+    get edit_project_url(@project)
+    assert_response :success
+    assert_select "button[data-action*='publish-form#saveChanges']"
+  end
+
   # ---- Phase 4: publish-intent on create/update ----
 
   test "create with status published publishes the project" do

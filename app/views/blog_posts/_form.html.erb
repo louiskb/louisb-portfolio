@@ -1,5 +1,9 @@
-<%# Shared blog post form. Locals: submit_label (button text). %>
-<%= simple_form_for @blog_post, html: { multipart: true } do |f| %>
+<%# Shared blog post form. The split publish button (below) drives the
+    status + scheduled_at fields via the publish-form Stimulus controller. %>
+<%= simple_form_for @blog_post, html: { multipart: true, data: {
+      controller: "publish-form load-button",
+      "publish-form-current-status-value": (@blog_post.persisted? ? @blog_post.status : "draft")
+    } } do |f| %>
   <%= f.error_notification %>
   <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
@@ -77,8 +81,130 @@
   <%# Ensure empty tag_ids clears previous associations when no boxes are checked %>
   <input type="hidden" name="blog_post[tag_ids][]" value="">
 
-  <div class="d-flex justify-content-end my-4 gap-3">
-    <%= f.button :submit, local_assigns.fetch(:submit_label, "Save"), class: "btn btn-primary rounded-4 p-2" %>
+  <%# Hidden fields driven by the split button via the publish-form controller. %>
+  <input type="hidden"
+         name="blog_post[status]"
+         value="<%= @blog_post.persisted? ? @blog_post.status : "draft" %>"
+         data-publish-form-target="statusInput">
+  <input type="hidden"
+         name="blog_post[scheduled_at]"
+         value="<%= @blog_post.scheduled_at&.strftime("%Y-%m-%dT%H:%M") %>"
+         data-publish-form-target="scheduledAtInput">
+
+  <%# ===== SPLIT PUBLISH BUTTON ===== %>
+  <div class="d-flex align-items-center gap-3 flex-wrap my-4" data-load-button-target="buttons">
+    <% if @blog_post.persisted? %>
+      <% if @blog_post.scheduled? %>
+        <p class="small text-warning w-100 mb-1">
+          <i class="fa-regular fa-clock me-1"></i>
+          Scheduled to publish on <%= @blog_post.scheduled_at.strftime("%d %b %Y at %H:%M") %>
+          &mdash; use the dropdown to reschedule or change status.
+        </p>
+      <% elsif @blog_post.published? %>
+        <p class="small text-success w-100 mb-1">
+          <i class="fa-solid fa-circle-check me-1"></i>
+          This post is published and visible to everyone
+          &mdash; use the dropdown to reschedule or change status.
+        </p>
+      <% else %>
+        <p class="small text-muted w-100 mb-1">
+          <i class="fa-regular fa-file-lines me-1"></i>
+          This post is a draft and not visible to the public
+          &mdash; use the dropdown to reschedule or change status.
+        </p>
+      <% end %>
+    <% end %>
+
+    <div class="btn-group dropup">
+      <%# Default action button — context-aware label. %>
+      <% if @blog_post.new_record? %>
+        <button type="button" class="btn btn-primary rounded-start-4"
+                data-action="click->load-button#showSpinner click->publish-form#saveDraft"
+                data-load-button-loading-text-value="Saving...">
+          Save as draft
+        </button>
+      <% else %>
+        <button type="button" class="btn btn-primary rounded-start-4"
+                data-action="click->load-button#showSpinner click->publish-form#saveChanges"
+                data-load-button-loading-text-value="Saving changes...">
+          Save changes
+        </button>
+      <% end %>
+
+      <%# Chevron — opens the upward dropdown. %>
+      <button type="button"
+              class="btn btn-primary dropdown-toggle dropdown-toggle-split rounded-end-4"
+              data-bs-toggle="dropdown"
+              aria-expanded="false">
+        <span class="visually-hidden">More publishing options</span>
+      </button>
+
+      <ul class="dropdown-menu dropdown-menu-end">
+        <% unless @blog_post.new_record? %>
+          <li>
+            <button type="button" class="dropdown-item"
+                    data-action="click->load-button#showSpinner click->publish-form#saveDraft"
+                    data-load-button-loading-text-value="Saving...">
+              <i class="fa-regular fa-file me-2 text-muted"></i>Save as draft
+            </button>
+          </li>
+          <li><hr class="dropdown-divider"></li>
+        <% end %>
+        <li>
+          <button type="button" class="dropdown-item"
+                  data-action="click->load-button#showSpinner click->publish-form#publishNow"
+                  data-load-button-loading-text-value="Publishing...">
+            <i class="fa-solid fa-globe me-2 text-muted"></i>Publish now
+          </button>
+        </li>
+        <li>
+          <button type="button" class="dropdown-item"
+                  data-bs-toggle="modal" data-bs-target="#schedulePostModal">
+            <i class="fa-regular fa-clock me-2 text-muted"></i>Schedule&hellip;
+          </button>
+        </li>
+      </ul>
+    </div>
+
     <%= link_to "Cancel", blog_posts_path, class: "btn btn-outline-dark rounded-4 p-2" %>
+  </div>
+
+  <%# ===== SCHEDULE MODAL ===== %>
+  <div class="modal fade" id="schedulePostModal" tabindex="-1"
+       aria-labelledby="schedulePostModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="schedulePostModalLabel">
+            <i class="fa-regular fa-clock me-2"></i>Schedule post
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted mb-3">Choose when this post will go live automatically.</p>
+          <label class="form-label fw-semibold" for="schedule-post-datetime">Publish at</label>
+          <%# No `name` attribute: this field is read by the publish-form controller,
+              which copies its value into the hidden scheduled_at input above. %>
+          <input type="datetime-local"
+                 id="schedule-post-datetime"
+                 class="form-control"
+                 min="<%= Time.current.strftime("%Y-%m-%dT%H:%M") %>"
+                 value="<%= @blog_post.scheduled_at&.strftime("%Y-%m-%dT%H:%M") %>"
+                 data-publish-form-target="scheduleInput"
+                 required>
+          <div class="form-text">
+            <i class="fa-solid fa-clock me-1"></i>Times are in <strong><%= Time.current.zone %></strong>.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary"
+                  data-action="click->load-button#showSpinner click->publish-form#confirmSchedule"
+                  data-load-button-loading-text-value="Scheduling...">
+            Schedule post
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 <% end %>

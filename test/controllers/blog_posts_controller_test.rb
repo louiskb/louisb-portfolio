@@ -179,6 +179,27 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_user_session_url
   end
 
+  # ---- Phase 4: split publish-button UI ----
+
+  test "new renders the split publish button and schedule modal" do
+    sign_in users(:louis)
+    get new_blog_post_url
+    assert_response :success
+    assert_select "form[data-controller~=publish-form]"
+    assert_select "input[data-publish-form-target=statusInput]"
+    assert_select "input[data-publish-form-target=scheduledAtInput]"
+    assert_select "input[type=datetime-local][data-publish-form-target=scheduleInput]"
+    assert_select "button[data-action*='publish-form#publishNow']"
+    assert_select "#schedulePostModal"
+  end
+
+  test "edit renders the split publish button" do
+    sign_in users(:louis)
+    get edit_blog_post_url(@blog_post)
+    assert_response :success
+    assert_select "button[data-action*='publish-form#saveChanges']"
+  end
+
   # ---- Phase 4: publish-intent on create/update ----
 
   test "create with status published publishes the post" do
