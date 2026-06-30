@@ -29,12 +29,46 @@ class BlogPostTest < ActiveSupport::TestCase
   end
 
   test "has a rich text body that round-trips to plain text" do
-    post = blog_posts(:welcome)
-    post.body = "<h2>Hello</h2><p>This is a rich text body.</p>"
-    post.save!
+    post = BlogPost.create!(
+      title: "Rich Text Post",
+      body: "<h2>Hello</h2><p>This is a rich text body.</p>",
+      user: users(:louis)
+    )
 
     assert post.body.present?
     assert_includes post.reload.body.to_plain_text, "This is a rich text body."
+  end
+
+  test "existing html_content-only fixture posts are valid" do
+    assert blog_posts(:welcome).valid?, blog_posts(:welcome).errors.full_messages.to_sentence
+  end
+
+  test "a body-only post is valid" do
+    post = BlogPost.new(title: "Manual Post", body: "<p>Just rich text.</p>", user: users(:louis))
+    assert post.valid?, post.errors.full_messages.to_sentence
+  end
+
+  test "a post with both body and html_content is invalid" do
+    post = BlogPost.new(
+      title: "Conflicted Post",
+      html_content: "<p>Raw HTML.</p>",
+      body: "<p>Rich text too.</p>",
+      user: users(:louis)
+    )
+
+    assert_not post.valid?
+    assert_includes post.errors[:base].to_sentence, "only have rich text content or HTML content"
+  end
+
+  test "reading_time returns a string" do
+    assert_kind_of String, blog_posts(:welcome).reading_time
+    assert_match(/min read/, blog_posts(:welcome).reading_time)
+  end
+
+  test "set_author stamps Louis Bourne before validation" do
+    post = BlogPost.new(title: "Authored", html_content: "<p>Hi.</p>", user: users(:louis))
+    post.valid?
+    assert_equal "Louis Bourne", post.author
   end
 
   test "generates a slug from the title" do
