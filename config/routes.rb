@@ -10,6 +10,12 @@ Rails.application.routes.draw do
 
   resources :projects do
     collection { patch :reorder }
+    member do
+      # Publish-intent actions act on a specific record (needs an :id).
+      patch :publish
+      patch :schedule
+      patch :cancel_schedule
+    end
   end
 
   resources :blog_posts do
@@ -23,6 +29,10 @@ Rails.application.routes.draw do
       # AI revision acts on a specific existing post (needs an :id).
       get   :ai_revise
       patch :revise_with_ai
+      # Publish-intent actions act on a specific existing post (needs an :id).
+      patch :publish
+      patch :schedule
+      patch :cancel_schedule
     end
   end
 

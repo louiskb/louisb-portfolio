@@ -178,4 +178,166 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to new_user_session_url
   end
+
+  # ---- Phase 4: publish-intent on create/update ----
+
+  test "create with status published publishes the post" do
+    sign_in users(:louis)
+    post blog_posts_url, params: { blog_post: {
+      title: "Publish On Create",
+      html_content: "<p>Body.</p>",
+      status: "published"
+    } }
+    assert BlogPost.find_by(title: "Publish On Create").published?
+  end
+
+  test "create with status scheduled and a future time schedules the post" do
+    sign_in users(:louis)
+    post blog_posts_url, params: { blog_post: {
+      title: "Schedule On Create",
+      html_content: "<p>Body.</p>",
+      status: "scheduled",
+      scheduled_at: 2.days.from_now.strftime("%Y-%m-%dT%H:%M")
+    } }
+    created = BlogPost.find_by(title: "Schedule On Create")
+    assert created.scheduled?
+    assert created.scheduled_at.present?
+  end
+
+  test "create with status scheduled but a past time falls back to draft" do
+    sign_in users(:louis)
+    post blog_posts_url, params: { blog_post: {
+      title: "Past Schedule On Create",
+      html_content: "<p>Body.</p>",
+      status: "scheduled",
+      scheduled_at: 2.days.ago.strftime("%Y-%m-%dT%H:%M")
+    } }
+    assert BlogPost.find_by(title: "Past Schedule On Create").draft?
+  end
+
+  test "create with status scheduled but a blank time falls back to draft" do
+    sign_in users(:louis)
+    post blog_posts_url, params: { blog_post: {
+      title: "Blank Schedule On Create",
+      html_content: "<p>Body.</p>",
+      status: "scheduled",
+      scheduled_at: ""
+    } }
+    assert BlogPost.find_by(title: "Blank Schedule On Create").draft?
+  end
+
+  test "update with status published publishes a draft post" do
+    sign_in users(:louis)
+    draft = BlogPost.create!(
+      title: "Draft To Update Publish",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+    patch blog_post_url(draft), params: { blog_post: { status: "published" } }
+    assert draft.reload.published?
+  end
+
+  # ---- Phase 4: publish / schedule / cancel_schedule member actions ----
+
+  test "publish publishes a draft post for the owner" do
+    sign_in users(:louis)
+    draft = BlogPost.create!(
+      title: "Draft To Publish",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+    patch publish_blog_post_url(draft)
+    assert draft.reload.published?
+    assert_nil draft.scheduled_at
+  end
+
+  test "publish requires authentication" do
+    draft = BlogPost.create!(
+      title: "Guarded Publish",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+    patch publish_blog_post_url(draft)
+    assert_redirected_to new_user_session_url
+    assert draft.reload.draft?
+  end
+
+  test "schedule with a future time schedules the post" do
+    sign_in users(:louis)
+    draft = BlogPost.create!(
+      title: "To Schedule",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+    patch schedule_blog_post_url(draft), params: { scheduled_at: 1.day.from_now.strftime("%Y-%m-%dT%H:%M") }
+    assert draft.reload.scheduled?
+    assert draft.scheduled_at.present?
+  end
+
+  test "schedule with a past time does not schedule" do
+    sign_in users(:louis)
+    draft = BlogPost.create!(
+      title: "Past Schedule Member",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+    patch schedule_blog_post_url(draft), params: { scheduled_at: 1.day.ago.strftime("%Y-%m-%dT%H:%M") }
+    assert_not draft.reload.scheduled?
+  end
+
+  test "schedule with a blank time does not schedule" do
+    sign_in users(:louis)
+    draft = BlogPost.create!(
+      title: "Blank Schedule Member",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+    patch schedule_blog_post_url(draft), params: { scheduled_at: "" }
+    assert_not draft.reload.scheduled?
+  end
+
+  test "schedule requires authentication" do
+    draft = BlogPost.create!(
+      title: "Guarded Schedule",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :draft
+    )
+    patch schedule_blog_post_url(draft), params: { scheduled_at: 1.day.from_now.strftime("%Y-%m-%dT%H:%M") }
+    assert_redirected_to new_user_session_url
+    assert draft.reload.draft?
+  end
+
+  test "cancel_schedule reverts a scheduled post to draft" do
+    sign_in users(:louis)
+    scheduled = BlogPost.create!(
+      title: "Cancel My Schedule",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: 1.day.from_now
+    )
+    patch cancel_schedule_blog_post_url(scheduled)
+    assert scheduled.reload.draft?
+    assert_nil scheduled.scheduled_at
+  end
+
+  test "cancel_schedule requires authentication" do
+    scheduled = BlogPost.create!(
+      title: "Guarded Cancel",
+      html_content: "<p>x</p>",
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: 1.day.from_now
+    )
+    patch cancel_schedule_blog_post_url(scheduled)
+    assert_redirected_to new_user_session_url
+    assert scheduled.reload.scheduled?
+  end
 end

@@ -125,4 +125,100 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :redirect
   end
+
+  # ---- Phase 4: publish-intent on create/update ----
+
+  test "create with status published publishes the project" do
+    sign_in users(:louis)
+    post projects_url, params: { project: {
+      title: "Publish On Create Project",
+      tech_stack: "Rails",
+      personal_project: true,
+      status: "published"
+    } }
+    assert Project.find_by(title: "Publish On Create Project").published?
+  end
+
+  test "create with status scheduled and a future time schedules the project" do
+    sign_in users(:louis)
+    post projects_url, params: { project: {
+      title: "Schedule On Create Project",
+      tech_stack: "Rails",
+      personal_project: true,
+      status: "scheduled",
+      scheduled_at: 2.days.from_now.strftime("%Y-%m-%dT%H:%M")
+    } }
+    created = Project.find_by(title: "Schedule On Create Project")
+    assert created.scheduled?
+    assert created.scheduled_at.present?
+  end
+
+  test "create with status scheduled but a past time falls back to draft" do
+    sign_in users(:louis)
+    post projects_url, params: { project: {
+      title: "Past Schedule On Create Project",
+      tech_stack: "Rails",
+      personal_project: true,
+      status: "scheduled",
+      scheduled_at: 2.days.ago.strftime("%Y-%m-%dT%H:%M")
+    } }
+    assert Project.find_by(title: "Past Schedule On Create Project").draft?
+  end
+
+  # ---- Phase 4: publish / schedule / cancel_schedule member actions ----
+
+  test "publish publishes a draft project for the owner" do
+    sign_in users(:louis)
+    draft = Project.create!(title: "Draft Project Publish", user: users(:louis), status: :draft)
+    patch publish_project_url(draft)
+    assert draft.reload.published?
+    assert_nil draft.scheduled_at
+  end
+
+  test "publish requires authentication" do
+    draft = Project.create!(title: "Guarded Project Publish", user: users(:louis), status: :draft)
+    patch publish_project_url(draft)
+    assert_redirected_to new_user_session_url
+    assert draft.reload.draft?
+  end
+
+  test "schedule with a future time schedules the project" do
+    sign_in users(:louis)
+    draft = Project.create!(title: "Project To Schedule", user: users(:louis), status: :draft)
+    patch schedule_project_url(draft), params: { scheduled_at: 1.day.from_now.strftime("%Y-%m-%dT%H:%M") }
+    assert draft.reload.scheduled?
+    assert draft.scheduled_at.present?
+  end
+
+  test "schedule with a past time does not schedule the project" do
+    sign_in users(:louis)
+    draft = Project.create!(title: "Project Past Schedule", user: users(:louis), status: :draft)
+    patch schedule_project_url(draft), params: { scheduled_at: 1.day.ago.strftime("%Y-%m-%dT%H:%M") }
+    assert_not draft.reload.scheduled?
+  end
+
+  test "cancel_schedule reverts a scheduled project to draft" do
+    sign_in users(:louis)
+    scheduled = Project.create!(
+      title: "Cancel Project Schedule",
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: 1.day.from_now
+    )
+    patch cancel_schedule_project_url(scheduled)
+    assert scheduled.reload.draft?
+    assert_nil scheduled.scheduled_at
+  end
+
+  test "cancel_schedule requires authentication" do
+    scheduled = Project.create!(
+      title: "Guarded Project Cancel",
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: 1.day.from_now
+    )
+    patch cancel_schedule_project_url(scheduled)
+    assert_redirected_to new_user_session_url
+    assert scheduled.reload.scheduled?
+  end
 end

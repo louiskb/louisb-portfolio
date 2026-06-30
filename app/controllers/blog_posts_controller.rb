@@ -2,6 +2,7 @@ class BlogPostsController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :index, :show ]
   before_action :load_tags, only: %i[ new edit create update ]
   before_action :set_ai_blog_post, only: %i[ ai_revise revise_with_ai ]
+  before_action :set_owned_blog_post, only: %i[ publish schedule cancel_schedule ]
   # The POST/PATCH actions actually call Claude, so guard them up front. The GET
   # forms render fine without a key (the view shows a "configure" notice).
   before_action :require_ai_configured, only: %i[ create_with_ai revise_with_ai ]
@@ -45,11 +46,15 @@ class BlogPostsController < ApplicationController
   end
 
   def create
-    @blog_post = BlogPost.new(blog_post_params)
+    status, scheduled_at = resolve_publish_intent(
+      params.dig(:blog_post, :status),
+      params.dig(:blog_post, :scheduled_at)
+    )
+    @blog_post = BlogPost.new(blog_post_params.merge(status: status, scheduled_at: scheduled_at))
     @blog_post.user = current_user
 
     if @blog_post.save
-      redirect_to blog_post_path(@blog_post), notice: "Blog post was successfully created!"
+      redirect_to blog_post_path(@blog_post), notice: publish_notice(status, scheduled_at, action: :created)
     else
       render "new", alert: "Blog post failed to create. Please try again!", status: :unprocessable_entity
     end
@@ -61,12 +66,43 @@ class BlogPostsController < ApplicationController
 
   def update
     @blog_post = BlogPost.friendly.find(params[:id])
+    status, scheduled_at = resolve_publish_intent(
+      params.dig(:blog_post, :status),
+      params.dig(:blog_post, :scheduled_at)
+    )
 
-    if @blog_post.update(blog_post_params)
-      redirect_to blog_post_path(@blog_post), notice: "Blog post was successfully edited!"
+    if @blog_post.update(blog_post_params.merge(status: status, scheduled_at: scheduled_at))
+      redirect_to blog_post_path(@blog_post), notice: publish_notice(status, scheduled_at, action: :updated)
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  # PATCH /blog_posts/:id/publish — publishes a draft or scheduled post now.
+  def publish
+    @blog_post.publish!
+    redirect_to blog_post_path(@blog_post), notice: "Post published successfully."
+  end
+
+  # PATCH /blog_posts/:id/schedule — sets a future publish time.
+  def schedule
+    parsed_time = parse_future_time(params[:scheduled_at])
+
+    if parsed_time.nil?
+      redirect_to blog_post_path(@blog_post),
+        alert: "Please choose a date and time in the future to schedule."
+      return
+    end
+
+    @blog_post.schedule!(parsed_time)
+    redirect_to blog_post_path(@blog_post),
+      notice: "Post scheduled for #{parsed_time.strftime("%d %b %Y at %H:%M")}."
+  end
+
+  # PATCH /blog_posts/:id/cancel_schedule — reverts a scheduled post to draft.
+  def cancel_schedule
+    @blog_post.cancel_schedule!
+    redirect_to blog_post_path(@blog_post), notice: "Schedule cancelled. Post reverted to draft."
   end
 
   def destroy
@@ -147,6 +183,55 @@ class BlogPostsController < ApplicationController
   # post the signed-in owner owns (defense-in-depth IDOR guard).
   def set_ai_blog_post
     @blog_post = current_user.blog_posts.friendly.find(params[:id])
+  end
+
+  # Scoped to current_user.blog_posts so a publish/schedule/cancel request can
+  # only act on a post the signed-in owner owns (defense-in-depth IDOR guard,
+  # matching the reorder/set_ai_blog_post pattern).
+  def set_owned_blog_post
+    @blog_post = current_user.blog_posts.friendly.find(params[:id])
+  end
+
+  # Parses the split button's status + datetime-local scheduled_at into the
+  # [status_symbol, scheduled_at_or_nil] pair persisted on the record.
+  #
+  #   "published"                       -> publish now
+  #   "scheduled" + future scheduled_at -> schedule
+  #   "scheduled" + blank/past time     -> draft  (safer than silently publishing)
+  #   "draft" / anything else           -> draft
+  def resolve_publish_intent(raw_status, raw_scheduled_at)
+    status = (raw_status.presence || "draft").to_sym
+
+    if status == :scheduled
+      parsed = parse_future_time(raw_scheduled_at)
+      return [ :draft, nil ] if parsed.nil?
+
+      return [ :scheduled, parsed ]
+    end
+
+    [ status, nil ]
+  end
+
+  # Returns a parsed Time only when the input is present and strictly in the
+  # future; otherwise nil. Tolerates unparseable input (returns nil).
+  def parse_future_time(raw)
+    return nil if raw.blank?
+
+    parsed = Time.zone.parse(raw.to_s)
+    parsed if parsed && parsed > Time.current
+  rescue ArgumentError
+    nil
+  end
+
+  # Human-readable flash notice describing what happened to the post.
+  def publish_notice(status, scheduled_at, action:)
+    base = action == :created ? "Blog post saved" : "Blog post updated"
+
+    case status.to_sym
+    when :published then "#{base} and published."
+    when :scheduled then "#{base} and scheduled for #{scheduled_at.strftime("%d %b %Y at %H:%M")}."
+    else                 "#{base} as draft."
+    end
   end
 
   # Redirects to the blog with a friendly notice when AI is not configured, so
