@@ -19,6 +19,22 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "show resolves by friendly slug" do
+    sign_in users(:louis)
+    project = Project.create!(
+      title: "Resolving Project Slug",
+      description: "A description.",
+      img_url: "lb-portfolio.jpeg",
+      tech_stack: "Python",
+      project_url: "https://example.com/p",
+      user: users(:louis)
+    )
+
+    get project_url(project)
+    assert_response :success
+    assert_equal "/projects/resolving-project-slug", path
+  end
+
   test "new succeeds when signed in" do
     sign_in users(:louis)
     get new_project_url

@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.find(params[:id])
+    @project = Project.friendly.find(params[:id])
   end
 
   def new
@@ -28,13 +28,13 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = Project.find(params[:id])
+    @project = Project.friendly.find(params[:id])
     @featured_personal_projects_count = filter_featured_personal_projects(Project.all)
     @featured_open_source_projects_count = filter_featured_open_source_projects(Project.all)
   end
 
   def update
-    @project = Project.find(params[:id])
+    @project = Project.friendly.find(params[:id])
 
     if @project.update(project_params)
       redirect_to project_path(@project), notice: "Project was successfully edited!"
@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    @project = Project.find(params[:id])
+    @project = Project.friendly.find(params[:id])
 
     if @project.destroy
       redirect_to projects_path, notice: "Project was successfully deleted!", status: :see_other

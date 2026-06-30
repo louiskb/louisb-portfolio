@@ -13,6 +13,21 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "show resolves by friendly slug" do
+    post = BlogPost.create!(
+      title: "Resolving By Slug",
+      description: "A description.",
+      img_url: "lb-portfolio.jpeg",
+      tags: "Ruby",
+      html_content: "<p>Body.</p>",
+      user: users(:louis)
+    )
+
+    get blog_post_url(post)
+    assert_response :success
+    assert_equal "/blog_posts/resolving-by-slug", path
+  end
+
   test "new requires authentication" do
     get new_blog_post_url
     assert_redirected_to new_user_session_url

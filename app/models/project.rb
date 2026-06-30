@@ -1,6 +1,9 @@
 class Project < ApplicationRecord
   include Publishable
 
+  extend FriendlyId
+  friendly_id :title, use: :slugged
+
   # Associations
   belongs_to :user
 

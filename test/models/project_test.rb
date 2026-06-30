@@ -15,4 +15,18 @@ class ProjectTest < ActiveSupport::TestCase
   test "includes the Publishable concern" do
     assert_includes Project.ancestors, Publishable
   end
+
+  test "generates a slug from the title" do
+    project = Project.create!(
+      title: "My Trading Bot",
+      description: "A description.",
+      img_url: "lb-portfolio.jpeg",
+      tech_stack: "Python",
+      project_url: "https://example.com/bot",
+      user: users(:louis)
+    )
+
+    assert_equal "my-trading-bot", project.slug
+    assert_equal project, Project.friendly.find("my-trading-bot")
+  end
 end

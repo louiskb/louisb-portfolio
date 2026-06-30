@@ -5,7 +5,7 @@ class BlogPostsController < ApplicationController
   end
 
   def show
-    @blog_post = BlogPost.find(params[:id])
+    @blog_post = BlogPost.friendly.find(params[:id])
   end
 
   def new
@@ -24,11 +24,11 @@ class BlogPostsController < ApplicationController
   end
 
   def edit
-    @blog_post = BlogPost.find(params[:id])
+    @blog_post = BlogPost.friendly.find(params[:id])
   end
 
   def update
-    @blog_post = BlogPost.find(params[:id])
+    @blog_post = BlogPost.friendly.find(params[:id])
 
     if @blog_post.update(blog_post_params)
       redirect_to blog_post_path(@blog_post), notice: "Blog post was successfully edited!"
@@ -38,7 +38,7 @@ class BlogPostsController < ApplicationController
   end
 
   def destroy
-    @blog_post = BlogPost.find(params[:id])
+    @blog_post = BlogPost.friendly.find(params[:id])
 
     if @blog_post.destroy
       redirect_to blog_posts_path, notice: "Blog post was successfully deleted!", status: :see_other

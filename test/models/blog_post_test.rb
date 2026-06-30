@@ -16,4 +16,18 @@ class BlogPostTest < ActiveSupport::TestCase
   test "includes the Publishable concern" do
     assert_includes BlogPost.ancestors, Publishable
   end
+
+  test "generates a slug from the title" do
+    post = BlogPost.create!(
+      title: "My First Rails Post",
+      description: "A description.",
+      img_url: "lb-portfolio.jpeg",
+      tags: "Ruby",
+      html_content: "<p>Body.</p>",
+      user: users(:louis)
+    )
+
+    assert_equal "my-first-rails-post", post.slug
+    assert_equal post, BlogPost.friendly.find("my-first-rails-post")
+  end
 end

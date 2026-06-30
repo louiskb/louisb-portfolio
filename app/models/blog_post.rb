@@ -1,6 +1,9 @@
 class BlogPost < ApplicationRecord
   include Publishable
 
+  extend FriendlyId
+  friendly_id :title, use: :slugged
+
   # Associations
   belongs_to :user # creates a method `blog_post.users` that shows who the owner / creator of the blog_post is.
 
