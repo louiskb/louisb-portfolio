@@ -3,8 +3,11 @@ class ProjectsController < ApplicationController
   before_action :set_owned_project, only: %i[ publish schedule cancel_schedule ]
 
   def index
-    # Owner sees everything; visitors only see published projects.
-    scope = (user_signed_in? ? Project.all : Project.visible_to_visitors).order(:position)
+    # Owner sees everything; visitors only see published projects. Eager-load the
+    # attachment the cards now read (featured_image) to avoid an N+1 per row.
+    scope = (user_signed_in? ? Project.all : Project.visible_to_visitors)
+            .with_attached_featured_image
+            .order(:position)
     @personal_projects = filter_personal_projects(scope)
     @open_source_projects = filter_open_source_projects(scope)
   end

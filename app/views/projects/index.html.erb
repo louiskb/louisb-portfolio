@@ -23,7 +23,11 @@
                 <p class="card-text small text-muted mb-3">
                   <%= project.description.capitalize %>
                 </p>
-                <%= image_tag project.img_url, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                <% if project.featured_image.attached? %>
+                  <%= image_tag project.featured_image, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                <% elsif project.img_url.present? %>
+                  <%= image_tag project.img_url, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                <% end %>
                 <p class="mb-4 text-secondary text-tech-stack">
                   <%= project.tech_stack %>
                 </p>
@@ -87,7 +91,11 @@
                 <p class="card-text small text-muted mb-3">
                   <%= project.description.capitalize %>
                 </p>
-                <%= image_tag project.img_url, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                <% if project.featured_image.attached? %>
+                  <%= image_tag project.featured_image, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                <% elsif project.img_url.present? %>
+                  <%= image_tag project.img_url, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                <% end %>
                 <p class="mb-4 text-secondary text-tech-stack">
                   <%= project.tech_stack %>
                 </p>

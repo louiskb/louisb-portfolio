@@ -35,6 +35,61 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, draft.title, "owner must see the draft"
   end
 
+  test "show renders a project with a blank img_url and no attachment without crashing" do
+    sign_in users(:louis)
+    # No featured_image and a nil img_url: the hero banner must render no image
+    # instead of calling asset_path(nil), which raises "nil is not a valid asset source".
+    project = Project.create!(
+      title: "No Image Project",
+      description: "Has no image at all.",
+      tech_stack: "Ruby",
+      project_url: "https://example.com/no-image",
+      personal_project: true,
+      user: users(:louis),
+      img_url: nil
+    )
+
+    get project_url(project)
+    assert_response :success
+  end
+
+  test "index renders a project with a blank img_url and no attachment without crashing" do
+    sign_in users(:louis)
+    # image_tag(nil) raises the same "nil is not a valid asset source"; the card
+    # must fall back to no image when neither attachment nor img_url is present.
+    Project.create!(
+      title: "No Image Index Project",
+      description: "Has no image at all.",
+      tech_stack: "Ruby",
+      project_url: "https://example.com/no-image-index",
+      personal_project: true,
+      user: users(:louis),
+      img_url: nil
+    )
+
+    get projects_url
+    assert_response :success
+  end
+
+  test "show prefers the featured_image attachment over a blank img_url" do
+    sign_in users(:louis)
+    project = Project.create!(
+      title: "Attached Image Project",
+      description: "Uses an uploaded image.",
+      tech_stack: "Ruby",
+      project_url: "https://example.com/attached",
+      personal_project: true,
+      user: users(:louis),
+      img_url: nil
+    )
+    project.featured_image.attach(fixture_file_upload("test_image.png", "image/png"))
+
+    get project_url(project)
+    assert_response :success
+    assert_includes response.body, "active_storage",
+      "the hero banner must reference the uploaded featured_image"
+  end
+
   test "uploading a featured_image via the form attaches it" do
     sign_in users(:louis)
     assert_difference "Project.count", 1 do
