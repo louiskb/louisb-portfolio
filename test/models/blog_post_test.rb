@@ -28,6 +28,15 @@ class BlogPostTest < ActiveSupport::TestCase
     assert post.featured_image.attached?
   end
 
+  test "has a rich text body that round-trips to plain text" do
+    post = blog_posts(:welcome)
+    post.body = "<h2>Hello</h2><p>This is a rich text body.</p>"
+    post.save!
+
+    assert post.body.present?
+    assert_includes post.reload.body.to_plain_text, "This is a rich text body."
+  end
+
   test "generates a slug from the title" do
     post = BlogPost.create!(
       title: "My First Rails Post",

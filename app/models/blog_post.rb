@@ -12,6 +12,10 @@ class BlogPost < ApplicationRecord
   has_one_attached :featured_image
   has_many_attached :photos
 
+  # Rich text body (Action Text / Trix) for new manual posts. AI/legacy posts
+  # use the raw html_content column instead — never both (see one_content_field_only).
+  has_rich_text :body
+
   # Validations
   validates :title, presence: true
   validates :description, presence: true
