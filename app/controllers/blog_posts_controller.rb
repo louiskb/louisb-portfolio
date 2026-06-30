@@ -1,6 +1,10 @@
 class BlogPostsController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :index, :show ]
   before_action :load_tags, only: %i[ new edit create update ]
+  before_action :set_ai_blog_post, only: %i[ ai_revise revise_with_ai ]
+  # The POST/PATCH actions actually call Claude, so guard them up front. The GET
+  # forms render fine without a key (the view shows a "configure" notice).
+  before_action :require_ai_configured, only: %i[ create_with_ai revise_with_ai ]
 
   def index
     # Owner sees everything; visitors only see published posts.
@@ -75,7 +79,101 @@ class BlogPostsController < ApplicationController
     end
   end
 
+  # GET /blog_posts/ai_new — renders the AI creation prompt form (or a
+  # "configure ANTHROPIC_API_KEY" notice when the key is absent).
+  def ai_new
+  end
+
+  # POST /blog_posts/create_with_ai — generates a new post via the AI service.
+  def create_with_ai
+    status = (ai_params[:status].presence || "draft").to_sym
+
+    service = BlogPostAiService.new(current_user)
+    @blog_post = service.create_from_prompt(
+      ai_params[:prompt],
+      featured_image: ai_params[:featured_image],
+      image_url: ai_params[:image_url],
+      status: status,
+      scheduled_at: ai_params[:scheduled_at]
+    )
+
+    if @blog_post.persisted?
+      redirect_to blog_post_path(@blog_post), notice: "Blog post created with AI."
+    else
+      flash.now[:alert] = "The AI response couldn't be saved: #{@blog_post.errors.full_messages.to_sentence}"
+      @prompt = ai_params[:prompt]
+      render :ai_new, status: :unprocessable_entity
+    end
+  rescue StandardError => e
+    handle_ai_error(e, :ai_new)
+  end
+
+  # GET /blog_posts/:id/ai_revise — renders the AI revision form.
+  def ai_revise
+    @has_rich_text_body = @blog_post.body.present?
+  end
+
+  # PATCH /blog_posts/:id/revise_with_ai — revises an existing post via the AI service.
+  def revise_with_ai
+    status = ai_params[:status].present? ? ai_params[:status].to_sym : nil
+    keep = ai_params[:keep_featured_image] == "1"
+
+    service = BlogPostAiService.new(current_user)
+    @blog_post = service.revise_blog_post(
+      @blog_post,
+      ai_params[:prompt],
+      featured_image: ai_params[:featured_image],
+      image_url: ai_params[:image_url],
+      keep_featured_image: keep,
+      status: status,
+      scheduled_at: ai_params[:scheduled_at]
+    )
+
+    if @blog_post.persisted? && @blog_post.errors.empty?
+      redirect_to blog_post_path(@blog_post), notice: "Blog post revised with AI."
+    else
+      flash.now[:alert] = "The AI revision couldn't be saved: #{@blog_post.errors.full_messages.to_sentence}"
+      @prompt = ai_params[:prompt]
+      @has_rich_text_body = @blog_post.body.present?
+      render :ai_revise, status: :unprocessable_entity
+    end
+  rescue StandardError => e
+    handle_ai_error(e, :ai_revise)
+  end
+
   private
+
+  def set_ai_blog_post
+    @blog_post = BlogPost.friendly.find(params[:id])
+  end
+
+  # Redirects to the blog with a friendly notice when AI is not configured, so
+  # the generate/revise endpoints degrade gracefully instead of erroring.
+  def require_ai_configured
+    return if helpers.ai_configured?
+
+    redirect_to blog_posts_path,
+      alert: "AI features need an ANTHROPIC_API_KEY. Set it to enable AI blog generation."
+  end
+
+  def ai_params
+    params.require(:blog_post).permit(:prompt, :featured_image, :image_url,
+                                      :keep_featured_image, :status, :scheduled_at)
+  end
+
+  # Logs the failure and re-renders the AI form with a generic, non-leaky alert.
+  def handle_ai_error(error, render_action)
+    Rails.logger.error "AI error in BlogPostsController: #{error.message}"
+    Rails.logger.error error.backtrace.join("\n") if error.backtrace
+    flash.now[:alert] = "The AI encountered an error. Please try again."
+    @prompt = begin
+      ai_params[:prompt]
+    rescue StandardError
+      nil
+    end
+    @has_rich_text_body = @blog_post&.body&.present?
+    render render_action, status: :unprocessable_entity
+  end
 
   def blog_post_params
     params.require(:blog_post).permit(:title, :description, :img_url, :html_content, :body,

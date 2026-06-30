@@ -5,6 +5,9 @@
       <p>Explore practical tutorials and coding insights from my blog.</p>
       <% if user_signed_in? %>
         <%= link_to "Create", new_blog_post_path, class: "btn btn-primary rounded-4 p-2 mt-1" %>
+        <% if ai_configured? %>
+          <%= link_to "Create with AI", ai_new_blog_posts_path, class: "btn btn-outline-light rounded-4 p-2 mt-1" %>
+        <% end %>
       <% end %>
     </header>
   </div>

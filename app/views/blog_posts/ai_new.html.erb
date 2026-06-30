@@ -1,0 +1,60 @@
+<% content_for :title, "Create blog post with AI" %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><%= link_to "Blog", blog_posts_path %></li>
+          <li class="breadcrumb-item active" aria-current="page">Create with AI</li>
+        </ol>
+      </nav>
+
+      <div class="mb-4">
+        <h1 class="mb-2"><i class="fa-solid fa-wand-magic-sparkles me-2"></i>Create with AI</h1>
+        <p class="text-muted mb-0">
+          Describe what you'd like to write about and Claude will draft a full post —
+          review and edit it before publishing.
+        </p>
+      </div>
+
+      <% if ai_configured? %>
+        <%= link_to "Write manually instead", new_blog_post_path, class: "btn btn-outline-dark btn-sm rounded-4 mb-4" %>
+
+        <% if flash[:alert] %>
+          <div class="alert alert-danger mb-4"><%= flash[:alert] %></div>
+        <% end %>
+
+        <%= simple_form_for :blog_post, url: create_with_ai_blog_posts_path, method: :post,
+              html: { multipart: true } do |f| %>
+
+          <%= f.input :prompt, as: :text,
+                input_html: { rows: 6, value: @prompt },
+                label: "What should the post be about?",
+                hint: "Be as specific or as broad as you like — Claude will handle the rest." %>
+
+          <%= f.input :featured_image, as: :file,
+                label: "Featured image (optional)",
+                input_html: { accept: "image/*" },
+                hint: "Upload a hero image, or leave blank and the AI fetches a relevant photo from Unsplash." %>
+
+          <%= f.input :image_url,
+                label: "Fallback image URL (optional)",
+                placeholder: "https://example.com/photo.jpg",
+                hint: "Used only if no file is uploaded and the Unsplash fetch fails." %>
+
+          <%# Phase 3 keeps this simple — new AI posts are saved as drafts.
+              Phase 4 wires the split publish/schedule button. %>
+          <%= f.hidden_field :status, value: "draft" %>
+
+          <div class="d-flex gap-3 my-4">
+            <%= f.button :submit, "Generate and save as draft", class: "btn btn-primary rounded-4 p-2" %>
+            <%= link_to "Cancel", blog_posts_path, class: "btn btn-outline-dark rounded-4 p-2" %>
+          </div>
+        <% end %>
+      <% else %>
+        <%= render "ai_not_configured" %>
+      <% end %>
+    </div>
+  </div>
+</div>

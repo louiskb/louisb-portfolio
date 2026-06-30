@@ -13,7 +13,17 @@ Rails.application.routes.draw do
   end
 
   resources :blog_posts do
-    collection { patch :reorder }
+    collection do
+      patch :reorder
+      # AI generation acts on the whole collection (creating a new post).
+      get  :ai_new
+      post :create_with_ai
+    end
+    member do
+      # AI revision acts on a specific existing post (needs an :id).
+      get   :ai_revise
+      patch :revise_with_ai
+    end
   end
 
   resources :tags, only: [:create, :destroy]

@@ -23,6 +23,9 @@
           <%= link_to "Back to Blog", blog_posts_path, class: "btn btn-secondary rounded-4 p-2 mt-3" %>
           <div class="d-flex gap-4 justify-content-start align-items-center">
             <%= link_to "Edit Post", edit_blog_post_path, class: "btn btn-primary rounded-4 p-2 mt-3" %>
+            <% if ai_configured? %>
+              <%= link_to "Revise with AI", ai_revise_blog_post_path(@blog_post), class: "btn btn-outline-light rounded-4 p-2 mt-3" %>
+            <% end %>
             <%= link_to blog_post_path(@blog_post), data: { turbo_method: :delete, turbo_confirm: "Delete blog post ?" } do %>
               <i class="fa-regular fa-trash-can text-danger trash-grow fs-2 mt-3"></i>
             <% end %>
