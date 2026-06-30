@@ -66,6 +66,38 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Paginated Post 11"
   end
 
+  test "index eager-loads tags so the post list is not an N+1" do
+    # Several published posts each carrying a tag: without includes(:tags) the
+    # view's per-row `tags.any?`/`tags.map` loads tags once per post (scales with
+    # N). With eager loading the tag-table query count stays small and constant.
+    tag = tags(:rails7)
+    6.times do |i|
+      post = BlogPost.create!(
+        title: "N Plus One Post #{i}",
+        html_content: "<p>Body #{i}.</p>",
+        img_url: "lb-portfolio.jpeg",
+        user: users(:louis),
+        status: :published,
+        position: i
+      )
+      post.tags << tag
+    end
+
+    tag_queries = 0
+    counter = lambda do |_name, _start, _finish, _id, payload|
+      tag_queries += 1 if payload[:sql]&.match?(/FROM "tags"/i)
+    end
+
+    ActiveSupport::Notifications.subscribed(counter, "sql.active_record") do
+      get blog_posts_url
+    end
+
+    assert_response :success
+    # Fix => @all_tags (1) + a single preload (1). N+1 regression => one per post.
+    assert_operator tag_queries, :<=, 3,
+      "blog index must eager-load tags (saw #{tag_queries} tag queries — N+1 regression)"
+  end
+
   test "index filters by title with ?q" do
     get blog_posts_url(q: "Deploying")
     assert_response :success

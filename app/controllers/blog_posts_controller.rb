@@ -23,6 +23,9 @@ class BlogPostsController < ApplicationController
     end
 
     @all_tags = Tag.order(:name)
+    # Eager-load what each card reads (tags, the Action Text body for reading_time,
+    # the featured_image attachment) to avoid an N+1 across the paginated rows.
+    scope = scope.includes(:tags, :rich_text_body).with_attached_featured_image
     # Keep :position ordering so the Phase-1 drag-to-reorder stays meaningful.
     @pagy, @blog_posts = pagy(scope.order(:position))
   end
