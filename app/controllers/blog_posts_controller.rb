@@ -8,6 +8,14 @@ class BlogPostsController < ApplicationController
     @blog_post = BlogPost.friendly.find(params[:id])
   end
 
+  # PATCH /blog_posts/reorder — persists drag-and-drop order (owner only).
+  def reorder
+    reorder_params.fetch(:ids, []).each_with_index do |id, index|
+      BlogPost.where(id: id).update_all(position: index)
+    end
+    head :ok
+  end
+
   def new
     @blog_post = BlogPost.new
   end
@@ -51,5 +59,9 @@ class BlogPostsController < ApplicationController
 
   def blog_post_params
     params.require(:blog_post).permit(:title, :description, :img_url, :tags, :html_content, :user_id)
+  end
+
+  def reorder_params
+    params.permit(ids: [])
   end
 end

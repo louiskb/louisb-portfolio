@@ -41,6 +41,35 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "index renders drag handles for the signed-in owner" do
+    sign_in users(:louis)
+    get projects_url
+    assert_response :success
+    assert_select "[data-controller=sortable]"
+    assert_select ".drag-handle"
+  end
+
+  test "reorder persists new position order when signed in" do
+    sign_in users(:louis)
+    a = projects(:sipfolio)
+    b = projects(:findadoc)
+
+    patch reorder_projects_url, params: { ids: [ b.id, a.id ] }, as: :json
+    assert_response :success
+
+    assert_equal 0, b.reload.position
+    assert_equal 1, a.reload.position
+  end
+
+  test "reorder requires authentication" do
+    a = projects(:sipfolio)
+    b = projects(:findadoc)
+
+    # The reorder request is JSON, so Devise returns 401 rather than redirecting.
+    patch reorder_projects_url, params: { ids: [ b.id, a.id ] }, as: :json
+    assert_response :unauthorized
+  end
+
   test "create succeeds when signed in" do
     sign_in users(:louis)
     assert_difference "Project.count", 1 do

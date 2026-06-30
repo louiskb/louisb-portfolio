@@ -10,6 +10,14 @@ class ProjectsController < ApplicationController
     @project = Project.friendly.find(params[:id])
   end
 
+  # PATCH /projects/reorder — persists drag-and-drop order (owner only).
+  def reorder
+    reorder_params.fetch(:ids, []).each_with_index do |id, index|
+      Project.where(id: id).update_all(position: index)
+    end
+    head :ok
+  end
+
   def new
     @project = Project.new
     @featured_personal_projects_count = filter_featured_personal_projects(Project.all)
@@ -57,6 +65,10 @@ class ProjectsController < ApplicationController
 
   def project_params
     params.require(:project).permit(:title, :description, :img_url, :tech_stack, :project_url, :github_url, :user_id, :personal_project, :private_repo, :featured)
+  end
+
+  def reorder_params
+    params.permit(ids: [])
   end
 
   def filter_personal_projects(projects)

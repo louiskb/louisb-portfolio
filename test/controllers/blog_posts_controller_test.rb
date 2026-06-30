@@ -28,6 +28,35 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "/blog_posts/resolving-by-slug", path
   end
 
+  test "index renders drag handles for the signed-in owner" do
+    sign_in users(:louis)
+    get blog_posts_url
+    assert_response :success
+    assert_select "[data-controller=sortable]"
+    assert_select ".drag-handle"
+  end
+
+  test "reorder persists new position order when signed in" do
+    sign_in users(:louis)
+    a = blog_posts(:welcome)
+    b = blog_posts(:deploying)
+
+    patch reorder_blog_posts_url, params: { ids: [ b.id, a.id ] }, as: :json
+    assert_response :success
+
+    assert_equal 0, b.reload.position
+    assert_equal 1, a.reload.position
+  end
+
+  test "reorder requires authentication" do
+    a = blog_posts(:welcome)
+    b = blog_posts(:deploying)
+
+    # The reorder request is JSON, so Devise returns 401 rather than redirecting.
+    patch reorder_blog_posts_url, params: { ids: [ b.id, a.id ] }, as: :json
+    assert_response :unauthorized
+  end
+
   test "new requires authentication" do
     get new_blog_post_url
     assert_redirected_to new_user_session_url

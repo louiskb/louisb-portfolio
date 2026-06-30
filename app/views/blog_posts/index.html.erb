@@ -3,13 +3,20 @@
 <div class="container">
   <main>
     <section id="blog-posts-index">
-      <div class="row justify-content-start align-items-center">
-        <h2 class="mt-5 mb-4">Blog Posts</h2>
+      <h2 class="mt-5 mb-4">Blog Posts</h2>
+      <%# Owner-only drag-to-reorder: the sortable container holds only card items. %>
+      <% sortable_data = user_signed_in? ? { controller: "sortable", sortable_url_value: reorder_blog_posts_path } : {} %>
+      <%= tag.div class: "row justify-content-start align-items-center", data: sortable_data do %>
         <% @blog_posts.each do |blog_post| %>
-          <div class="col-12 col-md-6 col-lg-4">
+          <div class="col-12 col-md-6 col-lg-4" data-id="<%= blog_post.id %>">
             <div class="card card-blog-post shadow-sm rounded-4 mb-4">
               <div class="card-body p-4">
-                 <%= link_to blog_post_path(blog_post), class: "text-decoration-none text-dark" do %>
+                <% if user_signed_in? %>
+                  <span class="drag-handle text-muted mb-2 d-inline-block" style="cursor: grab;" title="Drag to reorder">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                  </span>
+                <% end %>
+                <%= link_to blog_post_path(blog_post), class: "text-decoration-none text-dark" do %>
                   <h3 class="card-title fw-bold mb-4"><%= blog_post.title %></h3>
                 <% end %>
                 <%= image_tag blog_post.img_url, alt: "Blog post featured image", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
@@ -27,7 +34,7 @@
             </div>
           </div>
         <% end %>
-      </div>
+      <% end %>
     </section>
   </main>
 </div>

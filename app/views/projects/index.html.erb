@@ -6,20 +6,24 @@
   <main>
     <section id="projects-index">
       <!-- Personal projects -->
-      <div class="row justify-content-start align-items-center">
-        <h2 class="mt-5 mb-4">My projects</h2>
+      <h2 class="mt-5 mb-4">My projects</h2>
+      <%# Owner-only drag-to-reorder: the sortable container holds only card items. %>
+      <% personal_sortable = user_signed_in? ? { controller: "sortable", sortable_url_value: reorder_projects_path } : {} %>
+      <%= tag.div class: "row justify-content-start align-items-center", data: personal_sortable do %>
         <% @personal_projects.each do |project| %>
-          <div class="col-12 col-md-6 col-lg-4 mb-2">
+          <div class="col-12 col-md-6 col-lg-4 mb-2" data-id="<%= project.id %>">
             <div class="card card-project shadow-sm rounded-4 mb-4">
               <div class="card-body p-4">
+                <% if user_signed_in? %>
+                  <span class="drag-handle text-muted mb-2 d-inline-block" style="cursor: grab;" title="Drag to reorder">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                  </span>
+                <% end %>
                 <h3 class="card-title fw-bold mb-2"><%= project.title %></h3>
                 <p class="card-text small text-muted mb-3">
                   <%= project.description.capitalize %>
                 </p>
                 <%= image_tag project.img_url, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-                <!-- <p class="mb-4 text-secondary text-tech-stack">
-              Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
-            </p> -->
                 <p class="mb-4 text-secondary text-tech-stack">
                   <%= project.tech_stack %>
                 </p>
@@ -64,23 +68,26 @@
             </div>
           </div>
         <% end %>
-      </div>
+      <% end %>
       <hr class="mt-5 mb-3">
       <!-- Open source project contributions-->
-      <% @open_source_projects.each do |project| %>
-        <div class="row justify-content-start align-items-center">
-          <h2 class="mt-5 mb-4">Open source contributions</h2>
-          <div class="col-12 col-md-6 col-lg-4 mb-2">
+      <h2 class="mt-5 mb-4">Open source contributions</h2>
+      <% open_source_sortable = user_signed_in? ? { controller: "sortable", sortable_url_value: reorder_projects_path } : {} %>
+      <%= tag.div class: "row justify-content-start align-items-center", data: open_source_sortable do %>
+        <% @open_source_projects.each do |project| %>
+          <div class="col-12 col-md-6 col-lg-4 mb-2" data-id="<%= project.id %>">
             <div class="card card-project shadow-sm rounded-4 mb-4">
               <div class="card-body p-4">
+                <% if user_signed_in? %>
+                  <span class="drag-handle text-muted mb-2 d-inline-block" style="cursor: grab;" title="Drag to reorder">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                  </span>
+                <% end %>
                 <h3 class="card-title fw-bold mb-2"><%= project.title %></h3>
                 <p class="card-text small text-muted mb-3">
                   <%= project.description.capitalize %>
                 </p>
                 <%= image_tag project.img_url, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-                <!-- <p class="mb-4 text-secondary text-tech-stack">
-              Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
-            </p> -->
                 <p class="mb-4 text-secondary text-tech-stack">
                   <%= project.tech_stack %>
                 </p>
@@ -125,7 +132,7 @@
             </div>
           </div>
         <% end %>
-      </div>
+      <% end %>
     </section>
   </main>
 </div>
