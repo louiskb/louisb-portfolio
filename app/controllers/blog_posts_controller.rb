@@ -1,7 +1,9 @@
 class BlogPostsController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :index, :show ]
   def index
-    @blog_posts = BlogPost.all
+    # Owner sees everything; visitors only see published posts.
+    scope = user_signed_in? ? BlogPost.all : BlogPost.visible_to_visitors
+    @blog_posts = scope.order(:position)
   end
 
   def show
@@ -58,7 +60,8 @@ class BlogPostsController < ApplicationController
   private
 
   def blog_post_params
-    params.require(:blog_post).permit(:title, :description, :img_url, :tags, :html_content, :user_id)
+    params.require(:blog_post).permit(:title, :description, :img_url, :tags, :html_content, :user_id,
+                                      :featured_image, :featured, :status, :scheduled_at, :position)
   end
 
   def reorder_params

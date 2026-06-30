@@ -8,9 +8,47 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "show requires authentication" do
+  test "show is public" do
     get project_url(@project)
-    assert_redirected_to new_user_session_url
+    assert_response :success
+  end
+
+  test "index hides draft projects from visitors but shows them to the owner" do
+    draft = Project.create!(
+      title: "Secret Draft Project",
+      description: "Not ready yet.",
+      img_url: "lb-portfolio.jpeg",
+      tech_stack: "Ruby",
+      project_url: "https://example.com/secret",
+      personal_project: true,
+      user: users(:louis),
+      status: :draft
+    )
+
+    get projects_url
+    assert_response :success
+    assert_not_includes response.body, draft.title, "draft must not leak to visitors"
+
+    sign_in users(:louis)
+    get projects_url
+    assert_response :success
+    assert_includes response.body, draft.title, "owner must see the draft"
+  end
+
+  test "uploading a featured_image via the form attaches it" do
+    sign_in users(:louis)
+    assert_difference "Project.count", 1 do
+      post projects_url, params: { project: {
+        title: "Project With Upload",
+        description: "Has an uploaded image.",
+        img_url: "market-sensei.jpg",
+        tech_stack: "Rails",
+        project_url: "https://example.com/upload",
+        personal_project: true,
+        featured_image: fixture_file_upload("test_image.png", "image/png")
+      } }
+    end
+    assert Project.last.featured_image.attached?
   end
 
   test "show succeeds when signed in" do

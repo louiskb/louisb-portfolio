@@ -2,8 +2,10 @@ class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :home, :terms_of_service, :privacy_policy ]
 
   def home
-    @personal_projects = filter_personal_projects(Project.all)
-    @open_source_projects = filter_open_source_projects(Project.all)
+    # Owner sees everything; visitors only see published projects.
+    scope = user_signed_in? ? Project.all : Project.visible_to_visitors
+    @personal_projects = filter_personal_projects(scope)
+    @open_source_projects = filter_open_source_projects(scope)
     @contact = Contact.new
   end
 

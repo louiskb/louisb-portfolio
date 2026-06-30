@@ -1,9 +1,11 @@
 class ProjectsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [ :index ]
+  skip_before_action :authenticate_user!, only: [ :index, :show ]
 
   def index
-    @personal_projects = filter_personal_projects(Project.all)
-    @open_source_projects = filter_open_source_projects(Project.all)
+    # Owner sees everything; visitors only see published projects.
+    scope = (user_signed_in? ? Project.all : Project.visible_to_visitors).order(:position)
+    @personal_projects = filter_personal_projects(scope)
+    @open_source_projects = filter_open_source_projects(scope)
   end
 
   def show
@@ -64,7 +66,9 @@ class ProjectsController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :img_url, :tech_stack, :project_url, :github_url, :user_id, :personal_project, :private_repo, :featured)
+    params.require(:project).permit(:title, :description, :img_url, :tech_stack, :project_url, :github_url,
+                                    :user_id, :personal_project, :private_repo, :featured,
+                                    :featured_image, :status, :scheduled_at, :position)
   end
 
   def reorder_params

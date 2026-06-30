@@ -8,6 +8,42 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "index hides draft posts from visitors but shows them to the owner" do
+    draft = BlogPost.create!(
+      title: "Secret Draft Post",
+      description: "Still drafting.",
+      img_url: "lb-portfolio.jpeg",
+      tags: "Ruby",
+      html_content: "<p>Draft body.</p>",
+      user: users(:louis),
+      status: :draft
+    )
+
+    get blog_posts_url
+    assert_response :success
+    assert_not_includes response.body, draft.title, "draft must not leak to visitors"
+
+    sign_in users(:louis)
+    get blog_posts_url
+    assert_response :success
+    assert_includes response.body, draft.title, "owner must see the draft"
+  end
+
+  test "uploading a featured_image via the form attaches it" do
+    sign_in users(:louis)
+    assert_difference "BlogPost.count", 1 do
+      post blog_posts_url, params: { blog_post: {
+        title: "Post With Upload",
+        description: "Has an uploaded image.",
+        img_url: "lb-portfolio.jpeg",
+        tags: "Ruby",
+        html_content: "<p>Body.</p>",
+        featured_image: fixture_file_upload("test_image.png", "image/png")
+      } }
+    end
+    assert BlogPost.last.featured_image.attached?
+  end
+
   test "show is public" do
     get blog_post_url(@blog_post)
     assert_response :success
