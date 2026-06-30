@@ -8,6 +8,7 @@ class PagesController < ApplicationController
     scope = user_signed_in? ? Project.all : Project.visible_to_visitors
     @personal_projects = filter_personal_projects(scope)
     @open_source_projects = filter_open_source_projects(scope)
+    @stats = HomeStats.new.to_h
     @contact = Contact.new
   end
 
