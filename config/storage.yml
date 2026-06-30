@@ -32,3 +32,9 @@ local:
 #   service: Mirror
 #   primary: local
 #   mirrors: [ amazon, google, microsoft ]
+
+# Cloudinary service for production uploads. Reads CLOUDINARY_URL from the
+# environment; only instantiated when active_storage.service is :cloudinary.
+cloudinary:
+  service: Cloudinary
+  folder: <%= Rails.env %>

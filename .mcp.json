@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "posthog": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote@latest",
+        "https://mcp.posthog.com/mcp",
+        "--header",
+        "Authorization: Bearer ${POSTHOG_PERSONAL_API_KEY}"
+      ]
+    }
+  }
+}

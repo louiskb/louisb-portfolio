@@ -1,0 +1,7 @@
+jane:
+  first_name: Jane
+  last_name: Doe
+  email: jane@example.com
+  message: Hello Louis, I would love to connect about a project.
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.week.ago %>

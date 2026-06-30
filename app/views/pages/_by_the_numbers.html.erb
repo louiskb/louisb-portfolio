@@ -1,0 +1,35 @@
+<!--
+  By the numbers — proof-of-concept stats section.
+  Intentionally plain (semantic Bootstrap utilities only); the Claude Design
+  handoff restyles this later. The point is that real @stats data animates on
+  scroll: scroll_reveal reveals the cards, count_up animates each number.
+  Reduced-motion safe — count_up sets the final value immediately, and the
+  reveal CSS is gated behind prefers-reduced-motion.
+-->
+<section id="by-the-numbers" class="py-5 border-top" data-controller="scroll-reveal">
+  <div class="container">
+    <h2 class="mb-4">By the numbers</h2>
+    <div class="row g-4 text-center">
+      <% {
+        projects_count: "Projects shipped",
+        blog_posts_count: "Blog posts",
+        technologies_count: "Technologies",
+        years_coding: "Years coding",
+        years_trading: "Years in markets"
+      }.each do |key, label| %>
+        <div class="col-6 col-md" data-scroll-reveal-target="fromBottom">
+          <div class="card h-100 shadow-sm rounded-4">
+            <div class="card-body">
+              <p class="display-5 fw-bold mb-1"
+                 data-controller="count-up"
+                 data-count-up-target-value="<%= @stats[key] %>">
+                <%= @stats[key] %>
+              </p>
+              <p class="text-muted small mb-0"><%= label %></p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

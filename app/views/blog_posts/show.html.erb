@@ -2,10 +2,17 @@
 <%= render "blog_post_hero_banner", blog_post: @blog_post %>
 <div class="container">
   <main>
-    <article data-controller="html-inject" class="mt-5 mb-4" hidden>
-      <!-- textContent (HTML string) that's inside <article> element -->
-      <!-- Rails `sanitize` helper method cleans + marks safe → Rails ERB automatically converts any sanitized (or html_safe marked) HTML string to DOM → Stimulus just un-hides on connect(). This renders sanitized HTML directly on page load via Stimulus connect() -->
-      <%= sanitize @blog_post.html_content %>
-    </article>
+    <% if @blog_post.body.present? %>
+      <%# Manual post: render the Action Text rich-text body. %>
+      <article class="trix-content mt-5 mb-4">
+        <%= @blog_post.body %>
+      </article>
+    <% else %>
+      <article data-controller="html-inject" class="mt-5 mb-4" hidden>
+        <!-- textContent (HTML string) that's inside <article> element -->
+        <!-- Rails `sanitize` helper method cleans + marks safe → Rails ERB automatically converts any sanitized (or html_safe marked) HTML string to DOM → Stimulus just un-hides on connect(). This renders sanitized HTML directly on page load via Stimulus connect() -->
+        <%= sanitize @blog_post.html_content %>
+      </article>
+    <% end %>
   </main>
 </div>

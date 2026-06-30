@@ -33,7 +33,7 @@
           <% end %>
         </li>
         <li>
-          <span class="text-dark">Project description:</span> <%= @project.description.capitalize %>
+          <span class="text-dark">Project description:</span> <%= @project.description&.capitalize %>
         </li>
         <li>
           <span class="text-dark">Tech stack:</span> <%= @project.tech_stack %>

@@ -26,6 +26,10 @@ Rails.application.configure do
   # Toggling the line below executes enqueued jobs immediately in the same process rather than queuing them for later processing. When paired with `deliver_later` (e.g., `ContactMailer.with(contact: @contact).confirmation_email.deliver_later` in the `contact_controller`), this configuration causes the email delivery job to run synchronously right away, mimicking `deliver_now` behavior instead of deferring to a background queue.
   # config.active_job.queue_adapter = :inline
 
+  # Solid Queue in development too, so scheduled publishing can be exercised
+  # locally (run the server with SOLID_QUEUE_IN_PUMA=true to start the worker).
+  config.active_job.queue_adapter = :solid_queue
+
   # ------------------ End of email configuration settings ---------------------
 
   # In the development environment your application's code is reloaded any time

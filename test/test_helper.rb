@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require "minitest/mock"
 
 module ActiveSupport
   class TestCase
@@ -11,5 +12,34 @@ module ActiveSupport
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
+
+    # Temporarily set (or unset, when value is nil) an environment variable for
+    # the duration of the block, restoring the original afterwards. Test
+    # processes are isolated and run serially, so this is leak-free.
+    def with_env(key, value)
+      original = ENV[key]
+      value.nil? ? ENV.delete(key) : ENV[key] = value
+      yield
+    ensure
+      original.nil? ? ENV.delete(key) : ENV[key] = original
+    end
+
+    # Stubs the module-level PostHog.capture for the duration of the block and
+    # records every call's keyword options. Because the real method is replaced,
+    # NO analytics request ever leaves the test process — the assertions run
+    # purely against the recorded calls. Returns the array of recorded option
+    # hashes (each like { distinct_id:, event:, properties: }).
+    def capture_posthog_events
+      recorded = []
+      PostHog.stub(:capture, ->(*_args, **kwargs) { recorded << kwargs }) do
+        yield recorded
+      end
+      recorded
+    end
   end
+end
+
+class ActionDispatch::IntegrationTest
+  # Devise helpers so controller/integration tests can `sign_in users(:louis)`.
+  include Devise::Test::IntegrationHelpers
 end

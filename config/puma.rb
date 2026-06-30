@@ -42,3 +42,8 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
+
+# Run the Solid Queue supervisor (workers + recurring tasks) inside Puma when
+# SOLID_QUEUE_IN_PUMA is set, so scheduled publishing works without a separate
+# Heroku worker dyno. Required in production for scheduling to run at all.
+plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
