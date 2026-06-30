@@ -3,7 +3,8 @@ class BlogPostsController < ApplicationController
   def index
     # Owner sees everything; visitors only see published posts.
     scope = user_signed_in? ? BlogPost.all : BlogPost.visible_to_visitors
-    @blog_posts = scope.order(:position)
+    # Keep :position ordering so the Phase-1 drag-to-reorder stays meaningful.
+    @pagy, @blog_posts = pagy(scope.order(:position))
   end
 
   def show

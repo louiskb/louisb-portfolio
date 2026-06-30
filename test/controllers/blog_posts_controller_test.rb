@@ -42,6 +42,30 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert BlogPost.last.featured_image.attached?
   end
 
+  test "index paginates published posts nine per page" do
+    # 12 published posts with explicit positions 0..11; the two fixtures have a
+    # nil position so they sort last. Page 1 shows positions 0–8, page 2 the rest.
+    12.times do |i|
+      BlogPost.create!(
+        title: format("Paginated Post %02d", i),
+        description: "A paginated post number #{i}.",
+        img_url: "lb-portfolio.jpeg",
+        html_content: "<p>Body #{i}.</p>",
+        position: i,
+        user: users(:louis)
+      )
+    end
+
+    get blog_posts_url
+    assert_response :success
+    assert_includes response.body, "Paginated Post 00"
+    assert_not_includes response.body, "Paginated Post 11", "post at position 11 belongs on page 2"
+
+    get blog_posts_url(page: 2)
+    assert_response :success
+    assert_includes response.body, "Paginated Post 11"
+  end
+
   test "show is public" do
     get blog_post_url(@blog_post)
     assert_response :success

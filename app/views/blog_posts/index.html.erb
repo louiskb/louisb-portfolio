@@ -35,6 +35,12 @@
           </div>
         <% end %>
       <% end %>
+
+      <% if @pagy.pages > 1 %>
+        <nav class="mt-4" aria-label="Blog pages">
+          <%= raw @pagy.series_nav(:bootstrap) %>
+        </nav>
+      <% end %>
     </section>
   </main>
 </div>
