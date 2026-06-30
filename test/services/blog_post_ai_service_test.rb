@@ -106,6 +106,54 @@ class BlogPostAiServiceTest < ActiveSupport::TestCase
     assert post.human_generated?, "human_generated should be true after revision"
   end
 
+  test "revise_blog_post preserves the existing scheduled_at when scheduled with no new time" do
+    original_time = 3.days.from_now.change(usec: 0)
+    post = BlogPost.create!(
+      title: "Scheduled Post To Revise",
+      html_content: "<p>Original scheduled body.</p>",
+      user: @user,
+      status: :scheduled,
+      scheduled_at: original_time
+    )
+
+    payload = ai_payload("title" => "Revised Scheduled", "content" => "<h2>R</h2><p>New body.</p>")
+
+    # Mirrors the AI-revise form: it submits the current status (scheduled) but
+    # NO scheduled_at, so the service is called with status: :scheduled, nil time.
+    RubyLLM.stub(:chat, FakeChat.new(payload)) do
+      @service.stub(:fetch_unsplash_data, nil) do
+        @service.revise_blog_post(post, "tighten it", status: :scheduled, scheduled_at: nil)
+      end
+    end
+
+    post.reload
+    assert post.scheduled?, "post must remain scheduled after an AI revision"
+    assert_not_nil post.scheduled_at, "the existing publish time must not be wiped to nil"
+    assert_equal original_time.to_i, post.scheduled_at.to_i,
+      "the original scheduled_at must be preserved intact"
+  end
+
+  test "revise_blog_post falls back to draft when scheduled with no usable time" do
+    post = BlogPost.create!(
+      title: "Draft Post To Revise",
+      html_content: "<p>Original draft body.</p>",
+      user: @user,
+      status: :draft
+    )
+
+    payload = ai_payload("content" => "<h2>R</h2><p>New body.</p>")
+
+    RubyLLM.stub(:chat, FakeChat.new(payload)) do
+      @service.stub(:fetch_unsplash_data, nil) do
+        @service.revise_blog_post(post, "tighten it", status: :scheduled, scheduled_at: nil)
+      end
+    end
+
+    post.reload
+    assert post.draft?, "a scheduled status with no usable time must fall back to draft"
+    assert_nil post.scheduled_at
+  end
+
   # --- Unsplash graceful degradation ---------------------------------------
   test "an Unsplash HTTP failure leaves the content intact and the post still saves" do
     with_env("UNSPLASH_ACCESS_KEY", "test-unsplash-key") do

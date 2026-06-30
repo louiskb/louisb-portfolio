@@ -125,8 +125,24 @@ class BlogPostAiService
       human_generated: true
     }
     if status
-      attrs[:status] = status
-      attrs[:scheduled_at] = (status == :scheduled ? scheduled_at : nil)
+      if status == :scheduled
+        # Preserve the existing publish time when the caller supplies none — the
+        # AI-revise form submits the current status but NO scheduled_at, so
+        # revising an already-scheduled post must not wipe its schedule to NULL
+        # (which would strand it: PublishScheduledPostsJob excludes NULL rows).
+        resolved_time = scheduled_at.presence || blog_post.scheduled_at
+        if resolved_time.present?
+          attrs[:status] = :scheduled
+          attrs[:scheduled_at] = resolved_time
+        else
+          # No usable time at all — fall back to draft rather than a stuck schedule.
+          attrs[:status] = :draft
+          attrs[:scheduled_at] = nil
+        end
+      else
+        attrs[:status] = status
+        attrs[:scheduled_at] = nil
+      end
     end
     blog_post.assign_attributes(attrs)
 
