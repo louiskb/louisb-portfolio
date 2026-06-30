@@ -30,4 +30,16 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, draft.title, "owner must see the draft on the homepage"
   end
+
+  test "privacy_policy is public and renders" do
+    get privacy_policy_url
+    assert_response :success
+    assert_includes response.body, "PostHog", "privacy policy must disclose the analytics provider"
+  end
+
+  test "terms_of_service is public and renders" do
+    get terms_of_service_url
+    assert_response :success
+    assert_includes response.body, "AI-assisted", "terms must disclose AI-assisted content"
+  end
 end
