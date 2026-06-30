@@ -143,8 +143,10 @@ class BlogPostsController < ApplicationController
 
   private
 
+  # Scoped to current_user.blog_posts so a revision request can only target a
+  # post the signed-in owner owns (defense-in-depth IDOR guard).
   def set_ai_blog_post
-    @blog_post = BlogPost.friendly.find(params[:id])
+    @blog_post = current_user.blog_posts.friendly.find(params[:id])
   end
 
   # Redirects to the blog with a friendly notice when AI is not configured, so

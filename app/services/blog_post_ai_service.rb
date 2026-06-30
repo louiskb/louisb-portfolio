@@ -1,6 +1,7 @@
 require "net/http"
 require "json"
 require "openssl"
+require "cgi"
 
 # Generates and revises blog posts with Anthropic Claude (via ruby_llm) and
 # auto-fetches imagery from Unsplash. Every external call degrades gracefully:
@@ -171,7 +172,7 @@ class BlogPostAiService
     uri = URI(UNSPLASH_API_URL)
     uri.query = URI.encode_www_form(query: query, orientation: "landscape", client_id: access_key)
 
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
+    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
       http.get(uri.request_uri)
     end
     return nil unless response.is_a?(Net::HTTPSuccess)
@@ -195,8 +196,8 @@ class BlogPostAiService
   # featured_image_caption and rendered directly below the featured image).
   def figcaption_html(data)
     "<figcaption class='text-muted mt-1' style='font-size:0.8em;'>" \
-      "Photo by <a href='#{data[:photographer_url]}'>#{data[:photographer]}</a> on " \
-      "<a href='#{data[:photo_url]}'>Unsplash</a>" \
+      "Photo by <a href='#{safe_href(data[:photographer_url])}'>#{escape_html(data[:photographer])}</a> on " \
+      "<a href='#{safe_href(data[:photo_url])}'>Unsplash</a>" \
       "</figcaption>"
   end
 
@@ -210,7 +211,7 @@ class BlogPostAiService
     uri = URI(UNSPLASH_API_URL)
     uri.query = URI.encode_www_form(query: query, orientation: "landscape", client_id: access_key)
 
-    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE) do |http|
+    response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
       http.get(uri.request_uri)
     end
     return "" unless response.is_a?(Net::HTTPSuccess)
@@ -224,11 +225,13 @@ class BlogPostAiService
     return "" if image_url.blank?
 
     # Unsplash terms require attribution — photographer name + Unsplash link.
+    # Every interpolated field is HTML-escaped and every href scheme-checked,
+    # even though the result is also sanitized on render (defense in depth).
     "<figure class='mb-4'>" \
-      "<img src='#{image_url}' alt='#{query}' class='img-fluid rounded' style='width:100%;max-height:420px;object-fit:cover;'>" \
+      "<img src='#{safe_href(image_url)}' alt='#{escape_html(query)}' class='img-fluid rounded' style='width:100%;max-height:420px;object-fit:cover;'>" \
       "<figcaption class='text-muted mt-1' style='font-size:0.8em;'>" \
-        "Photo by <a href='#{photographer_url}'>#{photographer}</a> on " \
-        "<a href='#{photo_url}'>Unsplash</a>" \
+        "Photo by <a href='#{safe_href(photographer_url)}'>#{escape_html(photographer)}</a> on " \
+        "<a href='#{safe_href(photo_url)}'>Unsplash</a>" \
       "</figcaption>" \
     "</figure>"
   rescue StandardError => e
@@ -243,6 +246,18 @@ class BlogPostAiService
 
     valid_ids = available_tags.map(&:id).to_set
     Array(ai_ids).map(&:to_i).select { |id| valid_ids.include?(id) }
+  end
+
+  # HTML-escape an interpolated value before it is placed inside attribution markup.
+  def escape_html(value)
+    CGI.escapeHTML(value.to_s)
+  end
+
+  # Only allow http(s) URLs into href/src attributes; anything else (e.g. a
+  # javascript: scheme) collapses to "#". Escapes the result for attribute use.
+  def safe_href(value)
+    url = value.to_s
+    url.match?(%r{\Ahttps?://}i) ? CGI.escapeHTML(url) : "#"
   end
 
   def creation_system_prompt(available_tags)
