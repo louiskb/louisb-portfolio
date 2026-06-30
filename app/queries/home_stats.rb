@@ -30,13 +30,15 @@ class HomeStats
   end
 
   # Distinct technologies across every published project's `tech_stack` string.
-  # Each string is split on commas, stripped, blanks dropped, and de-duplicated
-  # case-insensitively (so "Rails" and "rails" count once).
+  # Each string is split on the canonical " . " (dot-space) separator the data is
+  # authored with (seeds + the project form hint, e.g. "Vue.js . JavaScript . Vitest"),
+  # stripped, blanks dropped, and de-duplicated case-insensitively (so "Rails" and
+  # "rails" count once). Splitting on a bare "." would wrongly break "Vue.js".
   def technologies_count
     published_projects
       .pluck(:tech_stack)
       .compact
-      .flat_map { |stack| stack.split(",") }
+      .flat_map { |stack| stack.split(" . ") }
       .map { |tech| tech.strip.downcase }
       .reject(&:empty?)
       .uniq

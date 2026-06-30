@@ -23,8 +23,9 @@ class HomeStatsTest < ActiveSupport::TestCase
   end
 
   test "technologies_count de-duplicates technologies shared across projects" do
-    # Fixtures: sipfolio = "Rails, Bootstrap, PostgreSQL",
-    #           findadoc = "Rails, Leaflet, PostgreSQL".
+    # Fixtures use the canonical " . " (dot-space) separator, matching seeds and
+    # the project form hint: sipfolio = "Rails . Bootstrap . PostgreSQL",
+    #                        findadoc = "Rails . Leaflet . PostgreSQL".
     # Distinct across both: rails, bootstrap, postgresql, leaflet => 4.
     assert_equal 4, HomeStats.new.to_h[:technologies_count]
   end
@@ -34,7 +35,7 @@ class HomeStatsTest < ActiveSupport::TestCase
       title: "Caps project",
       user: users(:louis),
       status: :published,
-      tech_stack: "RAILS, rails, Rails"
+      tech_stack: "RAILS . rails . Rails"
     )
 
     # RAILS / rails / Rails all collapse into the existing "rails" — still 4.
@@ -46,7 +47,7 @@ class HomeStatsTest < ActiveSupport::TestCase
       title: "Draft tech project",
       user: users(:louis),
       status: :draft,
-      tech_stack: "Elixir, Phoenix"
+      tech_stack: "Elixir . Phoenix"
     )
 
     # Draft tech is excluded — count unchanged at 4.
