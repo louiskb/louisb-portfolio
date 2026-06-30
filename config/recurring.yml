@@ -1,6 +1,20 @@
-# Solid Queue recurring tasks. The scheduled-publishing job is added in Phase 4.
-# For now, only the finished-job cleanup runs in production.
+# Solid Queue recurring tasks.
+#
+# The publish_scheduled_posts task drives the scheduled-publishing feature: it
+# runs PublishScheduledPostsJob every minute so any blog post or project whose
+# scheduled_at has passed gets published. It runs in development too so the
+# feature can be exercised locally (with SOLID_QUEUE_IN_PUMA=true in .env).
+development:
+  publish_scheduled_posts:
+    class: PublishScheduledPostsJob
+    queue: default
+    schedule: every minute
+
 production:
+  publish_scheduled_posts:
+    class: PublishScheduledPostsJob
+    queue: default
+    schedule: every minute
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
