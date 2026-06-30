@@ -81,8 +81,9 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter = :resque
+  # Solid Queue runs Active Job in the primary database; the supervisor runs
+  # in-Puma when SOLID_QUEUE_IN_PUMA=true (no separate worker dyno).
+  config.active_job.queue_adapter = :solid_queue
   # config.active_job.queue_name_prefix = "louisb_portfolio_production"
 
   config.action_mailer.perform_caching = false

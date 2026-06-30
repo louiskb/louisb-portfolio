@@ -1,0 +1,20 @@
+default: &default
+  dispatchers:
+    - polling_interval: 1
+      batch_size: 500
+  workers:
+    - queues: "*"
+      threads: 3
+      # Keep at 1 on small Heroku dynos — each process loads full Rails alongside
+      # Puma when running in-Puma (watch for R14 memory warnings).
+      processes: <%= ENV.fetch("JOB_CONCURRENCY", 1) %>
+      polling_interval: 0.1
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
