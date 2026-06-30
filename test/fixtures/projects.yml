@@ -1,0 +1,27 @@
+sipfolio:
+  title: SipFolio
+  description: A cocktail discovery app built with Rails.
+  img_url: sipfolio-cocktails-screenshot.jpg
+  tech_stack: Rails, Bootstrap, PostgreSQL
+  project_url: https://example.com/sipfolio
+  github_url: https://github.com/louiskb/sipfolio
+  personal_project: true
+  private_repo: false
+  featured: true
+  user: louis
+  created_at: <%= 3.months.ago %>
+  updated_at: <%= 3.months.ago %>
+
+findadoc:
+  title: FindADoc
+  description: An open-source clinic finder with a map view.
+  img_url: findadoc-map-screenshot.jpg
+  tech_stack: Rails, Leaflet, PostgreSQL
+  project_url: https://example.com/findadoc
+  github_url: https://github.com/louiskb/findadoc
+  personal_project: false
+  private_repo: false
+  featured: true
+  user: louis
+  created_at: <%= 2.months.ago %>
+  updated_at: <%= 2.months.ago %>

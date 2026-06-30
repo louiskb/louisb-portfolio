@@ -1,0 +1,6 @@
+# Single portfolio owner. Password is "password123" for sign-in helpers.
+louis:
+  email: louis@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
+  created_at: <%= 1.year.ago %>
+  updated_at: <%= 1.year.ago %>
