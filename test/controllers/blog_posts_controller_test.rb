@@ -105,6 +105,49 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "show does not leak a draft post to signed-out visitors" do
+    draft = BlogPost.create!(
+      title: "Hidden Draft Show",
+      html_content: "<p>Secret draft body.</p>",
+      user: users(:louis),
+      status: :draft
+    )
+
+    # An unscoped lookup would return 200 and leak the body; the visibility
+    # scope makes the record 404 for visitors (RecordNotFound is rescued to a
+    # 404 response by ShowExceptions under the test env's :rescuable setting).
+    # A 404 means the show template never rendered, so the body cannot leak.
+    get blog_post_url(draft)
+    assert_response :not_found
+  end
+
+  test "show does not leak a scheduled post to signed-out visitors" do
+    scheduled = BlogPost.create!(
+      title: "Hidden Scheduled Show",
+      html_content: "<p>Secret scheduled body.</p>",
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: 2.days.from_now
+    )
+
+    get blog_post_url(scheduled)
+    assert_response :not_found
+  end
+
+  test "show renders a draft post for the signed-in owner" do
+    sign_in users(:louis)
+    draft = BlogPost.create!(
+      title: "Owner Draft Show",
+      html_content: "<p>Owner can see this draft.</p>",
+      user: users(:louis),
+      status: :draft
+    )
+
+    get blog_post_url(draft)
+    assert_response :success
+    assert_includes response.body, "Owner can see this draft."
+  end
+
   test "show resolves by friendly slug" do
     post = BlogPost.create!(
       title: "Resolving By Slug",

@@ -28,7 +28,10 @@ class BlogPostsController < ApplicationController
   end
 
   def show
-    @blog_post = BlogPost.friendly.find(params[:id])
+    # Owner sees any post; visitors only resolve published ones (draft/scheduled
+    # posts 404 instead of leaking their body — mirrors the index visibility gate).
+    base = user_signed_in? ? BlogPost : BlogPost.visible_to_visitors
+    @blog_post = base.friendly.find(params[:id])
 
     track_event("blog_post_viewed", {
       title: @blog_post.title,

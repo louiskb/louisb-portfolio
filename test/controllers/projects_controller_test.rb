@@ -57,6 +57,60 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "show does not leak a draft project to signed-out visitors" do
+    draft = Project.create!(
+      title: "Hidden Draft Project Show",
+      description: "Secret draft.",
+      img_url: "lb-portfolio.jpeg",
+      tech_stack: "Ruby",
+      project_url: "https://example.com/secret-show",
+      personal_project: true,
+      user: users(:louis),
+      status: :draft
+    )
+
+    # An unscoped lookup would return 200 and leak the project; the visibility
+    # scope makes the record 404 for visitors (RecordNotFound is rescued to a
+    # 404 response by ShowExceptions under the test env's :rescuable setting).
+    # A 404 means the show template never rendered, so nothing can leak.
+    get project_url(draft)
+    assert_response :not_found
+  end
+
+  test "show does not leak a scheduled project to signed-out visitors" do
+    scheduled = Project.create!(
+      title: "Hidden Scheduled Project Show",
+      description: "Secret scheduled.",
+      img_url: "lb-portfolio.jpeg",
+      tech_stack: "Ruby",
+      project_url: "https://example.com/secret-scheduled",
+      personal_project: true,
+      user: users(:louis),
+      status: :scheduled,
+      scheduled_at: 2.days.from_now
+    )
+
+    get project_url(scheduled)
+    assert_response :not_found
+  end
+
+  test "show renders a draft project for the signed-in owner" do
+    sign_in users(:louis)
+    draft = Project.create!(
+      title: "Owner Draft Project Show",
+      description: "Owner can see this draft.",
+      img_url: "lb-portfolio.jpeg",
+      tech_stack: "Ruby",
+      project_url: "https://example.com/owner-draft",
+      personal_project: true,
+      user: users(:louis),
+      status: :draft
+    )
+
+    get project_url(draft)
+    assert_response :success
+  end
+
   test "show resolves by friendly slug" do
     sign_in users(:louis)
     project = Project.create!(

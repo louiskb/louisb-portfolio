@@ -10,7 +10,10 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = Project.friendly.find(params[:id])
+    # Owner sees any project; visitors only resolve published ones (draft/scheduled
+    # projects 404 instead of leaking — mirrors the index visibility gate).
+    base = user_signed_in? ? Project : Project.visible_to_visitors
+    @project = base.friendly.find(params[:id])
 
     track_event("project_viewed", {
       title: @project.title,
