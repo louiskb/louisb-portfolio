@@ -4,116 +4,109 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Louis Bourne's personal portfolio website — a Rails 7.1 app that is simultaneously a public
-portfolio, a project showcase, and a blog. It is a **single-owner CMS**: exactly one user account
-may exist (enforced in the `User` model), and that owner logs in to manage projects and blog posts.
-Live at `www.louisbourne.me` (deployed on Heroku).
+Louis Bourne's personal portfolio — a **Rails 8.1** app that is a public portfolio, a project
+showcase, and an AI-assisted blog. It is a **single-owner CMS**: exactly one user account may exist
+(enforced in the `User` model), and that owner logs in to manage projects and posts. Live at
+`www.louisbourne.me`.
+
+**This is v2.** The live site is still v1 (the pre-overhaul Rails 7.1 app). v2 (this codebase) added
+the feature set below by porting proven patterns from Louis's `isarak-portfolio` client build, and is
+being stabilised before launch — bug-fixing plus an incoming Claude Design handoff that will layer the
+final visual design over the current plain scaffolding. See
+`docs/superpowers/specs/2026-07-01-portfolio-enhancements-design.md` and the matching plan +
+`docs/DEPLOY_NOTES.md`.
+
+## ⚠️ Deployment policy (do not deploy without a greenlight)
+
+**Do NOT deploy this project** during `/review-sync`, `/docs-sync`, `/self-review`, or otherwise, until
+Louis explicitly initiates the **first v2 deploy**. Land code and push, but stop before any
+`git push heroku …`. Once he greenlights that first deploy, those skills deploy normally thereafter.
+The live v1 must not be overwritten by an unstabilised v2.
 
 ## Stack
 
-- **Ruby 3.3.5 / Rails 7.1.5**, PostgreSQL, Puma
-- **Importmap** for JavaScript — no Node/bundler/`bin/dev`. JS is pinned in `config/importmap.rb`.
-- **Hotwire** (Turbo + Stimulus)
-- **Bootstrap 5.3** compiled through `sassc-rails` (SCSS), plus `font-awesome-sass` and `autoprefixer-rails`
-- **Devise** for auth, **simple_form** (installed from the heartcombo GitHub repo) for forms,
-  **invisible_captcha** for contact-form spam protection
-- Images are referenced by plain URL strings (`img_url` columns), **not** Active Storage attachments,
-  even though Active Storage is configured.
+- **Ruby 3.3.5 / Rails 8.1.3**, PostgreSQL, Puma. Default branch: **`main`**.
+- **Importmap** for JS (no Node/bundler/`bin/dev`); Hotwire (Turbo + Stimulus).
+- **Bootstrap 5.3** via `sassc-rails`; `font-awesome-sass`; `autoprefixer-rails`.
+- **Devise 5** (single-user), **simple_form** (heartcombo GitHub), **invisible_captcha**.
+- **Action Text (Trix)** rich text; **FriendlyId** slugs; **Pagy** pagination.
+- **Cloudinary + Active Storage** uploads (variant processing disabled — originals rendered).
+- **ruby_llm → Anthropic Claude** for AI blog generation; **Unsplash** (raw `Net::HTTP`) for imagery.
+- **Solid Queue** background jobs, run **in-Puma on the primary DB** (no Solid Cache/Cable).
+- **posthog-ruby/-rails + posthog-js** — cookieless, visitor-only analytics; PostHog MCP in `.mcp.json`.
 
 ## Commands
 
 ```bash
-bin/setup                      # install gems + db:prepare (first-time setup)
-bin/rails server               # run locally (no bin/dev — importmap needs no JS build step)
-bin/rails db:prepare           # create + migrate + seed if needed
-bin/rails db:migrate
-bin/rails db:seed              # seeds the single user + projects from db/seeds.rb (uses ENV vars)
+bin/setup                      # install gems + db:prepare
+bin/rails server               # run locally (no bin/dev). .env sets SOLID_QUEUE_IN_PUMA=true
+                               #   so the scheduled-publish worker runs in-Puma
+bin/rails db:prepare           # create + migrate
+bin/rails db:seed              # seeds the single user + projects/posts (reads USER_1_* env vars)
 bin/importmap pin <package>    # add a JS dependency
 
-bin/rails test                       # run the whole test suite
-bin/rails test test/models/contact_test.rb        # one file
-bin/rails test test/models/contact_test.rb:12     # one test by line number
-
-bundle exec rubocop            # lint (config in .rubocop.yml; many cops disabled, line length 120)
+bin/rails test                       # full suite (currently 185 runs, 0 failures)
+bin/rails test test/models/blog_post_test.rb        # one file
+bin/rails test test/models/blog_post_test.rb:42     # one test by line
 ```
 
-Note: the test suite is mostly Rails-generated scaffolding (commented-out stubs); there is no
-substantial coverage yet. Don't assume green tests prove behavior — verify changes by running the app.
-
-## Deployment
-
-Heroku, via `git push heroku master`. The `Procfile` runs `release: rails db:migrate` on every
-deploy. A `Dockerfile` also exists but the live deploy uses the Heroku Rails buildpack. Use the
-`deploy-heroku` skill for the full walkthrough.
+Test output is noisy with Bootstrap `WARNING: Found no color…` scss lines — ignore them; only
+failures/errors matter. No RuboCop in the bundle; follow the conventions below by hand.
 
 ## Architecture — the parts that span files
 
-**Access control is by `skip_before_action`, not an admin namespace.**
-`ApplicationController` applies `before_action :authenticate_user!` globally, so *everything is
-private by default*. Each controller then opens up its public actions with
-`skip_before_action :authenticate_user!, only: [...]`. Public visitors can reach: `pages#home`,
-`pages#terms_of_service`, `pages#privacy_policy`, `projects#index`, `blog_posts#index/show`, and
-`contacts#create`. Everything else (creating/editing/deleting projects and blog posts, the profile
-dashboard) requires login. **When you add a new publicly-visible route, you must add its action to
-the relevant `skip_before_action` list** or it will 302 to the Devise login.
+**Single-owner CMS, gated by `skip_before_action`.** `ApplicationController` applies
+`before_action :authenticate_user!` globally; public actions opt out per-action. Public visitors reach:
+`pages#home/terms_of_service/privacy_policy/resume`, `projects#index/show`, `blog_posts#index/show`,
+`contacts#create`, `tags` is owner-only. **When adding a public route, add it to the relevant
+`skip_before_action` list.** The `User` model enforces a single account (`one_account_allowed`), so
+"authenticated" == "owner".
 
-**The home page is composed of section partials.** `pages/home.html.erb` renders
-`_landing_hero_banner`, `_featured_projects`, `_demo_day`, `_tech_stack`, `_related_skills`,
-`_education`, `_about_me`, `_contact`. Most portfolio content (tech stack, education, about, skills)
-is **hard-coded in these partials**, not database-driven. Only the *featured projects* block reads
-from the DB.
+**`Publishable` concern** (`app/models/concerns/publishable.rb`) is included by `BlogPost` and `Project`:
+`enum :status { draft, scheduled, published }`, a `visible_to_visitors` scope (= published), and
+`publish!`/`schedule!(time)`/`cancel_schedule!`. **Visitor scoping is correctness-critical and applied in
+both `index` AND `show`** (`user_signed_in? ? Model.all : Model.visible_to_visitors`) plus `pages#home`
+— drafts/scheduled records must never reach a signed-out visitor. `pages#profile` is owner-only.
 
-**Projects/BlogPosts are DB-backed and filtered in Ruby, not via scopes.** Both `belong_to :user`.
-`Project` has three booleans — `personal_project`, `private_repo`, `featured` — and the
-`PagesController`/`ProjectsController` partition projects with `Array#select` over `Project.all`
-(e.g. `filter_personal_projects`, `filter_open_source_projects`). This loads all rows into memory;
-it's a deliberately simple pattern, not optimized. "Featured" + `personal_project` decides what shows
-on the landing page vs. the open-source section.
+**Dual-content blog.** A `BlogPost` renders **either** Action Text `body` (manual, Trix) **or**
+`html_content` (AI / legacy raw HTML), never both (`one_content_field_only`). The AI path writes
+`html_content`; `show` renders `body` if present else `sanitize(html_content)` via the `html-inject`
+Stimulus controller (sanitize allowlist widened for `figure`/`figcaption` + the `style` attribute).
+Tags are a `Tag`/`BlogPostTag` many-to-many; `reading_time`/`related_posts`/`ai_label` are model helpers.
 
-**Blog content is raw HTML stored in the DB and revealed by Stimulus.** `BlogPost#html_content` holds
-a hand-authored HTML string. `blog_posts/show.html.erb` wraps it in a hidden `<article
-data-controller="html-inject">`, passes it through Rails' `sanitize` helper, and the `html-inject`
-Stimulus controller un-hides the element on `connect()`. Editing blog rendering means touching both
-the view's `sanitize` call and `app/javascript/controllers/html_inject_controller.js`.
+**AI generation** (`app/services/blog_post_ai_service.rb`): `create_from_prompt` + `revise_blog_post`
+build a Claude chat via `RubyLLM.chat(model: ENV["AI_MODEL"]||"claude-sonnet-5", provider: :anthropic,
+assume_model_exists: true).with_instructions(...).with_schema(BlogPostSchema)`; `response.content` is an
+auto-parsed Hash (ruby_llm 1.16 Anthropic structured output). Unsplash fetch + inline `<!-- IMAGE: q -->`
+replacement; **every external call rescues to nil/"" and never blocks a save**, and gates on a present
+`ANTHROPIC_API_KEY` (`ai_configured?`). Interpolated Unsplash fields are HTML-escaped + scheme-checked.
 
-**The contact form sends two emails synchronously.** `contacts#create` saves a `Contact`, then calls
-`ContactMailer` twice with `deliver_now` — `received_email` (to the owner, `ENV["MAILER_SENDER"]`) and
-`confirmation_email` (to the submitter) — and redirects to `root_path(anchor: "contact")`. The action
-is guarded by `invisible_captcha`. There is no background job queue; mail is inline.
+**Scheduled publishing.** `PublishScheduledPostsJob` publishes due `BlogPost`/`Project` (`scheduled_at <=
+now`) via `publish!`; `config/recurring.yml` runs it every minute through the in-Puma Solid Queue
+supervisor (needs `SOLID_QUEUE_IN_PUMA=true`). `resolve_publish_intent` on both controllers parses the
+split publish/schedule button; a blank/past time falls back to **draft** (never an accidental publish).
 
-**Stimulus controllers** (`app/javascript/controllers/`): `clipboard` (copy-to-clipboard share
-button), `load_button` (injects a spinner and `requestSubmit()`s the form on click), `html_inject`
-(blog reveal, above), `hello` (unused scaffold).
+**Analytics.** `config/initializers/posthog.rb` is fully **guarded** — a complete no-op without
+`POSTHOG_PROJECT_TOKEN`. `ApplicationController#track_event` fires server events only for signed-out
+visitors (`distinct_id: "anonymous"`); the posthog-js snippet renders only when enabled AND signed-out;
+cookieless (no consent banner). Owner is never tracked.
 
-**Active-nav highlighting** lives in `ApplicationHelper#nav_link_class` /
-`#nav_link_dropdown_class`, which switch the `active` class via `current_page?`. The navbar
-(`shared/_navbar.html.erb`) shows different links for signed-in (owner: Projects/Blog/Create/Profile)
-vs. signed-out (Portfolio/Projects/Blog/Contact) visitors.
+**Homepage** `pages#home` exposes `@stats` from `app/queries/home_stats.rb` (published counts; technologies
+split on the canonical `" . "` separator; editable year constants). `scroll_reveal` + `count_up` Stimulus
+controllers animate the plain "by the numbers" section (reduced-motion gated). **Intentionally unstyled —
+the Claude Design handoff restyles it.**
 
-## Styling
-
-SCSS entrypoint is `app/assets/stylesheets/application.scss`: it imports `config/` (fonts, colors,
-`_bootstrap_variables`) **before** `bootstrap` so variable overrides take effect, then the
-`components/` and `pages/` partial indexes. Override Bootstrap by editing
-`config/_bootstrap_variables.scss`, and add component styles as a new `components/_*.scss` partial
-registered in `components/_index.scss`.
-
-## Email / environment
-
-- **Production** (`config/environments/production.rb`): SMTP via `ENV["SMTP_ADDRESS"]`,
-  `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`; sender is `ENV["MAILER_SENDER"]`. Host is
-  `www.louisbourne.me`, `force_ssl` on.
-- **Development** (`config/environments/development.rb`): points at a local SMTP bridge on
-  `127.0.0.1:1025` (Proton Mail Bridge — `ENV["PM_USERNAME"]` / `PM_PASSWORD`). `letter_opener` is
-  available as a commented-out toggle for inspecting mail without sending.
-- **Seeds** use `ENV["USER_1_USERNAME"]` / `USER_1_PASSWORD` to create the single account.
-- Local secrets live in `.env` (gitignored, loaded by `dotenv-rails`).
+**Other:** FriendlyId slugs on both models (`.friendly.find`); drag-reorder via SortableJS
+(`position` column, owner-scoped `reorder` action); Cloudinary `featured_image` attachments alongside the
+legacy `img_url` string (views prefer the attachment, fall back to `img_url`, else no image).
 
 ## Conventions
 
-- Double quotes everywhere; `simple_form` with `f.input` / `f.button :submit`; Bootstrap classes for layout.
-- `.rubocop.yml` disables many style cops (including `Style/StringLiterals`) and excludes
-  `config/`, `db/`, `bin/`, `test/`; line length max is 120.
-- **Inline teaching comments are intentional** — the codebase has long explanatory comments on
-  models, controllers, and Stimulus actions because the owner is learning Rails. Preserve that style
-  rather than stripping comments when editing.
+- **Strong params: `params.require(...).permit(...)`** (not Rails-8 `params.expect`). Double quotes.
+  `simple_form_for` + `f.input`. App module `LouisbPortfolio`.
+- **All mutating actions are IDOR-scoped to `current_user`** (reorder, publish/schedule/cancel, AI revise).
+- **Tests never hit the network** — `RubyLLM`, `Net::HTTP` (Unsplash), and PostHog are always stubbed.
+  Secrets are read with `ENV.fetch("VAR", nil)` and every feature degrades gracefully when absent.
+- Storage service per env: test→`:test`, development→`:local`, production→`:cloudinary` (`CLOUDINARY_URL`).
+- **Inline teaching comments are intentional** (Louis is learning Rails) — preserve that style.
+- Commit style: Conventional Commits, **no `Co-Authored-By`** lines.
