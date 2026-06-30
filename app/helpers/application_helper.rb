@@ -14,4 +14,12 @@ module ApplicationHelper
   def ai_configured?
     ENV["ANTHROPIC_API_KEY"].present?
   end
+
+  # True when a PostHog project token is configured, which enables cookieless
+  # visitor analytics (the client snippet and server-side events). When false,
+  # the analytics snippet is omitted and every server-side event is a no-op, so
+  # the app runs identically with analytics simply switched off.
+  def posthog_enabled?
+    ENV["POSTHOG_PROJECT_TOKEN"].present?
+  end
 end
