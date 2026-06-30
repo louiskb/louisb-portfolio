@@ -10,19 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_30_211109) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_01_090002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "blog_posts", force: :cascade do |t|
+    t.boolean "ai_generated", default: false
+    t.string "author"
+    t.text "blog_excerpt"
     t.datetime "created_at", null: false
     t.text "description"
+    t.boolean "featured", default: false
+    t.text "featured_image_caption"
     t.text "html_content"
+    t.boolean "human_generated", default: false, null: false
     t.string "img_url"
+    t.integer "position"
+    t.datetime "scheduled_at"
+    t.string "slug"
+    t.integer "status", default: 2, null: false
     t.string "tags"
     t.string "title"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["slug"], name: "index_blog_posts_on_slug", unique: true
     t.index ["user_id"], name: "index_blog_posts_on_user_id"
   end
 
@@ -42,12 +53,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_30_211109) do
     t.string "github_url"
     t.string "img_url"
     t.boolean "personal_project"
+    t.integer "position"
     t.boolean "private_repo"
     t.string "project_url"
+    t.datetime "scheduled_at"
+    t.string "slug"
+    t.integer "status", default: 2, null: false
     t.string "tech_stack"
     t.string "title"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["slug"], name: "index_projects_on_slug", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
 

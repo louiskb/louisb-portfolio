@@ -1,4 +1,6 @@
 class BlogPost < ApplicationRecord
+  include Publishable
+
   # Associations
   belongs_to :user # creates a method `blog_post.users` that shows who the owner / creator of the blog_post is.
 

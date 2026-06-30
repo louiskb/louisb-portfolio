@@ -1,4 +1,6 @@
 class Project < ApplicationRecord
+  include Publishable
+
   # Associations
   belongs_to :user
 
