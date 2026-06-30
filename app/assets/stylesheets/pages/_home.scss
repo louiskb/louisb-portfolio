@@ -1,1 +1,53 @@
 // Specific CSS for your home-page
+
+// ===== SCROLL-REVEAL ANIMATIONS =====
+// scroll_reveal_controller.js adds .reveal-visible when the section enters the
+// viewport. All of this is gated behind prefers-reduced-motion: no-preference,
+// so reduced-motion users get no initial hidden state — content shows at once.
+@media (prefers-reduced-motion: no-preference) {
+  // Slide in from the left (staggered when multiple)
+  [data-scroll-reveal-target="fromLeft"] {
+    opacity: 0;
+    transform: translateX(-48px);
+    transition: opacity 0.75s ease-out, transform 0.75s ease-out;
+
+    &.reveal-visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  // Slide in from the right
+  [data-scroll-reveal-target="fromRight"] {
+    opacity: 0;
+    transform: translateX(48px);
+    transition: opacity 0.75s ease-out, transform 0.75s ease-out;
+
+    &.reveal-visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  // Simple opacity fade
+  [data-scroll-reveal-target="fadeIn"] {
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+
+    &.reveal-visible {
+      opacity: 1;
+    }
+  }
+
+  // Slide up from below (staggered when multiple) — used by the stat cards
+  [data-scroll-reveal-target="fromBottom"] {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.75s ease-out, transform 0.75s ease-out;
+
+    &.reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
