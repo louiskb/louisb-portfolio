@@ -4,36 +4,97 @@
   <main>
     <section id="blog-posts-index">
       <h2 class="mt-5 mb-4">Blog Posts</h2>
+
+      <%# ===== SEARCH + TAG FILTER ===== %>
+      <%= form_with url: blog_posts_path, method: :get,
+            data: { controller: "blog-filter", turbo_action: "replace" } do |f| %>
+        <div class="mb-3 position-relative">
+          <%= f.search_field :q, value: params[:q],
+                placeholder: "Search posts by title…",
+                class: "form-control rounded-4",
+                autocomplete: "off",
+                data: { action: "input->blog-filter#search" } %>
+        </div>
+
+        <% if @all_tags.any? %>
+          <% active_tag_ids = Array(params[:tag_ids]).map(&:to_s) %>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <% @all_tags.each do |tag| %>
+              <label class="btn btn-sm rounded-pill <%= active_tag_ids.include?(tag.id.to_s) ? "btn-dark" : "btn-outline-dark" %>">
+                <%= check_box_tag "tag_ids[]", tag.id,
+                      active_tag_ids.include?(tag.id.to_s),
+                      class: "visually-hidden",
+                      data: { action: "change->blog-filter#submit" } %>
+                <%= tag.name %>
+              </label>
+            <% end %>
+            <% if active_tag_ids.any? %>
+              <%= link_to "Clear filters", blog_posts_path,
+                    class: "btn btn-sm btn-link", data: { turbo_action: "replace" } %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
       <%# Owner-only drag-to-reorder: the sortable container holds only card items. %>
       <% sortable_data = user_signed_in? ? { controller: "sortable", sortable_url_value: reorder_blog_posts_path } : {} %>
-      <%= tag.div class: "row justify-content-start align-items-center", data: sortable_data do %>
-        <% @blog_posts.each do |blog_post| %>
-          <div class="col-12 col-md-6 col-lg-4" data-id="<%= blog_post.id %>">
-            <div class="card card-blog-post shadow-sm rounded-4 mb-4">
-              <div class="card-body p-4">
-                <% if user_signed_in? %>
-                  <span class="drag-handle text-muted mb-2 d-inline-block" style="cursor: grab;" title="Drag to reorder">
-                    <i class="fa-solid fa-grip-vertical"></i>
-                  </span>
-                <% end %>
-                <%= link_to blog_post_path(blog_post), class: "text-decoration-none text-dark" do %>
-                  <h3 class="card-title fw-bold mb-4"><%= blog_post.title %></h3>
-                <% end %>
-                <%= image_tag blog_post.img_url, alt: "Blog post featured image", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
 
-                <p class="card-text small text-muted">Posted on <%= blog_post.created_at.strftime("%B %d, %Y") %></p>
-                <p class="card-text text-muted"><%= blog_post.description.capitalize %></p>
-                <hr class="my-3">
-                <p class="text-blog-tags">
-                  <%= blog_post.tags.map(&:name).join(" · ") %>
-                </p>
-                <div class="d-flex justify-content-center align-items-center">
-                  <%= link_to "View Full Post", blog_post_path(blog_post), class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium w-100 my-3" %>
+      <% if @blog_posts.any? %>
+        <%= tag.div class: "row justify-content-start align-items-stretch", data: sortable_data do %>
+          <% @blog_posts.each do |blog_post| %>
+            <div class="col-12 col-md-6 col-lg-4" data-id="<%= blog_post.id %>">
+              <div class="card card-blog-post shadow-sm rounded-4 mb-4 h-100">
+                <div class="card-body p-4 d-flex flex-column">
+                  <% if user_signed_in? %>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="drag-handle text-muted d-inline-block" style="cursor: grab;" title="Drag to reorder">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                      </span>
+                      <span class="badge rounded-pill text-bg-secondary"><%= blog_post.status.capitalize %></span>
+                    </div>
+                  <% end %>
+
+                  <%= link_to blog_post_path(blog_post), class: "text-decoration-none text-dark" do %>
+                    <h3 class="card-title fw-bold mb-3"><%= blog_post.title %></h3>
+                  <% end %>
+
+                  <% if blog_post.featured_image.attached? %>
+                    <%= image_tag blog_post.featured_image, alt: blog_post.title, class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                  <% elsif blog_post.img_url.present? %>
+                    <%= image_tag blog_post.img_url, alt: blog_post.title, class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                  <% end %>
+
+                  <p class="card-text small text-muted mb-2">
+                    Posted on <%= blog_post.created_at.strftime("%B %d, %Y") %>
+                    &middot; <%= blog_post.reading_time %>
+                  </p>
+
+                  <% excerpt = blog_post.blog_excerpt.presence || blog_post.description %>
+                  <% if excerpt.present? %>
+                    <p class="card-text text-muted"><%= excerpt %></p>
+                  <% end %>
+
+                  <% if blog_post.tags.any? %>
+                    <hr class="my-3">
+                    <p class="text-blog-tags"><%= blog_post.tags.map(&:name).join(" · ") %></p>
+                  <% end %>
+
+                  <div class="d-flex justify-content-center align-items-center mt-auto">
+                    <%= link_to "View Full Post", blog_post_path(blog_post), class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium w-100 my-3" %>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          <% end %>
         <% end %>
+      <% else %>
+        <p class="text-muted py-4">
+          <% if params[:q].present? || params[:tag_ids].present? %>
+            No posts match your search or filter.
+          <% else %>
+            No posts published yet.
+          <% end %>
+        </p>
       <% end %>
 
       <% if @pagy.pages > 1 %>

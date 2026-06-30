@@ -66,6 +66,40 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "Paginated Post 11"
   end
 
+  test "index filters by title with ?q" do
+    get blog_posts_url(q: "Deploying")
+    assert_response :success
+    assert_includes response.body, "Deploying Rails to Heroku"
+    assert_not_includes response.body, "Welcome to my blog"
+  end
+
+  test "index filters by tag with ?tag_ids[]" do
+    # Only `deploying` carries the PostgreSQL tag (see fixtures).
+    get blog_posts_url(tag_ids: [ tags(:postgresql).id ])
+    assert_response :success
+    assert_includes response.body, "Deploying Rails to Heroku"
+    assert_not_includes response.body, "Welcome to my blog"
+  end
+
+  test "creating a manual rich-text post (body, no html_content) saves and renders" do
+    sign_in users(:louis)
+    assert_difference "BlogPost.count", 1 do
+      post blog_posts_url, params: { blog_post: {
+        title: "A Manual Rich Text Post",
+        body: "<h2>Heading</h2><p>This was written in the editor.</p>"
+      } }
+    end
+    assert_response :redirect
+
+    created = BlogPost.last
+    assert created.body.present?
+    assert created.html_content.blank?
+
+    get blog_post_url(created)
+    assert_response :success
+    assert_includes response.body, "This was written in the editor."
+  end
+
   test "show is public" do
     get blog_post_url(@blog_post)
     assert_response :success

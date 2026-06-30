@@ -1,8 +1,23 @@
 class BlogPostsController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :index, :show ]
+  before_action :load_tags, only: %i[ new edit create update ]
+
   def index
     # Owner sees everything; visitors only see published posts.
     scope = user_signed_in? ? BlogPost.all : BlogPost.visible_to_visitors
+
+    # Title search (case-insensitive).
+    if params[:q].present?
+      scope = scope.where("title ILIKE ?", "%#{params[:q].strip}%")
+    end
+
+    # Tag filter — match posts carrying any of the selected tags.
+    if params[:tag_ids].present?
+      tag_ids = Array(params[:tag_ids]).map(&:to_i).select(&:positive?)
+      scope = scope.joins(:tags).where(tags: { id: tag_ids }).distinct if tag_ids.any?
+    end
+
+    @all_tags = Tag.order(:name)
     # Keep :position ordering so the Phase-1 drag-to-reorder stays meaningful.
     @pagy, @blog_posts = pagy(scope.order(:position))
   end
@@ -63,9 +78,14 @@ class BlogPostsController < ApplicationController
   private
 
   def blog_post_params
-    params.require(:blog_post).permit(:title, :description, :img_url, :html_content, :user_id,
+    params.require(:blog_post).permit(:title, :description, :img_url, :html_content, :body,
+                                      :blog_excerpt, :featured_image_caption, :user_id,
                                       :featured_image, :featured, :status, :scheduled_at, :position,
-                                      tag_ids: [])
+                                      tag_ids: [], photos: [])
+  end
+
+  def load_tags
+    @all_tags = Tag.order(:name)
   end
 
   def reorder_params
