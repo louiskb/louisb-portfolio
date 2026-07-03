@@ -160,10 +160,11 @@ export default class extends Controller {
     if(!reduce){ window.addEventListener('pointermove',onMove); window.addEventListener('pointerleave',onLeave); }
     renderText(0);
     render(0.016,performance.now()/1000);
-    if(reduce){ window.addEventListener('scroll',()=>{ render(.2,performance.now()/1000); },{passive:true}); }
+    const onScroll=()=>{ render(.2,performance.now()/1000); };
+    if(reduce){ window.addEventListener('scroll',onScroll,{passive:true}); }
     else { raf=requestAnimationFrame(loop); }
     return {
-      stop(){ if(raf)cancelAnimationFrame(raf); window.removeEventListener('resize',onResize); window.removeEventListener('pointermove',onMove); window.removeEventListener('pointerleave',onLeave); },
+      stop(){ if(raf)cancelAnimationFrame(raf); window.removeEventListener('resize',onResize); window.removeEventListener('pointermove',onMove); window.removeEventListener('pointerleave',onLeave); window.removeEventListener('scroll',onScroll); },
       resetForCache(){ renderText(0); ctx.clearRect(0, 0, w, h); }
     };
   }

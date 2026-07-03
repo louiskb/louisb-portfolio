@@ -131,7 +131,7 @@ mock's `initBH(cv)` closure nearly verbatim (dependency-free Canvas 2D):
   4. A `turbo:before-cache` listener resets the morph spans to their
      default text and clears the canvas, so Turbo's page snapshot never
      caches a half-morphed headline or a frozen frame (brief stale-flash
-     on back-navigation otherwise). Canvas positioning lives in
+     on back-navigation otherwise). The reduced-motion scroll listener is also named and removed in `stop()` — the mock leaked it, which a static page tolerates but Turbo navigation does not. Canvas positioning lives in
      `_black_hole.scss` (created with the controller in phase 2).
 - `prefers-reduced-motion` (or `animate: false`): single static render,
   re-rendered on passive scroll — mock behavior, kept.
