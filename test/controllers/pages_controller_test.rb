@@ -79,6 +79,15 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     draft_titles.each { |title| assert_no_match title, response.body }
   end
 
+  test "home sections carry the depth-camera data attributes" do
+    get root_path
+    # 10 sections: hero, work, numbers, demo, stack, background, education,
+    # about, blog (2 published fixture posts exist), contact.
+    assert_select "[data-sec]", 10
+    assert_select "[data-sec][data-role][data-ax]", 10
+    assert_select "#contact form", 1 # engine end-anchor contract
+  end
+
   test "privacy_policy is public and renders" do
     get privacy_policy_url
     assert_response :success
