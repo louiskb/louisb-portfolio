@@ -28,7 +28,7 @@
             <div class="d-flex align-items-center gap-3">
               <% if project.private_repo %>
                 <% if user_signed_in? %>
-                  <%= link_to project.github_url, class: "gray-link github-btn", target: "_blank", rel: "noopener" do %>
+                  <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
                     <i class="fa-brands fa-github fs-5"></i>
                   <% end %>
                   <span class="text-soft-muted small">private</span>
@@ -37,7 +37,7 @@
                   <span class="text-soft-muted small">private</span>
                 <% end %>
               <% else %>
-                <%= link_to project.github_url, class: "gray-link github-btn", target: "_blank", rel: "noopener" do %>
+                <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
                   <i class="fa-brands fa-github fs-5"></i>
                 <% end %>
               <% end %>
@@ -54,7 +54,7 @@
     <% if @open_source_projects.present? %>
       <p class="mono-label mt-4">Open source</p>
       <p class="text-body-soft mb-3">
-        Setup <%= link_to "Storybook", "https://storybook.js.org/", class: "gray-link", target: "_blank", rel: "noopener" %>
+        Setup <%= link_to "Storybook", "https://storybook.js.org/", class: "gray-link text-decoration-none", target: "_blank", rel: "noopener" %>
         for Find a Doc Japan (an open-source project) and built out an initial set of components for the
         design system, conducted snapshot testing with <span class="fst-italic">Jest</span> and
         <span class="fst-italic">Vitest</span> while collaborating with developers worldwide.
@@ -73,7 +73,7 @@
             <div class="d-flex align-items-center gap-3">
               <% if project.private_repo %>
                 <% if user_signed_in? %>
-                  <%= link_to project.github_url, class: "gray-link github-btn", target: "_blank", rel: "noopener" do %>
+                  <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
                     <i class="fa-brands fa-github fs-5"></i>
                   <% end %>
                   <span class="text-soft-muted small">private</span>
@@ -82,7 +82,7 @@
                   <span class="text-soft-muted small">private</span>
                 <% end %>
               <% else %>
-                <%= link_to project.github_url, class: "gray-link github-btn", target: "_blank", rel: "noopener" do %>
+                <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
                   <i class="fa-brands fa-github fs-5"></i>
                 <% end %>
               <% end %>
