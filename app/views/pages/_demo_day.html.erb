@@ -1,17 +1,16 @@
-<!-- Demo day -->
-<section id="demo-day" class="bg-waves-1 container-fluid p-5 my-5">
-  <div class="container">
-    <div class="row my-5">
-      <div class="col-12 col-md-6">
-        <h2 class="h1-d mb-3">Le Wagon Tokyo demo day</h2>
-        <h4 class="h4-d mb-5">Showcasing our demo app <%= link_to "Market Sensei", "https://www.marketsensei.app/", target: "_blank", class: "text-decoration-none" %> at Le Wagon Tokyo demo day, hosted by Google for Startups.</h4>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="border border-light border-5 rounded-4 shadow">
-          <!-- width="560" -->
-          <iframe height="350" src="https://www.youtube.com/embed/4xmj3REIGe0?si=YLU2WypZ70-SUjgb&amp;start=5030" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" class="w-100" allowfullscreen></iframe>
-        </div>
-      </div>
+<%# Demo day — Depth Charge restyle (Task 8). The .bg-waves-1 photo background
+    is gone now that the black-hole canvas sits behind every section; the
+    YouTube embed gets the shared .framed-media treatment instead. %>
+<section id="demo-day" class="sec justify-content-start"
+         data-sec data-role="demo" data-ax="0.66" data-label="Demo Day">
+  <div class="section-inner" style="max-width: 620px;">
+    <p class="section-eyebrow">◆ Demo Day</p>
+    <h2 class="section-heading mb-3">Le Wagon Tokyo demo day.</h2>
+    <p class="text-body-soft mb-4">
+      Showcasing our demo app <%= link_to "Market Sensei", "https://www.marketsensei.app/", target: "_blank", rel: "noopener", class: "gray-link" %> at Le Wagon Tokyo demo day, hosted by Google for Startups.
+    </p>
+    <div class="framed-media">
+      <iframe height="350" src="https://www.youtube.com/embed/4xmj3REIGe0?si=YLU2WypZ70-SUjgb&amp;start=5030" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" class="w-100" allowfullscreen></iframe>
     </div>
   </div>
 </section>

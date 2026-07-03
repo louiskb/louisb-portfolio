@@ -1,84 +1,40 @@
-<!-- Related skills -->
-<section id="related-skills">
-  <div class="container">
-    <h3 class="mb-3">Related skills and background</h3>
-    <p>I have experience and backgrounds in the following fields.</p>
-    <!-- 1st row -->
-    <div class="row justify-content-center">
-      <!-- Card #1 -->
-      <div class="col-12 col-lg-6">
-        <div class="card card-skills shadow-sm rounded-4 my-3">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-top gap-4">
-              <%= image_tag "trading.jpg", alt: "Trading and financial analysis", class: "img-fluid w-25 rounded-3" %>
-              <div class="">
-                <h5 class="card-title fw-bold mb-2"><i class="fa-solid fa-chart-column"></i> Financial Analysis</h5>
-                <p class="card-text small mb-3">6 years experience in trading and financial analysis.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Card #2 -->
-      <div class="col-12 col-lg-6">
-        <div class="card card-skills shadow-sm rounded-4 my-3">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-top gap-4">
-              <%= image_tag "digital-marketing.jpg", alt: "Digital marketing", class: "w-25 rounded-3" %>
-              <div class="">
-                <h5 class="card-title fw-bold mb-2"><i class="fa-solid fa-bullhorn text-dark"></i> Digital marketing</h5>
-                <p class="card-text small mb-3">Drove online store sales through targeted marketing for 3 years.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<%#
+  Related skills & background — Depth Charge restyle (Task 8). The five
+  photo cards become stacked glass cards (text-only, matching the design
+  language's minimal card style); all five real entries are kept even
+  though the brief text mentions "three" — the current partial has five,
+  and real content wins over the brief's approximate count.
+%>
+<section id="related-skills" class="sec justify-content-start"
+         data-sec data-role="background" data-ax="0.66" data-label="Background">
+  <div class="section-inner" style="max-width: 600px;">
+    <p class="section-eyebrow">◆ Related Skills</p>
+    <h2 class="section-heading mb-3">Skills &amp; background.</h2>
+    <p class="text-body-soft mb-4">I have experience and backgrounds in the following fields.</p>
+
+    <div class="glass-card p-3 mb-3">
+      <h3 class="project-card-title"><i class="fa-solid fa-chart-column"></i> Financial Analysis</h3>
+      <p class="text-body-soft mb-0">6 years experience in trading and financial analysis.</p>
     </div>
-    <!-- 2nd row -->
-    <div class="row justify-content-center">
-      <!-- Card #3 -->
-      <div class="col-12 col-lg-6">
-        <div class="card card-skills shadow-sm rounded-4 my-3">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-top gap-4">
-              <%= image_tag "ecom.jpg", alt: "E-commerce and online shopping", class: "w-25 rounded-3" %>
-              <div class="">
-                <h5 class="card-title fw-bold mb-2"><i class="fa-solid fa-cart-shopping text-dark"></i> E-commerce</h5>
-                <p class="card-text small mb-3">3 years experience in building online stores with WordPress WooCommerce and Shopify.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Card #4 -->
-      <div class="col-12 col-lg-6">
-        <div class="card card-skills shadow-sm rounded-4 my-3">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-top gap-4">
-              <%= image_tag "analysis.jpg", alt: "Statistical analysis", class: "w-25 rounded-3" %>
-              <div class="">
-                <h5 class="card-title fw-bold mb-2"><i class="fa-solid fa-magnifying-glass-chart text-dark"></i> Analytical skills</h5>
-                <p class="card-text small mb-3">Analyzed finance and marketing trends to inform strategic decisions.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Card #5 -->
-      <div class="col-12 col-lg-6">
-        <div class="card card-skills shadow-sm rounded-4 my-3">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-top gap-4">
-              <%= image_tag "marine-conservation2.jpg", alt: "Statistical analysis", class: "w-25 rounded-3" %>
-              <div class="">
-                <h5 class="card-title fw-bold mb-2"><i class="fa-solid fa-fish"></i> Marine biology</h5>
-                <p class="card-text small mb-3">4+ years marine conservation in SE Asia and Australia: surveys, data, PADI dive instruction.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
+    <div class="glass-card p-3 mb-3">
+      <h3 class="project-card-title"><i class="fa-solid fa-bullhorn"></i> Digital marketing</h3>
+      <p class="text-body-soft mb-0">Drove online store sales through targeted marketing for 3 years.</p>
     </div>
-    <hr class="my-5">
+
+    <div class="glass-card p-3 mb-3">
+      <h3 class="project-card-title"><i class="fa-solid fa-cart-shopping"></i> E-commerce</h3>
+      <p class="text-body-soft mb-0">3 years experience in building online stores with WordPress WooCommerce and Shopify.</p>
+    </div>
+
+    <div class="glass-card p-3 mb-3">
+      <h3 class="project-card-title"><i class="fa-solid fa-magnifying-glass-chart"></i> Analytical skills</h3>
+      <p class="text-body-soft mb-0">Analyzed finance and marketing trends to inform strategic decisions.</p>
+    </div>
+
+    <div class="glass-card p-3">
+      <h3 class="project-card-title"><i class="fa-solid fa-fish"></i> Marine biology</h3>
+      <p class="text-body-soft mb-0">4+ years marine conservation in SE Asia and Australia: surveys, data, PADI dive instruction.</p>
+    </div>
   </div>
 </section>
