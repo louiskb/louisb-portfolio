@@ -1,37 +1,31 @@
-<!-- About me -->
-<section id="about-me" class="bg-waves-2 container-fluid p-5 my-5">
-  <div class="container">
-    <h2 class="h2-d mb-4">About me</h2>
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-6">
-        <%= image_tag "lb-portfolio.jpeg", alt: "Louis web developer", class: "w-100 border border-light border-5 rounded-4 shadow mb-4" %>
-      </div>
-      <div class="col-12 col-md-6">
-        <p class="text-about fs-5">Mixed British-Thai developer based in Thailand, which I now call home after growing up across multiple countries. Fluent in English and Thai, with a long-standing love of tech 🤓 that naturally led into full‑stack development. Also an independent trader and financial analyst, combining technical charting with a structured, risk‑first approach to the markets 📊.
-        </p>
-      </div>
+<%#
+  About me — Depth Charge restyle (Task 8). The .bg-waves-2 photo background
+  is gone now that the black-hole canvas sits behind every section. All
+  three real beats (profile intro, adventure, Thai PBS documentary) are
+  kept — the brief only calls out paragraph/embed styling, not trimming the
+  content — stacked single-column instead of the old two-column rows, each
+  photo/video framed the same way via .framed-media.
+%>
+<section id="about-me" class="sec justify-content-start"
+         data-sec data-role="about" data-ax="0.66" data-label="About">
+  <div class="section-inner" style="max-width: 600px;">
+    <p class="section-eyebrow">◆ About Me</p>
+    <h2 class="section-heading mb-4">About me.</h2>
+
+    <div class="framed-media mb-4">
+      <%= image_tag "lb-portfolio.jpeg", alt: "Louis web developer", class: "w-100" %>
     </div>
-    <!-- Adventure -->
-    <div class="row my-3">
-      <div class="col-12 col-md-6">
-        <%= image_tag "mt-cook-ta.jpg", alt: "Louis web developer", class: "w-100 border border-light border-5 rounded-4 shadow mb-4" %>
-      </div>
-      <div class="col-12 col-md-6">
-        <p class="text-about fs-5">Beyond code and charts, staying active is a big part of life - lifting, kitesurfing, running, and hiking - and that love of adventure took me all the way through New Zealand’s 3,000 km Te Araroa thru‑hike, which I completed over four months in 2024/2025 🚀.</p>
-      </div>
+    <p class="text-body-soft mb-4" style="font-size: 16.5px;">Mixed British-Thai developer based in Thailand, which I now call home after growing up across multiple countries. Fluent in English and Thai, with a long-standing love of tech 🤓 that naturally led into full‑stack development. Also an independent trader and financial analyst, combining technical charting with a structured, risk‑first approach to the markets 📊.</p>
+
+    <div class="framed-media mb-4">
+      <%= image_tag "mt-cook-ta.jpg", alt: "Louis web developer", class: "w-100" %>
     </div>
-    <!-- Thai PBS 2C -->
-    <div class="row my-3">
-      <div class="col-12 col-md-6">
-        <div class="border border-light border-5 rounded-4 shadow">
-          <!-- width="560" -->
-          <iframe height="350" src="https://www.youtube.com/embed/X427QTamroE?si=cIjvoF9l_rCW2GHn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" class="w-100" allowfullscreen></iframe>
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <h4 class="h1-d mt-4 mb-3">Thai PBS - 2C Climate Change Documentary Series (2019): Episode 4</h4>
-        <p class="text-about fs-5 mb-4">Served as a TV presenter for a five‑episode climate change documentary along the Gulf of Thailand, covering the coastlines of Thailand, Cambodia, and Vietnam. The series explores key environmental challenges across Southeast Asia and still airs on Thai national TV.</p>
-      </div>
+    <p class="text-body-soft mb-4" style="font-size: 16.5px;">Beyond code and charts, staying active is a big part of life - lifting, kitesurfing, running, and hiking - and that love of adventure took me all the way through New Zealand’s 3,000 km Te Araroa thru‑hike, which I completed over four months in 2024/2025 🚀.</p>
+
+    <div class="framed-media mb-3">
+      <iframe height="350" src="https://www.youtube.com/embed/X427QTamroE?si=cIjvoF9l_rCW2GHn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" class="w-100" allowfullscreen></iframe>
     </div>
+    <h3 class="project-card-title mb-2">Thai PBS - 2C Climate Change Documentary Series (2019): Episode 4</h3>
+    <p class="text-body-soft" style="font-size: 16.5px;">Served as a TV presenter for a five‑episode climate change documentary along the Gulf of Thailand, covering the coastlines of Thailand, Cambodia, and Vietnam. The series explores key environmental challenges across Southeast Asia and still airs on Thai national TV.</p>
   </div>
 </section>

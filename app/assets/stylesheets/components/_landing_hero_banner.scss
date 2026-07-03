@@ -56,19 +56,3 @@
     color: #5a6572;
   }
 }
-
-// Demo day section
-.bg-waves-1 {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
-    image-url("abstract-waves-purple.jpg");
-  background-size: cover;
-  background-position: center;
-}
-
-// About me section
-.bg-waves-2 {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)),
-    image-url("abstract-waves.jpg");
-  background-size: cover;
-  background-position: center;
-}
