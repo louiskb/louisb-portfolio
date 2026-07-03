@@ -1,31 +1,33 @@
-<!-- Hero banner -->
-<div id="hero-banner" class="d-flex justify-content-center align-items-start text-center">
-  <%= render "social_vertical_bar" %>
-  <div class="container mt-5">
-    <div class="mt-5">
-      <h1 class="text-light">
-        Hi,<br>
-        I'm Louis,<br>
-        web developer
-      </h1>
-      <h2 class="lighter-gray mb-4">Full-Stack Developer / Ruby-on-Rails</h2>
-      <div class="d-flex justify-content-center align-items-center gap-3">
-        <!-- CTA Button -->
-        <!-- Desktop: large button (hidden on mobile) -->
-        <%= link_to "Contact Me", "#contact", class: "btn btn-primary btn-lg fs-4 rounded-5 custom-btn d-none d-sm-block" %>
-        <!-- Mobile: Small button (hidden on desktop) -->
-        <%= link_to "Contact Me", "#contact", class: "btn btn-primary btn-sm rounded-5 custom-btn px-4 py-2 d-block d-sm-none"  %>
-        <!-- Secondary Button -->
-        <!-- Desktop: large button (hidden on mobile) -->
-        <%= link_to "Key Projects", "#featured-projects", class: "btn btn-outline-light btn-lg fs-4 rounded-5 custom-btn d-none d-sm-block" %>
-        <!-- Mobile: Small button (hidden on desktop) -->
-        <%= link_to "Key Projects", "#featured-projects", class: "btn btn-outline-light btn-sm rounded-5 custom-btn px-4 py-2 d-block d-sm-none" %>
-      </div>
+<%# Hero — Depth Charge. The headline spans are morph targets: the engine
+    scrambles "web developer" toward "Louis Bourne" as the hole charges. %>
+<section id="hero-banner" class="sec justify-content-start"
+         data-sec data-role="hero" data-ax="0.66" data-label="Hero">
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
+    <p class="hero-kicker">Full-Stack Developer · Thailand</p>
+    <h1 class="hero-headline">
+      <span data-morph="1" class="hero-word-display">web</span>
+      <span data-morph="2" class="hero-word-accent">developer</span>
+    </h1>
+    <p data-morph="sub" class="hero-sub text-body-soft">Louis Bourne, full-stack developer building production Ruby-on-Rails products from Thailand.</p>
+    <div class="d-flex gap-3 mt-4 flex-wrap">
+      <%= link_to "Contact Me", "#contact", class: "btn btn-primary btn-lg" %>
+      <%= link_to "Key Projects", "#featured-projects", class: "btn btn-outline-light btn-lg" %>
     </div>
-    <div class="chevron-scroll">
-      <%= link_to "#featured-projects", class: "d-flex flex-column align-items-center justify-content-center text-decoration-none" do %>
-        <i class="fas fa-angle-double-down"></i>
+    <div class="d-flex align-items-center gap-4 mt-4 hero-social">
+      <%= link_to "https://github.com/louiskb", target: "_blank", rel: "noopener", "aria-label": "GitHub" do %>
+        <i class="fa-brands fa-github"></i>
+      <% end %>
+      <%= link_to "https://www.linkedin.com/in/louis-bourne/", target: "_blank", rel: "noopener", "aria-label": "LinkedIn" do %>
+        <i class="fa-brands fa-linkedin"></i>
+      <% end %>
+      <%= link_to "https://discord.com/users/brothercap", target: "_blank", rel: "noopener", "aria-label": "Discord" do %>
+        <i class="fa-brands fa-discord"></i>
+      <% end %>
+      <%= link_to "mailto:dev@louisbourne.me", "aria-label": "Email" do %>
+        <i class="fa-solid fa-envelope"></i>
       <% end %>
     </div>
+    <p class="hero-hint">↪ Hover the black hole to charge it · scroll to descend</p>
   </div>
-</div>
+</section>
