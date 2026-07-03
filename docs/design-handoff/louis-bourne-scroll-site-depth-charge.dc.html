@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;background:#040507;-webkit-font-smoothing:antialiased;}
+.nav-a{transition:color .2s;}
+.nav-a:hover{color:#fff!important;}
+.soc a{transition:color .2s;}
+.soc a:hover{color:#fff!important;}
+.pcard{transition:transform .35s,border-color .35s,box-shadow .35s;}
+.pcard:hover{transform:translateY(-6px);border-color:#1062FE!important;box-shadow:0 22px 50px rgba(16,98,254,.18);}
+@media (max-width:820px){.sec{justify-content:center!important;padding:96px 22px!important;}}
+</style>
+</helmet>
+
+<div style="position:relative;background:#040507;font-family:'Space Grotesk',sans-serif;color:#e9ecf1;overflow-x:hidden;">
+
+  <canvas data-bh style="position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block;"></canvas>
+
+  <nav style="position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;justify-content:space-between;padding:16px 6vw;background:linear-gradient(#040507cc,#04050700);backdrop-filter:blur(6px);">
+    <a href="#hero" style="display:flex;align-items:center;gap:11px;text-decoration:none;"><img src="https://louisbourne.me/assets/lb-circle-logo-light-tp-f54add4aa2e9a57180441e5498a5a8fc12bdb7f2a036b0bbfd20912aa9fe59c4.png" alt="LB" style="width:34px;height:34px;border-radius:50%;"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15.5px;color:#fff;">Louis Bourne</span></a>
+    <div style="display:flex;align-items:center;gap:24px;font-size:14px;">
+      <a class="nav-a" href="#work" style="color:#c1c8d0;text-decoration:none;">Work</a>
+      <a class="nav-a" href="#stack" style="color:#c1c8d0;text-decoration:none;">Stack</a>
+      <a class="nav-a" href="#about" style="color:#c1c8d0;text-decoration:none;">About</a>
+      <a href="#contact" style="text-decoration:none;padding:9px 18px;border-radius:11px;background:#1062FE;color:#fff;font-weight:600;">Contact</a>
+    </div>
+  </nav>
+
+  <section id="hero" class="sec" data-sec data-role="hero" data-ax="0.66" data-label="Hero" style="min-height:100vh;display:flex;align-items:center;justify-content:flex-start;padding:80px 6vw;position:relative;z-index:2;">
+    <div style="position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(90% 120% at 22% 50%, rgba(4,5,7,.80) 4%, rgba(4,5,7,0) 62%);"></div>
+    <div style="max-width:620px;position:relative;z-index:1;">
+      <div style="font-family:'Space Mono',monospace;font-size:12.5px;letter-spacing:.4em;text-transform:uppercase;color:#7f8a95;">Full-Stack Developer &#183; Thailand</div>
+      <h1 style="margin:20px 0 0;color:#fff;">
+        <span data-morph="1" style="display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(3rem,9vw,132px);line-height:.86;letter-spacing:-.045em;">web</span>
+        <span data-morph="2" style="display:block;font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:clamp(3.2rem,9.5vw,138px);line-height:.82;letter-spacing:-.01em;color:#e9f0ff;margin-top:2px;">developer</span>
+      </h1>
+      <p data-morph="sub" style="margin:26px 0 0;font-size:18px;line-height:1.5;color:#aeb7c1;max-width:470px;min-height:56px;">Louis Bourne, full-stack developer building production Ruby-on-Rails products from Thailand.</p>
+      <div id="hero-cta" style="display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;">
+        <a href="#contact" style="text-decoration:none;padding:14px 26px;border-radius:12px;background:#1062FE;color:#fff;font-size:15px;font-weight:600;">Contact Me</a>
+        <a href="#work" style="text-decoration:none;padding:14px 24px;border-radius:12px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.03);color:#fff;font-size:15px;font-weight:600;">Key Projects</a>
+      </div>
+      <div id="hero-social" class="soc" style="display:flex;align-items:center;gap:22px;color:#9aa3ad;margin-top:26px;">
+        <a href="https://github.com/louiskb" target="_blank" rel="noopener" style="color:inherit;"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 .1.8 2.7 1.7 2.7.1-.7.4-1.2.7-1.5-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg></a>
+        <a href="https://www.linkedin.com/in/louis-bourne/" target="_blank" rel="noopener" style="color:inherit;"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.6h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9z"/></svg></a>
+        <a href="https://discord.com/users/brothercap" target="_blank" rel="noopener" style="color:inherit;"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4.4A19 19 0 0 0 15.3 3l-.2.5c1.6.4 2.9 1 4.2 1.8-2.2-1-4.5-1.5-6.9-1.5s-4.7.5-6.9 1.5C6.8 4.4 8.1 3.8 9.7 3.4L9.5 3A19 19 0 0 0 4 4.4C1.6 8 1 11.6 1.3 15.1a19 19 0 0 0 5.7 2.9l.6-1c-1-.4-1.9-.9-2.7-1.5l.5-.4c3.6 1.7 7.5 1.7 11.1 0l.5.4c-.8.6-1.7 1.1-2.7 1.5l.6 1a19 19 0 0 0 5.7-2.9c.5-4.1-.7-7.7-3.9-10.7zM8.7 13.2c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8zm6.6 0c-.9 0-1.6-.8-1.6-1.8s.7-1.8 1.6-1.8 1.6.8 1.6 1.8-.7 1.8-1.6 1.8z"/></svg></a>
+        <a href="mailto:dev@louisbourne.me" style="color:inherit;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
+      </div>
+      <div style="margin-top:24px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5a6572;">&#8618; Hover the black hole to charge it &#183; scroll to descend</div>
+    </div>
+  </section>
+
+  <section id="work" class="sec" data-sec data-role="work" data-ax="0.34" data-label="Featured Projects" style="min-height:100vh;display:flex;align-items:center;justify-content:flex-end;padding:80px 6vw;position:relative;z-index:2;">
+    <div style="max-width:640px;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#5fb0ff;margin-bottom:14px;">&#9670; Selected Work</div>
+      <h2 style="margin:0 0 30px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.6vw,2.8rem);letter-spacing:-.025em;color:#fff;">Featured projects.</h2>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="pcard" style="display:flex;gap:18px;background:rgba(11,13,18,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;padding:16px;">
+          <img src="https://louisbourne.me/assets/market-sensei-dashboard-screenshot-cfe49b3dc73e32967ca82c6e89c2e97455009503ddc85dbbcf5d9ddbae5047ad.jpg" alt="Market Sensei" style="width:150px;aspect-ratio:16/11;object-fit:cover;border-radius:10px;flex:0 0 auto;">
+          <div style="display:flex;flex-direction:column;">
+            <h3 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;color:#fff;">Market Sensei</h3>
+            <p style="margin:7px 0 10px;font-size:13.5px;line-height:1.5;color:#aeb7c1;">AI-driven crypto education paired with intuitive trading tools.</p>
+            <div style="margin-top:auto;font-family:'Space Mono',monospace;font-size:11px;color:#6d7c9c;">Rails &#183; Stimulus &#183; PostgreSQL &#183; OpenAI</div>
+          </div>
+        </div>
+        <div class="pcard" style="display:flex;gap:18px;background:rgba(11,13,18,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;padding:16px;">
+          <img src="https://louisbourne.me/assets/sipfolio-cocktails-screenshot-b7c01729afe96c2f1190b4267296537cfb1ee857e4c9d0df511160e2db6fc2db.jpg" alt="Sipfolio" style="width:150px;aspect-ratio:16/11;object-fit:cover;border-radius:10px;flex:0 0 auto;">
+          <div style="display:flex;flex-direction:column;">
+            <h3 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;color:#fff;">Sipfolio</h3>
+            <p style="margin:7px 0 10px;font-size:13.5px;line-height:1.5;color:#aeb7c1;">A social cocktail app with AI recipes and gamified rewards.</p>
+            <div style="margin-top:auto;font-family:'Space Mono',monospace;font-size:11px;color:#6d7c9c;">Rails &#183; Bootstrap &#183; Stimulus &#183; PostgreSQL</div>
+          </div>
+        </div>
+        <div class="pcard" style="display:flex;gap:18px;background:rgba(11,13,18,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;padding:16px;">
+          <img src="https://louisbourne.me/assets/dokodemofit-routines-screenshot-669eaa0494bab6ee3173f17088b92e122e1ada54e60aefef62a779ed6582fcd3.jpg" alt="Dokodemo Fit" style="width:150px;aspect-ratio:16/11;object-fit:cover;border-radius:10px;flex:0 0 auto;">
+          <div style="display:flex;flex-direction:column;">
+            <h3 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;color:#fff;">Dokodemo Fit</h3>
+            <p style="margin:7px 0 10px;font-size:13.5px;line-height:1.5;color:#aeb7c1;">AI-built exercise routines from the equipment you own.</p>
+            <div style="margin-top:auto;font-family:'Space Mono',monospace;font-size:11px;color:#6d7c9c;">Rails &#183; Stimulus &#183; PostgreSQL &#183; OpenAI</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;font-family:'Space Mono',monospace;font-size:12px;color:#6d7c9c;">+ Open-source: Storybook design system for Find a Doc Japan</div>
+    </div>
+  </section>
+
+  <section id="numbers" class="sec" data-sec data-role="numbers" data-ax="0.5" data-label="By the Numbers" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 6vw;position:relative;z-index:2;">
+    <div style="max-width:760px;width:100%;text-align:center;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#5fb0ff;margin-bottom:14px;">&#9670; By the Numbers</div>
+      <h2 style="margin:0 0 34px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.6vw,2.8rem);letter-spacing:-.025em;color:#fff;">By the numbers.</h2>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+        <div style="background:rgba(11,13,18,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px 14px;"><div data-count="8" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;line-height:1;color:#5fb0ff;">8</div><div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b95a1;margin-top:8px;">Projects shipped</div></div>
+        <div style="background:rgba(11,13,18,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px 14px;"><div data-count="12" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;line-height:1;color:#5fb0ff;">12</div><div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b95a1;margin-top:8px;">Technologies</div></div>
+        <div style="background:rgba(11,13,18,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px 14px;"><div data-count="2" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;line-height:1;color:#5fb0ff;">2</div><div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b95a1;margin-top:8px;">Years coding</div></div>
+        <div style="background:rgba(11,13,18,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px 14px;"><div data-count="6" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;line-height:1;color:#5fb0ff;">6</div><div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b95a1;margin-top:8px;">Years in markets</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="demo" class="sec" data-sec data-role="demo" data-ax="0.66" data-label="Demo Day" style="min-height:100vh;display:flex;align-items:center;justify-content:flex-start;padding:80px 6vw;position:relative;z-index:2;">
+    <div style="max-width:620px;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#5fb0ff;margin-bottom:14px;">&#9670; Demo Day</div>
+      <h2 style="margin:0 0 14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.6vw,2.8rem);letter-spacing:-.025em;color:#fff;">Le Wagon Tokyo demo day.</h2>
+      <p style="margin:0 0 22px;font-size:16px;line-height:1.6;color:#aeb7c1;">Showcasing our demo app <a href="https://www.marketsensei.app/" target="_blank" rel="noopener" style="color:#5fb0ff;text-decoration:none;">Market Sensei</a> at Le Wagon Tokyo demo day, hosted by Google for Startups.</p>
+      <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 70px rgba(0,0,0,.5);"><iframe width="100%" height="330" src="https://www.youtube.com/embed/4xmj3REIGe0?start=5030" title="Le Wagon Tokyo demo day" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:block;border:0;"></iframe></div>
+    </div>
+  </section>
+
+  <section id="stack" class="sec" data-sec data-role="stack" data-ax="0.34" data-label="Tech Stack" style="min-height:100vh;display:flex;align-items:center;justify-content:flex-end;padding:80px 6vw;position:relative;z-index:2;">
+    <div style="max-width:600px;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#5fb0ff;margin-bottom:14px;">&#9670; Technology &amp; Skills</div>
+      <h2 style="margin:0 0 26px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.6vw,2.8rem);letter-spacing:-.025em;color:#fff;">The tools I reach for.</h2>
+      <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7f8a95;margin-bottom:12px;">What I know</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:26px;">
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">Ruby on Rails</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">PostgreSQL</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">StimulusJS</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">JavaScript</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">HTML / CSS</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">Sass</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">Bootstrap</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">RSpec</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">Git &amp; GitHub</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#dbe1e8;background:rgba(11,13,18,.55);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:9px 16px;">OpenAI API</span>
+      </div>
+      <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7f8a95;margin-bottom:12px;">Learning</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#9aa3ad;border:1px dashed rgba(255,255,255,.2);border-radius:999px;padding:9px 16px;">React</span>
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:#9aa3ad;border:1px dashed rgba(255,255,255,.2);border-radius:999px;padding:9px 16px;">Vue.js</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="background" class="sec" data-sec data-role="background" data-ax="0.66" data-label="Background" style="min-height:100vh;display:flex;align-items:center;justify-content:flex-start;padding:80px 6vw;position:relative;z-index:2;">
+    <div style="max-width:600px;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#5fb0ff;margin-bottom:14px;">&#9670; Related Skills</div>
+      <h2 style="margin:0 0 12px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.6vw,2.8rem);letter-spacing:-.025em;color:#fff;">Skills &amp; background.</h2>
+      <p style="margin:0 0 26px;font-size:15px;line-height:1.6;color:#aeb7c1;max-width:440px;">Not the usual route into code &mdash; markets, marketing and marine science each left their mark.</p>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="background:rgba(11,13,18,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 20px;"><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;color:#fff;">Financial analysis</div><div style="font-size:13.5px;color:#aeb7c1;margin-top:4px;">6 years trading &amp; financial analysis.</div></div>
+        <div style="background:rgba(11,13,18,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 20px;"><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;color:#fff;">Marine biology</div><div style="font-size:13.5px;color:#aeb7c1;margin-top:4px;">4+ yrs conservation in SE Asia &amp; Australia; PADI dive instruction.</div></div>
+        <div style="background:rgba(11,13,18,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 20px;"><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;color:#fff;">Digital marketing &amp; e-commerce</div><div style="font-size:13.5px;color:#aeb7c1;margin-top:4px;">3 years driving online store sales with WooCommerce &amp; Shopify.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="sec" data-sec data-role="education" data-ax="0.34" data-label="Education" style="min-height:100vh;display:flex;align-items:center;justify-content:flex-end;padding:80px 6vw;position:relative;z-index:2;">
+    <div style="max-width:600px;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#5fb0ff;margin-bottom:14px;">&#9670; Education</div>
+      <h2 style="margin:0 0 26px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.9rem,3.6vw,2.8rem);letter-spacing:-.025em;color:#fff;">Education &amp; certifications.</h2>
+      <div style="display:flex;flex-direction:column;">
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:20px;padding:18px 0;border-top:1px solid rgba(255,255,255,.1);"><div style="font-family:'Space Mono',monospace;font-size:12.5px;color:#5fb0ff;">2025</div><div><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:#fff;">Le Wagon &#183; Tokyo</div><div style="font-size:13.5px;color:#aeb7c1;margin-top:3px;">AI Software Development Bootcamp</div></div></div>
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:20px;padding:18px 0;border-top:1px solid rgba(255,255,255,.1);"><div style="font-family:'Space Mono',monospace;font-size:12.5px;color:#5fb0ff;">2023&ndash;24</div><div><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:#fff;">Nucamp</div><div style="font-size:13.5px;color:#aeb7c1;margin-top:3px;">Full-Stack Web &amp; Mobile Development</div></div></div>
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:20px;padding:18px 0;border-top:1px solid rgba(255,255,255,.1);"><div style="font-family:'Space Mono',monospace;font-size:12.5px;color:#5fb0ff;">2020&ndash;21</div><div><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:#fff;">LearnToTrade, UK</div><div style="font-size:13.5px;color:#aeb7c1;margin-top:3px;">Unlimited Wealth Program</div></div></div>
+        <div style="display:grid;grid-template-columns:120px 1fr;gap:20px;padding:18px 0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1);"><div style="font-family:'Space Mono',monospace;font-size:12.5px;color:#5fb0ff;">2008&ndash;11</div><div><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:#fff;">Newcastle University</div><div style="font-size:13.5px;color:#aeb7c1;margin-top:3px;">BSc Marine Biology</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="sec" data-sec data-role="about" data-ax="0.66" data-label="About" style="min-height:100vh;display:flex;align-items:center;justify-content:flex-start;padding:80px 6vw;position:relative;z-index:2;">
+    <div style="max-width:600px;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#5fb0ff;margin-bottom:14px;">&#9670; About Me</div>
+      <h2 style="margin:0 0 22px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(2rem,4vw,3rem);letter-spacing:-.025em;color:#fff;line-height:1.02;">About me.</h2>
+      <p style="margin:0 0 18px;font-size:16.5px;line-height:1.7;color:#c1c8d0;">Mixed British-Thai developer based in Thailand, which I now call home after growing up across multiple countries. Fluent in English and Thai, with a long-standing love of tech that led into full-stack development &mdash; and an independent trader &amp; financial analyst who reads the markets with a structured, risk-first approach.</p>
+      <p style="margin:0;font-size:16.5px;line-height:1.7;color:#c1c8d0;">Beyond code and charts, staying active is a big part of life &mdash; lifting, kitesurfing, running and hiking &mdash; and that love of adventure carried me through New Zealand&rsquo;s 3,000&#8239;km Te Araroa thru-hike over four months in 2024/25. I&rsquo;ve also presented a Thai PBS climate-change documentary series along the Gulf of Thailand.</p>
+    </div>
+  </section>
+
+  <section id="contact" class="sec" data-sec data-role="contact" data-ax="0.5" data-label="Contact" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 6vw;position:relative;z-index:2;">
+    <div style="max-width:560px;width:100%;text-align:center;">
+      <div style="font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#5fb0ff;margin-bottom:14px;">&#9670; Contact</div>
+      <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(2.2rem,5vw,3.4rem);letter-spacing:-.03em;color:#fff;line-height:1.02;">Let&rsquo;s build something.</h2>
+      <p style="margin:18px auto 26px;max-width:420px;font-size:16px;line-height:1.6;color:#aeb7c1;">Open to full-time roles and freelance contracts &mdash; Rails MVPs and custom web apps.</p>
+      <a href="mailto:dev@louisbourne.me" style="display:inline-flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:16px;color:#5fb0ff;text-decoration:none;margin-bottom:24px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> dev@louisbourne.me</a>
+      <form onsubmit="return false;" style="background:rgba(11,13,18,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:14px;text-align:left;">
+        <input placeholder="Your name" style="background:#05060a;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:13px 15px;color:#e9ecf1;font-family:'Space Grotesk',sans-serif;font-size:15px;outline:none;">
+        <input placeholder="Your email" style="background:#05060a;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:13px 15px;color:#e9ecf1;font-family:'Space Grotesk',sans-serif;font-size:15px;outline:none;">
+        <textarea placeholder="Your message" rows="4" style="background:#05060a;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:13px 15px;color:#e9ecf1;font-family:'Space Grotesk',sans-serif;font-size:15px;outline:none;resize:vertical;"></textarea>
+        <button style="background:#1062FE;color:#fff;border:none;border-radius:10px;padding:14px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;cursor:pointer;">Send message</button>
+      </form>
+    </div>
+  </section>
+
+  <footer style="position:relative;z-index:2;background:rgba(4,5,7,.7);backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,.08);">
+    <div style="max-width:1080px;margin:0 auto;padding:44px 6vw;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div style="display:flex;align-items:center;gap:11px;"><img src="https://louisbourne.me/assets/lb-circle-logo-light-tp-f54add4aa2e9a57180441e5498a5a8fc12bdb7f2a036b0bbfd20912aa9fe59c4.png" alt="LB" style="width:32px;height:32px;border-radius:50%;"><div style="font-family:'Space Mono',monospace;font-size:11px;color:#6d7c9c;">&#169; 2026 Louis Bourne &#183; Thailand</div></div>
+      <div style="display:flex;gap:24px;font-size:14px;">
+        <a class="nav-a" href="https://github.com/louiskb" target="_blank" rel="noopener" style="color:#aeb7c1;text-decoration:none;">GitHub</a>
+        <a class="nav-a" href="https://www.linkedin.com/in/louis-bourne/" target="_blank" rel="noopener" style="color:#aeb7c1;text-decoration:none;">LinkedIn</a>
+        <a class="nav-a" href="mailto:dev@louisbourne.me" style="color:#aeb7c1;text-decoration:none;">Email</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;intensity&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:70,&quot;min&quot;:20,&quot;max&quot;:120,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Black hole&quot;},&quot;animate&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Black hole&quot;},&quot;starfield&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Black hole&quot;}}">
+class Component extends DCLogic {
+  PAL=[[240,248,255],[85,205,245],[42,120,250],[85,95,232],[150,82,220],[210,84,162]];
+  ctrl=null;
+  componentDidMount(){ setTimeout(()=>this.boot(),0); }
+  componentWillUnmount(){ if(this.ctrl&&this.ctrl.stop) this.ctrl.stop(); }
+  boot(){ const cv=document.querySelector('canvas[data-bh]'); if(cv){ try{ this.ctrl=this.initBH(cv); }catch(e){ console.error('initBH failed',e); } } }
+
+  initBH(cv){
+    const self=this;
+    const ctx=cv.getContext('2d');
+    const inten=(self.props.intensity!=null?self.props.intensity:70)/70;
+    const animate=self.props.animate!==false;
+    const reduceMedia=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduce=reduceMedia||!animate;
+    const starsOn=self.props.starfield!==false;
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    const PAL=self.PAL, tilt=0.34, core=0.13;
+    let w=0,h=0,R=1,rMax=1;
+    let parts=[],orbits=[],stars=[],energyParts=[],bpool=[],bcount=0;
+    // charge/energy system
+    let phase='idle',chargeE=0,boom=0,excite=0,vFloor=0,power=0,bmult=2.5,energy=0,iterationsDone=0,textFrozen=false,holdT=0,decRate=0;
+    // cursor
+    let mx=-9999,my=-9999,hover=false,glowX=0,glowY=0,glowA=0;
+    // depth camera + scroll
+    let sc=1,curSc=1,cyOff=0,camCx=0,camCy=0,Re=1,rMe=1,vel=0,lastTop=0,counted=false,heroT=0,cxN=0.5,cyN=0.5,briMul=1;
+
+    function col(t){ t=t<0?0:t>1?1:t; const f=t*(PAL.length-1),i=Math.floor(f),j=Math.min(i+1,PAL.length-1),k=f-i,A=PAL[i],B=PAL[j]; return [A[0]+(B[0]-A[0])*k,A[1]+(B[1]-A[1])*k,A[2]+(B[2]-A[2])*k]; }
+
+    function build(){
+      R=Math.min(w,h)*core; rMax=R*4.5;
+      const count=Math.max(640,Math.min(3000,Math.round(w*h/1300)));
+      parts=[];
+      for(let i=0;i<count;i++){ const rr=R*1.08+Math.pow(Math.random(),.55)*(rMax-R*1.08); parts.push({a:rr,r:rr,ang:Math.random()*6.2832,spd:.2/Math.sqrt(rr/R)*(.85+Math.random()*.3),size:.5+Math.random()*1.7,br:.2+Math.random()*.8,t:(rr-R)/(rMax-R),ox:0,oy:0}); }
+      orbits=[];
+      [90,45,135,25,155].forEach(deg=>{ const o={phi:deg*Math.PI/180,thin:.16+Math.random()*.06,list:[]}; const oc=Math.round(count*.32); for(let i=0;i<oc;i++){ const rr=R*1.12+Math.pow(Math.random(),.6)*(rMax*.7-R*1.12); o.list.push({a:rr,r:rr,ang:Math.random()*6.2832,spd:.3/Math.sqrt(rr/R)*(.85+Math.random()*.3),size:.5+Math.random()*1.4,br:.25+Math.random()*.7,ox:0,oy:0}); } orbits.push(o); });
+      energyParts=[]; const ec=Math.round(count*1.1); for(let i=0;i<ec;i++){ const rr=R*1.08+Math.pow(Math.random(),.55)*(rMax-R*1.08); energyParts.push({a:rr,r:rr,ang:Math.random()*6.2832,spd:.2/Math.sqrt(rr/R)*(.85+Math.random()*.3),size:.5+Math.random()*1.6,br:.2+Math.random()*.8,t:(rr-R)/(rMax-R),ox:0,oy:0}); }
+      stars=[]; if(starsOn){ const s=Math.round(w*h/9500); for(let i=0;i<s;i++) stars.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.1+.2,b:.2+Math.random()*.6,tw:Math.random()*6.28}); }
+      bpool=[]; bcount=0;
+    }
+    function resize(){ w=Math.max(1,document.documentElement.clientWidth||window.innerWidth); h=Math.max(1,window.innerHeight); cv.style.width=w+'px'; cv.style.height=h+'px'; cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr); ctx.setTransform(dpr,0,0,dpr,0,0); build(); }
+    function readScroll(){ const secs=document.querySelectorAll('[data-sec]'); const n=secs.length; const de=document.documentElement; const max=Math.max(1,(de.scrollHeight||document.body.scrollHeight)-window.innerHeight); const top=window.scrollY||window.pageYOffset||0; const prog=Math.max(0,Math.min(1,top/max)); const vh=window.innerHeight; let ci=0,best=1e9; for(let i=0;i<n;i++){ const r=secs[i].getBoundingClientRect(); const c=r.top+r.height/2; const d=Math.abs(c-vh/2); if(d<best){best=d;ci=i;} } return {n,prog,ci,secs}; }
+    function countUp(){ document.querySelectorAll('[data-count]').forEach(el=>{ if(el.dataset.done)return; el.dataset.done=1; const tv=parseInt(el.dataset.count,10)||0; const st=performance.now(); const iv=setInterval(()=>{ const p=Math.min(1,(performance.now()-st)/900); el.textContent=Math.round(tv*(1-Math.pow(1-p,3))); if(p>=1) clearInterval(iv); },30); }); }
+
+    // ---- hero text morph (from charge level) ----
+    const SUB_START='Louis Bourne, full-stack developer building production Ruby-on-Rails products from Thailand.';
+    const SUB_END='Known for being incredibly handsome and talented.';
+    function blendStr(s,t,p){ if(p>=1) return t; const n=Math.floor(t.length*p); let out=''; const m=Math.max(s.length,t.length); for(let i=0;i<m;i++){ if(i<n) out+=t[i]; else if(i<s.length) out+=s[i]; } return out; }
+    function morphSub(el,startStr,endStr,frac){ if(!el) return; const len=Math.max(startStr.length,endStr.length); const key=startStr+'|'+endStr; if(el._subKey!==key){ const idx=[]; for(let i=0;i<len;i++) idx.push(i); for(let i=len-1;i>0;i--){ const j=(Math.random()*(i+1))|0; const t=idx[i]; idx[i]=idx[j]; idx[j]=t; } el._suborder=idx; el._subKey=key; } const order=el._suborder; const lockN=Math.floor(frac*len); const locked=new Set(order.slice(0,lockN)); let out=''; for(let i=0;i<len;i++){ if(locked.has(i)) out+=(endStr[i]!=null?endStr[i]:' '); else out+=(startStr[i]!=null?startStr[i]:' '); } if(el._cur!==out){ el.textContent=out; el._cur=out; } }
+    function renderText(e){ e=Math.max(0,Math.min(8,Math.ceil(e-1e-6))); const e1=document.querySelector('[data-morph="1"]'),e2=document.querySelector('[data-morph="2"]'),es=document.querySelector('[data-morph="sub"]'); let s1,s2; if(e<=6){ const p=e/6; s1=blendStr('web','Louis',p); s2=blendStr('developer','Bourne',p); if(es) morphSub(es,SUB_START,SUB_END,p); } else { const rp=Math.min(1,(e-6)/2); s1=blendStr('Louis','web',rp); s2=blendStr('Bourne','developer',rp); if(es) morphSub(es,SUB_END,SUB_START,rp); } if(e1&&e1._cur!==s1){ e1.textContent=s1; e1._cur=s1; } if(e2&&e2._cur!==s2){ e2.textContent=s2; e2._cur=s2; } }
+
+    function spawnBurst(){ const cols=[[90,180,255],[120,200,255],[80,140,255],[150,205,255],[255,255,255]]; const n=Math.round(parts.length*bmult); const lvf=1+Math.min(power,13)*.16; for(let i=0;i<n;i++){ let b=bpool[i]; if(!b){b={};bpool[i]=b;} const ang=Math.random()*6.2832; const sp=(.6+Math.random()*1.7)*rMax*sc*lvf; b.x=camCx+Math.cos(ang)*Re*.9; b.y=camCy+Math.sin(ang)*Re*.4; b.vx=Math.cos(ang)*sp; b.vy=Math.sin(ang)*sp*.62; b.life=.8+Math.random()*1.0; b.maxlife=b.life; b.size=.8+Math.random()*2.3; b.col=cols[(Math.random()*cols.length)|0]; } bcount=n; }
+
+    function stepCharge(dt){
+      const cx=camCx, cy=camCy;
+      const over = hover && Math.hypot(mx-cx,my-cy) < Re*1.7;
+      if(phase==='idle'){ if(over) phase='charging'; }
+      else if(phase==='charging'){
+        if(over){ chargeE += dt/2.5;
+          if(chargeE>=1){ chargeE=0; phase='explode'; boom=1; if(excite>=8){ iterationsDone++; vFloor=Math.min(3, iterationsDone*1.5); excite=0; } excite=Math.min(8, Math.floor(excite+1e-9)+1); textFrozen=(excite>=8); const ph=excite; power=(ph<=6)?ph:(ph===7?9:13); bmult=2.5+power*0.95; renderText(textFrozen?0:excite); spawnBurst(); }
+        } else { phase='hold'; holdT=2; }
+      } else if(phase==='hold'){
+        if(over){ phase='charging'; } else { holdT-=dt; if(holdT<=0){ phase='decay'; decRate=(chargeE>0?chargeE/3:1); } }
+      } else if(phase==='decay'){
+        if(over){ phase='charging'; } else { chargeE -= decRate*dt; if(chargeE<=0){ chargeE=0; phase='idle'; } }
+      } else if(phase==='explode'){ boom -= dt/1.15; if(over && boom<0.5){ chargeE=Math.min(0.6, chargeE+dt/2.5); } if(boom<=0){ boom=0; phase = over ? 'charging' : 'idle'; } }
+      if(!(phase==='charging'||phase==='explode')) excite=Math.max(0,excite-dt/10);
+      const vLev=Math.max(excite,vFloor);
+      energy=Math.max(Math.min(1,vLev/3), chargeE, boom);
+      renderText(textFrozen?0:excite);
+      const ch=chargeE, exploding=(phase==='explode');
+      const lf=1+Math.min(power,13)*0.26;
+      const ss=1+vel*2;
+      for(const p of parts){ p.ang += p.spd*dt*((1+ch*4.5+boom*3)*lf)*ss; const rt = exploding ? (p.a + boom*rMax*0.7*lf) : (R*1.1 + (p.a-R*1.1)*(1-ch*0.86)); p.r += (rt-p.r)*Math.min(1,dt*4.5); p.ox+=-p.ox*Math.min(1,dt*5); p.oy+=-p.oy*Math.min(1,dt*5); if(hover && !exploding){ const x=cx+Math.cos(p.ang)*p.r*sc, y=cy+Math.sin(p.ang)*p.r*sc*tilt; const ddx=x-mx,ddy=y-my,d2=ddx*ddx+ddy*ddy; if(d2<12100&&d2>1){ const d=Math.sqrt(d2); const f=(1-d/110)*30; p.ox+=ddx/d*f; p.oy+=ddy/d*f; } } }
+      for(let oi=0;oi<orbits.length;oi++){ const o=orbits[oi]; const ca=Math.cos(o.phi),sa=Math.sin(o.phi); const spB=(1+ch*6+boom*3)*(1+Math.min(power,13)*0.3)*(1+oi*0.12)*(1+Math.max(excite,vFloor)*0.18)*ss; for(const p of o.list){ p.ang += p.spd*dt*spB; const rt = exploding ? (p.a+boom*rMax*0.62*lf) : (R*1.05 + (p.a-R*1.05)*(1-ch*0.82)); p.r += (rt-p.r)*Math.min(1,dt*4.5); p.ox+=-p.ox*Math.min(1,dt*5); p.oy+=-p.oy*Math.min(1,dt*5); if(hover && !exploding){ const ex=Math.cos(p.ang)*p.r*sc, ey=Math.sin(p.ang)*p.r*sc*o.thin; const x=cx+ex*ca-ey*sa+p.ox, y=cy+ex*sa+ey*ca+p.oy; const ddx=x-mx,ddy=y-my,d2=ddx*ddx+ddy*ddy; if(d2<12100&&d2>1){ const d=Math.sqrt(d2); const f=(1-d/110)*30; p.ox+=ddx/d*f; p.oy+=ddy/d*f; } } } }
+      for(const p of energyParts){ p.ang += p.spd*dt*((1+ch*4.5+boom*3)*lf)*ss; const rt = exploding ? (p.a + boom*rMax*0.7*lf) : (R*1.1 + (p.a-R*1.1)*(1-ch*0.86)); p.r += (rt-p.r)*Math.min(1,dt*4.5); p.ox+=-p.ox*Math.min(1,dt*5); p.oy+=-p.oy*Math.min(1,dt*5); }
+      if(bcount>0){ for(let i=0;i<bcount;i++){ const b=bpool[i]; if(!b||b.life<=0) continue; b.life-=dt; b.x+=b.vx*dt; b.y+=b.vy*dt; b.vx*=(1-Math.min(0.9,dt*0.7)); b.vy*=(1-Math.min(0.9,dt*0.7)); } }
+    }
+
+    function drawParts(far,list,aMul){
+      list=list||parts; aMul=(aMul==null)?1:aMul;
+      ctx.globalCompositeOperation='lighter';
+      for(const p of list){ const sy=Math.sin(p.ang); if((sy<0)!==far) continue; const x=camCx+Math.cos(p.ang)*p.r*sc*1.5+p.ox; const y=camCy+sy*p.r*sc*tilt+p.oy; let c=col(p.t); let hl=0; if(hover){ const dx=x-mx,dy=y-my,d2=dx*dx+dy*dy; if(d2<16900){ hl=1-Math.sqrt(d2)/130; } } hl=Math.max(hl,chargeE*0.5,boom*0.85); if(hl>0){ c=[c[0]+(185-c[0])*hl,c[1]+(222-c[1])*hl,c[2]+(255-c[2])*hl]; } const edge=.5+.5*Math.abs(Math.cos(p.ang)); const a=Math.min(1,(p.br*edge*inten*briMul*(.55+.45*(1-p.t))+hl*0.4)*aMul); ctx.fillStyle='rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')'; ctx.beginPath(); ctx.arc(x,y,p.size,0,6.2832); ctx.fill(); }
+    }
+    function drawOrbits(far){
+      const spike=Math.max(chargeE,boom);
+      ctx.globalCompositeOperation='lighter';
+      const gold=[255,198,92], cyan=[150,205,255];
+      for(let oi=0;oi<orbits.length;oi++){ const o=orbits[oi]; const eff=Math.max(excite,vFloor)+spike; const rv=Math.min(1,Math.max(0,eff-oi*0.9)); if(rv<=0.02) continue; const cs=Math.max(0,Math.min(1,(rv-0.15)/0.5)); const c=[cyan[0]+(gold[0]-cyan[0])*cs,cyan[1]+(gold[1]-cyan[1])*cs,cyan[2]+(gold[2]-cyan[2])*cs]; const ca=Math.cos(o.phi),sa=Math.sin(o.phi); for(const p of o.list){ const depth=Math.sin(p.ang); if((depth<0)!==far) continue; const ex=Math.cos(p.ang)*p.r*sc, ey=Math.sin(p.ang)*p.r*sc*o.thin; const x=camCx+(ex*ca-ey*sa)*1.5+(p.ox||0), y=camCy+ex*sa+ey*ca+(p.oy||0); const a=Math.min(1,p.br*rv*inten*briMul*(.55+.45*Math.abs(Math.cos(p.ang)))); ctx.fillStyle='rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')'; ctx.beginPath(); ctx.arc(x,y,p.size*(1+boom*1.2),0,6.2832); ctx.fill(); } }
+    }
+    function drawBurst(){ if(bcount<=0) return; ctx.globalCompositeOperation='lighter'; for(let i=0;i<bcount;i++){ const b=bpool[i]; if(!b||b.life<=0) continue; const a=Math.min(1,b.life/b.maxlife)*inten; ctx.fillStyle='rgba('+b.col[0]+','+b.col[1]+','+b.col[2]+','+a+')'; ctx.beginPath(); ctx.arc(b.x,b.y,b.size,0,6.2832); ctx.fill(); } }
+
+    function render(dt,time){
+      // scroll-driven depth camera
+      const S=readScroll(); const {n,prog,ci,secs}=S;
+      const top=window.scrollY||window.pageYOffset||0; const dv=Math.abs(top-lastTop); lastTop=top; vel+=((Math.min(1,dv/55))-vel)*Math.min(1,dt*6);
+      const role=secs[ci]?secs[ci].getAttribute('data-role'):'';
+      const depthv=Math.max(0,1-Math.abs(prog-.5)*2); const tscl=.5+depthv*1.75; const endPush=Math.max(0,(prog-0.9)/0.1);
+      let tcyl=(prog-.5)*.1;
+      if(endPush>0){ const _f=document.querySelector('#contact form'), _ft=document.querySelector('footer'); if(_f&&_ft){ const _fr=_f.getBoundingClientRect(), _fo=_ft.getBoundingClientRect(); const _off=((_fr.bottom+_fo.top)/2)/h-0.5; const e=endPush*endPush; tcyl=tcyl*(1-e)+_off*e; } }
+      curSc+=(tscl-curSc)*Math.min(1,dt*3.5); cyOff+=(tcyl-cyOff)*Math.min(1,dt*3);
+      sc=curSc; camCx=w*0.5; camCy=h*0.5+cyOff*h; Re=R*sc; rMe=rMax*sc; briMul=1.45;
+      if(role==='numbers'&&!counted){ counted=true; countUp(); }
+      const ke=Math.min(1,dt*9); if(mx<-9000){ glowX=camCx; glowY=camCy; } else { glowX+=(mx-glowX)*ke; glowY+=(my-glowY)*ke; } glowA+=((hover?1:0)-glowA)*Math.min(1,dt*6);
+      if(!reduce) stepCharge(dt);
+
+      ctx.clearRect(0,0,w,h);
+      const cc=col(0.35); const bg=ctx.createRadialGradient(camCx,camCy,Re*.5,camCx,camCy,rMe*1.4); bg.addColorStop(0,'rgba('+(cc[0]|0)+','+(cc[1]|0)+','+(cc[2]|0)+','+(0.1*inten*briMul)+')'); bg.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
+      ctx.globalCompositeOperation='lighter';
+      for(const s of stars){ const tw=reduce?1:(.6+.4*Math.sin(time*1.5+s.tw)); ctx.fillStyle='rgba(200,214,235,'+(s.b*tw*.7)+')'; ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,6.2832); ctx.fill(); }
+      drawParts(true); drawParts(true,energyParts,energy); drawOrbits(true);
+      ctx.globalCompositeOperation='source-over';
+      const bd=ctx.createRadialGradient(camCx,camCy,Re*.15,camCx,camCy,Re*1.14); bd.addColorStop(0,'#000'); bd.addColorStop(.72,'#000'); bd.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=bd; ctx.beginPath(); ctx.arc(camCx,camCy,Re*1.16,0,6.2832); ctx.fill();
+      // accretion ring, pulses with charge/energy
+      ctx.globalCompositeOperation='lighter'; ctx.save(); const pr=col(0.05), rc=[255,248,236]; let rblur=18,rsa=0.55; const vLev=Math.max(excite,vFloor); const eng=Math.min(1.6, vLev/3 + Math.max(chargeE,boom)); if(eng>0.02){ const pulse=0.5+0.5*Math.sin(time*1.3); rblur=18+(28+vLev*11)*pulse*eng; rsa=Math.min(1,0.5+(0.4+vLev*0.06)*pulse*eng); } ctx.shadowColor='rgba('+(pr[0]|0)+','+(pr[1]|0)+','+(pr[2]|0)+',0.9)'; ctx.shadowBlur=rblur*inten; ctx.strokeStyle='rgba('+(rc[0]|0)+','+(rc[1]|0)+','+(rc[2]|0)+','+(rsa*inten*briMul)+')'; ctx.lineWidth=Math.max(1.2,Re*0.03);
+      { const _pres=Math.max(0,Math.min(1,(vLev-4)/4)); const act=Math.max(chargeE,boom*0.6,_pres); if(act<0.03){ ctx.beginPath(); ctx.arc(camCx,camCy,Re*1.02,0,6.2832); } else { const amp=act*0.006, step=Math.floor(time*15), seg=56; ctx.beginPath(); for(let i=0;i<=seg;i++){ const th=i/seg*6.2832; const hh=Math.sin(i*12.9898+step*78.233)*43758.5453; const jit=hh-Math.floor(hh); const rr=Re*1.02*(1+(jit-0.5)*2*amp); const x=camCx+Math.cos(th)*rr, y=camCy+Math.sin(th)*rr; if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); } ctx.closePath(); } } ctx.stroke(); ctx.restore();
+      // charge glow burst
+      if(chargeE>0.01||boom>0.01){ ctx.globalCompositeOperation='lighter'; const tt=Math.min(1,chargeE); const g0=[150,205,255],g1=[255,150,70]; const gc=[g0[0]+(g1[0]-g0[0])*tt,g0[1]+(g1[1]-g0[1])*tt,g0[2]+(g1[2]-g0[2])*tt]; const pulse=1+0.18*Math.sin(time*(7+chargeE*12)); const base=Re*(0.8+1.9*chargeE)*pulse+boom*Re*3.2; const gg=ctx.createRadialGradient(camCx,camCy,0,camCx,camCy,base); gg.addColorStop(0,'rgba(255,255,255,'+Math.min(0.92,(0.5*chargeE+boom))+')'); gg.addColorStop(0.35,'rgba('+(gc[0]|0)+','+(gc[1]|0)+','+(gc[2]|0)+','+((0.4*chargeE+boom*0.5)*inten)+')'); gg.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle=gg; ctx.beginPath(); ctx.arc(camCx,camCy,base,0,6.2832); ctx.fill(); }
+      drawOrbits(false); drawParts(false); drawParts(false,energyParts,energy); drawBurst();
+      ctx.globalCompositeOperation='source-over';
+    }
+
+    let raf=null,last=performance.now();
+    function loop(now){ const dt=Math.min(.05,(now-last)/1000); last=now; render(dt,now/1000); raf=requestAnimationFrame(loop); }
+    resize();
+    function onResize(){ resize(); }
+    function onMove(e){ mx=e.clientX; my=e.clientY; hover=true; }
+    function onLeave(){ hover=false; mx=-9999; my=-9999; }
+    window.addEventListener('resize',onResize);
+    if(!reduce){ window.addEventListener('pointermove',onMove); window.addEventListener('pointerleave',onLeave); }
+    renderText(0);
+    render(0.016,performance.now()/1000);
+    if(reduce){ window.addEventListener('scroll',()=>{ render(.2,performance.now()/1000); },{passive:true}); }
+    else { raf=requestAnimationFrame(loop); }
+    return { stop(){ if(raf)cancelAnimationFrame(raf); window.removeEventListener('resize',onResize); window.removeEventListener('pointermove',onMove); window.removeEventListener('pointerleave',onLeave); } };
+  }
+  renderVals(){ return {}; }
+}
+</script>
+</body>
+</html>
