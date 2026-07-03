@@ -1,7 +1,8 @@
-<div class="container-fluid bg-dark p-4 mt-5">
-  <footer>
-    <div class="row g-4">
-      <!-- Left: Nav Links -->
+<%# Site footer — Depth Charge design. Semantic <footer> is load-bearing:
+    the black-hole engine measures it to park the hole at end of scroll. %>
+<footer class="site-footer mt-5">
+  <div class="container-fluid py-4 px-4">
+    <div class="row g-4 align-items-center">
       <div class="col-12 col-md-4">
         <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-start align-items-center gap-3 gap-md-4">
           <% if !user_signed_in? && current_page?("/projects") %>
@@ -11,29 +12,27 @@
           <%= link_to "Privacy Policy", privacy_policy_path, class: "gray-link text-decoration-none" %>
         </div>
       </div>
-      <!-- Center: Copyright -->
       <div class="col-12 col-md-4 text-center">
-        <div class="gray-non-link">
-          © 2025 Louis Bourne. All rights reserved.
+        <div class="gray-non-link footer-copyright">
+          © <%= Date.current.year %> Louis Bourne · Thailand
         </div>
       </div>
-      <!-- Right: Social Icons -->
       <div class="col-12 col-md-4">
         <div class="social-horizontal d-flex justify-content-center justify-content-md-end align-items-center gap-4">
-          <%= link_to "https://github.com/louiskb", target: "_blank", rel: "noopener" do %>
+          <%= link_to "https://github.com/louiskb", target: "_blank", rel: "noopener", "aria-label": "GitHub" do %>
             <i class="fa-brands fa-github fs-5"></i>
           <% end %>
-          <%= link_to "https://www.linkedin.com/in/louis-bourne/", target: "_blank", rel: "noopener" do %>
+          <%= link_to "https://www.linkedin.com/in/louis-bourne/", target: "_blank", rel: "noopener", "aria-label": "LinkedIn" do %>
             <i class="fa-brands fa-linkedin fs-5"></i>
           <% end %>
-          <%= link_to "https://discord.com/users/brothercap", target: "_blank", rel: "noopener" do %>
+          <%= link_to "https://discord.com/users/brothercap", target: "_blank", rel: "noopener", "aria-label": "Discord" do %>
             <i class="fa-brands fa-discord fs-5"></i>
           <% end %>
-          <%= link_to "mailto:dev@louisbourne.me", target: "_blank", rel: "noopener" do %>
+          <%= link_to "mailto:dev@louisbourne.me", "aria-label": "Email" do %>
             <i class="fa-solid fa-envelope fs-5"></i>
           <% end %>
         </div>
       </div>
     </div>
-  </footer>
-</div>
+  </div>
+</footer>
