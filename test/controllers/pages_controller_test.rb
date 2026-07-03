@@ -47,6 +47,14 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "[data-count-up-target-value='#{stats[:technologies_count]}']"
   end
 
+  test "home renders the black-hole scene wiring" do
+    get root_path
+    assert_select "[data-controller='black-hole']", 1
+    assert_select "canvas[data-black-hole-target='canvas']", 1
+    # Skip-link target from the layout must exist on the page.
+    assert_select "main#main-content", 1
+  end
+
   test "home renders a semantic footer element (black-hole end anchor)" do
     get root_path
     # The canvas engine parks the hole between the contact form and the
