@@ -2,28 +2,27 @@
 //   max-width: 400px;
 // }
 
+// Depth Charge cards size to their content — no more fixed pixel heights.
+// The class names stay so existing views keep rendering until their view
+// task rewrites the markup; only the height rules are gone.
 .card-project {
-  height: 530px;
   // width: 100%;
   max-width: 400px;
   // aspect-ratio: 3/4; // w:h
 }
 
 .card-blog-post {
-  height: 690px;
   // width: 100%;
   max-width: 400px;
   // aspect-ratio: 3/4; // w:h
 }
 
 .card-education {
-  height: 160px;
   width: 100%;
   // max-width: 400px;
 }
 
 .card-skills {
-  height: 160px;
   width: 100%;
   // max-width: 400px;
 }

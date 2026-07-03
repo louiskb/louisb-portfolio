@@ -1,6 +1,11 @@
+// This file is imported after Bootstrap in components/_index.scss, so this
+// rule wins the cascade over Bootstrap's $body-bg variable. If this stayed
+// $white, the whole site would render on a white background no matter what
+// dark theme tokens are set elsewhere — this is the critical fix that makes
+// the Depth Charge dark theme actually take effect.
 body {
   // background-color: #f1f2ee;
-  background-color: $white;
+  background-color: $space-black;
 }
 
 body,

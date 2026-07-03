@@ -1,64 +1,40 @@
 // Element tag styles
-// Light mode default
-h1 {
-  color: #000000;
-}
-
-h2 {
-  color: #333333;
-}
-
-h3 {
-  color: #666666;
-}
-
-h4 {
-  // color: #979696;
-  color: #666666;
-}
-
+// Depth Charge dark theme. The site used to color headings/body text dark
+// (near-black h1, lightening toward h5/p) for a light background. Now that
+// the whole site sits on $space-black (see _body.scss), those same elements
+// need to go the other way: light text on a dark canvas.
+h1,
+h2,
+h3,
+h4,
 h5 {
-  // color: #bcbcbc;
-  color: #999999;
+  color: $text-bright;
 }
 
-p {
-  // color: #999999; // original lighter gray.
-  color: #8c8c8c;
-}
-
+p,
 li {
-  // color: #e5782a; // original color
-  color: #8c8c8c;
+  color: $text-body;
 }
 
 code {
   // color: $blue;
 }
 
-// Dark background - progressive lightening from <h1> (brightest) to <p> (medium gray)
-.h1-d {
-  color: #ffffff;
-}
-
-.h2-d {
-  color: #f5f5f7;
-}
-
-.h3-d {
-  color: #e8e8ed;
-}
-
-.h4-d {
-  color: #d4d4d8;
-}
-
+// "Dark background" variants — kept so older views using them still render.
+// Before this flip these were a separate lightened scale for use on
+// already-dark sections; now the base heading/paragraph colors above ARE
+// the dark-theme colors, so these simply alias them instead of keeping a
+// second hand-tuned scale in sync.
+.h1-d,
+.h2-d,
+.h3-d,
+.h4-d,
 .h5-d {
-  color: #c1c2c5;
+  color: $text-bright;
 }
 
 .p-d {
-  color: #a1a1aa;
+  color: $text-body;
 }
 
 // Custom text styles
@@ -72,19 +48,18 @@ code {
 }
 
 .gray-non-link {
-  color: $gray;
+  color: $text-muted;
 }
 
 .gray-link {
-  color: $gray;
+  color: $text-muted;
   transition: color 0.3s;
   // text-decoration: none; // omitted because should be optional as a bootstrap style class.
 }
 
 .gray-link:hover,
 .gray-link:focus {
-  // color: black;
-  color: $blue;
+  color: $text-bright;
 }
 
 .text-tech-stack {
@@ -104,5 +79,9 @@ code {
 }
 
 .purple {
-  color: #6f2bdd;
+  color: $purple;
 }
+
+// Soft text tones from the design (body copy + muted meta text).
+.text-body-soft { color: $text-body; }
+.text-soft-muted { color: $text-muted; }
