@@ -62,6 +62,23 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "footer", 1
   end
 
+  test "home shows up to three latest published posts and never drafts" do
+    get root_path
+    assert_select "section#latest-posts" do
+      # Only published posts may appear, newest first, max 3.
+      assert_select ".latest-post-card", { maximum: 3 }
+    end
+    draft_titles = BlogPost.where.not(status: :published).pluck(:title)
+    draft_titles.each { |title| assert_no_match title, response.body }
+  end
+
+  test "home hides drafts in latest posts even for the signed-in owner" do
+    sign_in users(:louis)
+    get root_path
+    draft_titles = BlogPost.where.not(status: :published).pluck(:title)
+    draft_titles.each { |title| assert_no_match title, response.body }
+  end
+
   test "privacy_policy is public and renders" do
     get privacy_policy_url
     assert_response :success

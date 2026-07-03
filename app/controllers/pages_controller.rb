@@ -10,6 +10,9 @@ class PagesController < ApplicationController
     @open_source_projects = filter_open_source_projects(scope)
     @stats = HomeStats.new.to_h
     @contact = Contact.new
+    # Latest published posts for the homepage blog section. Published-only for
+    # everyone (even the owner) — drafts belong in the blog index, not here.
+    @latest_posts = BlogPost.visible_to_visitors.order(created_at: :desc).limit(3)
   end
 
   def profile

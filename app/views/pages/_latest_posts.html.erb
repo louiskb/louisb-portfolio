@@ -1,1 +1,36 @@
-<%# Latest blog posts — implemented with @latest_posts in a later task. %>
+<%# From the Blog — surfaces the newest published posts on the homepage.
+    Renders nothing at all when no posts are published yet. %>
+<% if @latest_posts.any? %>
+  <section id="latest-posts" class="sec justify-content-end"
+           data-sec data-role="blog" data-ax="0.34" data-label="From the Blog">
+    <div class="section-inner" style="max-width: 640px;">
+      <p class="section-eyebrow">◆ From the Blog</p>
+      <h2 class="section-heading mb-4">Latest writing.</h2>
+      <div class="d-flex flex-column gap-3">
+        <% @latest_posts.each do |post| %>
+          <div class="glass-card glass-card--hover latest-post-card p-3">
+            <h3 class="project-card-title mb-1">
+              <%= link_to post.title, blog_post_path(post), class: "text-decoration-none" %>
+            </h3>
+            <% if post.blog_excerpt.present? %>
+              <p class="text-body-soft mb-2"><%= truncate(post.blog_excerpt, length: 140) %></p>
+            <% end %>
+            <div class="project-tech-line">
+              <%= post.created_at.strftime("%b %-d, %Y") %>
+              · <%= post.reading_time %>
+              <% if post.ai_label.present? %> · <%= post.ai_label %><% end %>
+            </div>
+            <% if post.tags.any? %>
+              <div class="mt-2 d-flex flex-wrap gap-2">
+                <% post.tags.each do |tag| %>
+                  <span class="chip"><%= tag.name %></span>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <%= link_to "All posts →", blog_posts_path, class: "d-inline-block mt-3" %>
+    </div>
+  </section>
+<% end %>
