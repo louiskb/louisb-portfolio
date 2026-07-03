@@ -7,11 +7,13 @@
 // General style
 $font-family-sans-serif: $body-font;
 $headings-font-family: $headers-font;
-$body-bg: $white;
 $font-size-base: 1rem;
 
+// Depth Charge dark theme: near-black body, light text.
+$body-bg: $space-black;
+$body-color: $text-bright;
+
 // Colors
-$body-color: $black;
 $primary: $blue;
 $secondary: $gray;
 $success: $green;
@@ -20,11 +22,22 @@ $danger: $red;
 $warning: $orange;
 $tertiary: $lightest_gray;
 
-// Buttons & inputs' radius
-$border-radius-sm: 0.0625rem;
-$border-radius: 0.125rem;
-$border-radius-lg: 0.25rem;
-$border-radius-xl: 0.5rem;
-$border-radius-xxl: 1rem;
+// Links use the design's sky accent.
+$link-color: $sky-blue;
+$link-decoration: none;
+$link-hover-color: lighten($sky-blue, 12%);
 
-// Override other variables below!
+// Dark form controls (design: #05060a fields with faint white borders).
+$input-bg: $input-dark;
+$input-color: $text-bright;
+$input-border-color: rgba(255, 255, 255, 0.12);
+$input-placeholder-color: $text-muted;
+$input-focus-border-color: $sky-blue;
+$input-focus-box-shadow: 0 0 0 0.2rem rgba(95, 176, 255, 0.15);
+
+// Buttons & inputs' radius — the design uses a 10–18px radius range.
+$border-radius-sm: 0.5rem;
+$border-radius: 0.625rem;   // ~10px, buttons/inputs
+$border-radius-lg: 0.75rem; // ~12px, CTAs
+$border-radius-xl: 1rem;    // ~16px, cards
+$border-radius-xxl: 1.125rem; // ~18px, large panels

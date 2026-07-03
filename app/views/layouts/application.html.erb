@@ -23,6 +23,13 @@
       </script>
     <% end %>
 
+    <%# Design fonts (Depth Charge handoff): Bricolage Grotesque (headings),
+        Instrument Serif (italic accent), Space Grotesk (body), Space Mono
+        (labels). Loaded as <link> so the fetch starts alongside the CSS. %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>

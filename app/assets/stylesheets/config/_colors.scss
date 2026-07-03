@@ -22,3 +22,16 @@ $lightest-gray: #D0D0D0;
 $cyan: #0dcaf0;
 $lime-yellow: #C7EF00;
 $green: #22C75F;
+
+// Depth Charge design palette (docs/design-handoff/README.md).
+// Near-black space background, glass panels, soft text scale, sky accent.
+$space-black: #040507;                    // body background
+$panel-bg: rgba(11, 13, 18, 0.62);        // glass card background
+$panel-border: rgba(255, 255, 255, 0.08); // glass card border
+$text-bright: #e9ecf1;                    // headings / primary text
+$text-body: #aeb7c1;                      // paragraphs
+$text-muted: #7f8a95;                     // labels / de-emphasised text
+$sky-blue: #5fb0ff;                       // eyebrows, stat numbers, links
+$input-dark: #05060a;                     // form control background
+$purple: #6f2bdd;                         // brand purple, promoted from a
+                                          // hardcoded hex in _text.scss

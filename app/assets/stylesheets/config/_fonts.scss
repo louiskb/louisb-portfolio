@@ -1,16 +1,8 @@
-// Import Google fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito:400,700|Work+Sans:400,700&display=swap');
-
-// Define fonts for body and headers
-$body-font: "Work Sans", "Helvetica", "sans-serif";
-$headers-font: "Nunito", "Helvetica", "sans-serif";
-
-// To use a font file (.woff) uncomment following lines
-// @font-face {
-//   font-family: "Font Name";
-//   src: font-url('FontFile.eot');
-//   src: font-url('FontFile.eot?#iefix') format('embedded-opentype'),
-//        font-url('FontFile.woff') format('woff'),
-//        font-url('FontFile.ttf') format('truetype')
-// }
-// $my-font: "Font Name";
+// Font variables for the Depth Charge design. The actual Google Fonts
+// <link> lives in the layout <head> so it loads in parallel with the CSS.
+// Every stack ends in a generic family so a failed font load degrades to a
+// readable system font.
+$body-font: "Space Grotesk", "Helvetica Neue", sans-serif;
+$headers-font: "Bricolage Grotesque", "Helvetica Neue", sans-serif;
+$mono-font: "Space Mono", "SFMono-Regular", monospace;
+$accent-font: "Instrument Serif", Georgia, serif;
