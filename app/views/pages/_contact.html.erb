@@ -1,18 +1,27 @@
-<!-- Contact -->
-<section id="contact">
-  <div class="container">
-    <div class="card shadow-sm rounded-4 my-3">
-      <div class="card-body p-4">
-        <h2 class="mb-3">Contact me</h2>
-        <p class="card-text mb-5">Want to collaborate or discuss a project? <br>
-          <br>
-          Fill out the form below or email me directly at
-          <%= link_to "dev@louisbourne.me", "mailto:dev@louisbourne.me", target: "_blank", class: "text-decoration-none" %>. <br>
-          <br>
-          Currently open to full-time roles and freelance contract work. Available for Ruby on Rails development projects including MVPs, custom web applications, and feature development.
-        </p>
-        <!-- Contact form -->
-       <%= simple_form_for @contact, url: contacts_path, local: true, data: { controller: "load-button" }, class: "mb-2" do |f| %>
+<%# Contact — Depth Charge restyle (Task 10, final Phase-2 section). The
+    simple_form_for @contact, every f.input, invisible_captcha, and the
+    load-button wiring below are carried over byte-for-byte from the
+    pre-redesign partial — only the chrome around the form is new: the
+    shared section wrapper (Task 8's pattern), eyebrow/heading/availability
+    copy, and a mono mailto row, matching the design mock's centered ax 0.5
+    contact section. The form itself now sits inside a glass-card panel. %>
+<section id="contact" class="sec justify-content-center"
+         data-sec data-role="contact" data-ax="0.5" data-label="Contact">
+  <div class="section-inner text-center" style="max-width: 560px;">
+    <p class="section-eyebrow">◆ Contact</p>
+    <h2 class="section-heading mb-3">Let’s build something.</h2>
+    <p class="text-body-soft mb-4">
+      Open to full-time roles and freelance contracts — Rails MVPs and custom web apps.
+    </p>
+    <%= link_to "mailto:dev@louisbourne.me",
+          class: "d-inline-flex align-items-center gap-2 mb-4 text-decoration-none",
+          style: "font-family: 'Space Mono', monospace; font-size: 16px;" do %>
+      <i class="fa-solid fa-envelope"></i> dev@louisbourne.me
+    <% end %>
+
+    <div class="glass-card p-4 text-start">
+      <!-- Contact form -->
+      <%= simple_form_for @contact, url: contacts_path, local: true, data: { controller: "load-button" }, class: "mb-2" do |f| %>
         <div class="row">
           <div class="col-12 col-md-6">
             <%= f.input :first_name, label: "First Name" %>
@@ -27,8 +36,7 @@
         <%= invisible_captcha %>
         <!-- Submit button -->
         <%= f.button :submit, "Send Message", data: { action: "click->load-button#loader" }, class: "btn btn-primary btn-lg rounded-5 mb-4 mt-4" %>
-       <% end %>
-      </div>
+      <% end %>
     </div>
   </div>
 </section>
