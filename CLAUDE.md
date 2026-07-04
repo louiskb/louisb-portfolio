@@ -48,7 +48,7 @@ bin/rails db:prepare           # create + migrate
 bin/rails db:seed              # seeds the single user + projects/posts (reads USER_1_* env vars)
 bin/importmap pin <package>    # add a JS dependency
 
-bin/rails test                       # full suite (currently 199 runs, 0 failures)
+bin/rails test                       # full suite (currently 213 runs, 0 failures)
 bin/rails test test/models/blog_post_test.rb        # one file
 bin/rails test test/models/blog_post_test.rb:42     # one test by line
 ```
@@ -63,7 +63,19 @@ failures/errors matter. No RuboCop in the bundle; follow the conventions below b
 `pages#home/terms_of_service/privacy_policy/resume`, `projects#index/show`, `blog_posts#index/show`,
 `contacts#create`, `tags` is owner-only. **When adding a public route, add it to the relevant
 `skip_before_action` list.** The `User` model enforces a single account (`one_account_allowed`), so
-"authenticated" == "owner".
+"authenticated" == "owner". **Public sign-up is closed at the route level**: `devise_for` routes
+registrations through `Users::RegistrationsController`, whose `new`/`create` always redirect to
+sign-in (the model's `one_account_allowed` only blocks a *second* row at save time, which would let
+the first visitor claim an unseeded DB — the seed/console creates the one account). `edit`/`update`
+stay live for the profile page.
+
+**Security hardening** (2026-07-04 audit sweep). An enforced **Content-Security-Policy**
+(`config/initializers/content_security_policy.rb`) with per-session script nonces backstops the
+AI-authored HTML; enumerated origins are Google Fonts, `*.i.posthog.com`, `api.cloudinary.com`,
+`youtube-nocookie.com` — **add any new external origin there or the browser blocks it**. `rack-attack`
+throttles `POST /users/sign_in` (by IP + by email; disabled in test). Devise `config.paranoid = true`.
+Uploads (`featured_image`, `photos`, and Trix body embeds) are validated to raster web formats only
+(no SVG) + 10 MB cap in `BlogPost`/`Project`. Strong-params permit lists exclude `:user_id`/`:position`.
 
 **`Publishable` concern** (`app/models/concerns/publishable.rb`) is included by `BlogPost` and `Project`:
 `enum :status { draft, scheduled, published }`, a `visible_to_visitors` scope (= published), and
@@ -73,9 +85,11 @@ both `index` AND `show`** (`user_signed_in? ? Model.all : Model.visible_to_visit
 
 **Dual-content blog.** A `BlogPost` renders **either** Action Text `body` (manual, Trix) **or**
 `html_content` (AI / legacy raw HTML), never both (`one_content_field_only`). The AI path writes
-`html_content`; `show` renders `body` if present else `sanitize(html_content)` via the `html-inject`
-Stimulus controller (sanitize allowlist widened for `figure`/`figcaption` + the `style` attribute).
-Tags are a `Tag`/`BlogPostTag` many-to-many; `reading_time`/`related_posts`/`ai_label` are model helpers.
+`html_content`; `show` renders `body` if present else `<%= sanitize(html_content) %>` directly (sanitize
+allowlist widened for `figure`/`figcaption` + the `style` attribute). The old `html-inject` Stimulus
+controller that rendered the article `hidden` then un-hid it on connect was removed — it caused a CLS
+jump and left the post invisible without JS, for no benefit. Tags are a `Tag`/`BlogPostTag`
+many-to-many; `reading_time`/`related_posts`/`ai_label` are model helpers.
 
 **AI generation** (`app/services/blog_post_ai_service.rb`): `create_from_prompt` + `revise_blog_post`
 build a Claude chat via `RubyLLM.chat(model: ENV["AI_MODEL"]||"claude-sonnet-5", provider: :anthropic,
@@ -100,7 +114,10 @@ split on the canonical `" . "` separator; editable year constants) plus `@latest
 controllers animate the "by the numbers" tiles (reduced-motion gated). The whole home page is a
 single-scroll "Depth Charge" scene: a fixed canvas black hole (`black_hole_controller.js` — verbatim
 port of the design-handoff engine; depth camera reads `[data-sec]` sections, hover-charge morphs the
-hero `[data-morph]` text, `turbo:before-cache` resets it) behind ten `data-sec` sections.
+hero `[data-morph]` text, `turbo:before-cache` resets it) behind ten `data-sec` sections. Brightness is
+set via `data-black-hole-intensity-value` on `home.html.erb` (**115**; handoff range 20–140) — the
+engine normalises it against 70 and multiplies it into every particle/ring/glow alpha; tune there, not
+in the engine math.
 
 **Design system.** Tokens in `config/_colors.scss`/`_fonts.scss` (space palette + 4 Google font
 families loaded via `<link>` in the layout head); Bootstrap rethemed dark (`data-bs-theme="dark"` +
@@ -112,8 +129,11 @@ page-stable pagination is regression-tested). Trix/Action Text has a hand-tuned 
 `_actiontext.scss` (incl. the link dialog) — retoken it, never stack invert filters.
 
 **Other:** FriendlyId slugs on both models (`.friendly.find`); drag-reorder via SortableJS
-(`position` column, owner-scoped `reorder` action); Cloudinary `featured_image` attachments alongside the
-legacy `img_url` string (views prefer the attachment, fall back to `img_url`, else no image).
+(`position` column, owner-scoped `reorder` action). **Reorder permutes the dragged slice's own
+`position` values among its members** (not raw `0..N`), because a drag only ever posts a SLICE of the
+collection — one Pagy page for blog posts, one of the two grids on the projects index — so raw indexes
+would collide with rows outside the slice. Cloudinary `featured_image` attachments alongside the legacy
+`img_url` string (views prefer the attachment, fall back to `img_url`, else no image).
 
 ## Conventions
 

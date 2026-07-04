@@ -35,6 +35,7 @@ Louis Bourne's personal portfolio, project showcase, and AI-assisted blog. Built
 | Background jobs | Solid Queue (in-Puma) |
 | Frontend | Hotwire (Turbo + Stimulus), Importmap |
 | Spam protection | invisible_captcha |
+| Rate limiting | rack-attack (login throttling) |
 | Analytics | PostHog (cookieless, visitor-only) |
 
 ## Development

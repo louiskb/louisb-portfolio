@@ -69,6 +69,22 @@ Eco/Basic dyno keep `JOB_CONCURRENCY=1` and watch for R14 after the first deploy
 - ~~Final visual design / styling — that is the separate Claude Design handoff; this work delivers
   the backend + a plain, working homepage stats section for it to restyle.~~ **Done 2026-07-04:**
   the Depth Charge design is fully implemented (PRs #8–#11 — dark theme, black-hole homepage
-  engine, typographic index heroes + featured cards, dark CMS/Trix). 199 tests green. Still NO
-  deploy until Louis greenlights the first v2 deploy.
+  engine, typographic index heroes + featured cards, dark CMS/Trix). Still NO deploy until Louis
+  greenlights the first v2 deploy.
 - Solid Cache / Solid Cable (unused), FriendlyId history redirects, AI-drafted project blurbs.
+
+## 6. Audit hardening sweep (2026-07-04, PR #13) — deploy-relevant
+
+Bug fixes, a11y/SEO/CLS, and security hardening landed post-design. **213 tests green.** Two items
+change deploy behaviour and are worth a look on the first v2 deploy:
+
+- **Public sign-up is now closed** (`Users::RegistrationsController` redirects `new`/`create`). The
+  single owner account must exist via `bin/rails db:seed` (reads `USER_1_*`) — the `release:` Procfile
+  step only migrates, so **run `heroku run rails db:seed` once** after the first deploy if the prod
+  `users` table is empty, or log in will be impossible.
+- **An enforced Content-Security-Policy** now ships (`config/initializers/content_security_policy.rb`).
+  Allowed external origins: Google Fonts, `*.i.posthog.com`, `api.cloudinary.com`,
+  `youtube-nocookie.com`. If prod uses a different PostHog host or a non-Cloudinary asset origin,
+  update the policy or the browser will block those requests (check the console after deploy).
+- No new env vars. `rack-attack` login throttling, Devise `paranoid` mode, and upload
+  content-type/size validation need no configuration.
