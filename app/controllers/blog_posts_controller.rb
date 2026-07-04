@@ -8,8 +8,12 @@ class BlogPostsController < ApplicationController
   before_action :require_ai_configured, only: %i[ create_with_ai revise_with_ai ]
 
   def index
-    # Owner sees everything; visitors only see published posts.
-    scope = user_signed_in? ? BlogPost.all : BlogPost.visible_to_visitors
+    # Owner sees everything; visitors only see published posts. Kept as its
+    # own variable (not folded straight into `scope`) so the featured-post
+    # pick below can reuse the exact same visibility rule — a signed-out
+    # visitor must never be offered a draft/scheduled post as the spotlight.
+    visitor_scope = user_signed_in? ? BlogPost.all : BlogPost.visible_to_visitors
+    scope = visitor_scope
 
     # Title search (case-insensitive).
     if params[:q].present?
@@ -28,6 +32,19 @@ class BlogPostsController < ApplicationController
     scope = scope.includes(:tags, :rich_text_body).with_attached_featured_image
     # Keep :position ordering so the Phase-1 drag-to-reorder stays meaningful.
     @pagy, @blog_posts = pagy(scope.order(:position))
+
+    # Featured spotlight card, rendered above the list — only on the plain,
+    # unfiltered first page (no ?q, no ?tag_ids) so it never sits alongside a
+    # filtered/search result set. Prefers a post explicitly marked `featured`,
+    # falling back to the most recent visible post so the spotlight never
+    # goes empty. Same eager-loads as the list above: this is a fresh query
+    # against `visitor_scope`, not necessarily the same object as a row
+    # already loaded into @blog_posts, so it needs its own preload.
+    if show_featured_post?
+      featured_scope = visitor_scope.includes(:tags, :rich_text_body).with_attached_featured_image
+      @featured_post = featured_scope.where(featured: true).order(created_at: :desc).first ||
+                        featured_scope.order(created_at: :desc).first
+    end
   end
 
   def show
@@ -284,6 +301,13 @@ class BlogPostsController < ApplicationController
 
   def load_tags
     @all_tags = Tag.order(:name)
+  end
+
+  # True only on the plain, unfiltered index (no ?q, no ?tag_ids, page 1) —
+  # the featured spotlight is a "front page" element, not part of the
+  # paginated or filtered list, so it disappears the moment either is active.
+  def show_featured_post?
+    params[:q].blank? && params[:tag_ids].blank? && (params[:page].blank? || params[:page].to_i <= 1)
   end
 
   def reorder_params

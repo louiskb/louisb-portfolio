@@ -1,0 +1,20 @@
+<%# Projects index hero — typographic masthead (Task 13b), sibling of the
+    blog index hero. No background image: shared styles live in
+    components/_index_heroes.scss. %>
+<div class="index-hero navbar-clearance">
+  <div class="container">
+    <p class="section-eyebrow">◆ Portfolio</p>
+    <h1 class="index-hero-headline">
+      <span class="index-hero-display">Selected</span>
+      <span class="index-hero-accent">work.</span>
+    </h1>
+    <p class="index-hero-standfirst text-body-soft">
+      A portfolio showcasing my personal projects and open source contributions.
+    </p>
+    <% if user_signed_in? %>
+      <div class="index-hero-actions">
+        <%= link_to "Create", new_project_path, class: "btn btn-primary rounded-4 px-4 py-2" %>
+      </div>
+    <% end %>
+  </div>
+</div>

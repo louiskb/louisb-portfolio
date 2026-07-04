@@ -58,8 +58,12 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
 
     get blog_posts_url
     assert_response :success
-    assert_includes response.body, "Paginated Post 00"
-    assert_not_includes response.body, "Paginated Post 11", "post at position 11 belongs on page 2"
+    # Scoped to the card grid, not the whole body: "Paginated Post 11" is the
+    # most recently created post here, so it may legitimately also appear
+    # above the grid as the featured spotlight (Task 13b) — that's expected,
+    # not a pagination bug. The grid itself must still stop at position 8.
+    assert_select "#blog-posts-index .row .project-card-title", text: "Paginated Post 00"
+    assert_select "#blog-posts-index .row .project-card-title", text: "Paginated Post 11", count: 0
 
     get blog_posts_url(page: 2)
     assert_response :success
@@ -93,8 +97,11 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :success
-    # Fix => @all_tags (1) + a single preload (1). N+1 regression => one per post.
-    assert_operator tag_queries, :<=, 3,
+    # Fixed, bounded query count regardless of post count: @all_tags's
+    # any?/each (2) + the list's single tags preload (1) + the featured
+    # spotlight's own single-record tags preload (1, Task 13b) = 4. An N+1
+    # regression scales with the number of posts, not this small constant.
+    assert_operator tag_queries, :<=, 4,
       "blog index must eager-load tags (saw #{tag_queries} tag queries — N+1 regression)"
   end
 
@@ -111,6 +118,92 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "Deploying Rails to Heroku"
     assert_not_includes response.body, "Welcome to my blog"
+  end
+
+  # ---- Task 13b: featured spotlight card ----
+
+  test "index shows a featured spotlight card for visitors" do
+    featured = BlogPost.create!(
+      title: "Spotlight Post",
+      html_content: "<p>Featured body.</p>",
+      user: users(:louis),
+      status: :published,
+      featured: true
+    )
+
+    get blog_posts_url
+    assert_response :success
+    assert_select "#featured-post"
+    assert_includes response.body, featured.title
+  end
+
+  test "index never picks a draft post as the featured spotlight for visitors" do
+    # The draft carries featured: true, but visitor_scope (visible_to_visitors)
+    # excludes drafts entirely before the featured pick ever runs — so the
+    # spotlight must fall back to a published post instead of leaking this one.
+    BlogPost.create!(
+      title: "Draft Featured Post",
+      html_content: "<p>Should never show.</p>",
+      user: users(:louis),
+      status: :draft,
+      featured: true
+    )
+
+    get blog_posts_url
+    assert_response :success
+    assert_not_includes response.body, "Draft Featured Post"
+  end
+
+  test "index shows no featured card when searching" do
+    BlogPost.create!(
+      title: "Spotlight For Search Test",
+      html_content: "<p>Featured body.</p>",
+      user: users(:louis),
+      status: :published,
+      featured: true
+    )
+
+    get blog_posts_url(q: "Deploying")
+    assert_response :success
+    assert_select "#featured-post", false
+  end
+
+  test "index shows no featured card when filtering by tag" do
+    BlogPost.create!(
+      title: "Spotlight For Tag Test",
+      html_content: "<p>Featured body.</p>",
+      user: users(:louis),
+      status: :published,
+      featured: true
+    )
+
+    get blog_posts_url(tag_ids: [ tags(:postgresql).id ])
+    assert_response :success
+    assert_select "#featured-post", false
+  end
+
+  test "index shows no featured card on page 2" do
+    BlogPost.create!(
+      title: "Featured Multi Page",
+      html_content: "<p>Featured body.</p>",
+      user: users(:louis),
+      status: :published,
+      featured: true,
+      position: 0
+    )
+    12.times do |i|
+      BlogPost.create!(
+        title: format("Filler Post %02d", i),
+        html_content: "<p>Body #{i}.</p>",
+        user: users(:louis),
+        status: :published,
+        position: i + 1
+      )
+    end
+
+    get blog_posts_url(page: 2)
+    assert_response :success
+    assert_select "#featured-post", false
   end
 
   test "creating a manual rich-text post (body, no html_content) saves and renders" do

@@ -1,10 +1,14 @@
 <!-- Projects index -->
 <header>
-  <%= render "projects_hero_banner" %>
+  <%= render "projects_index_hero" %>
 </header>
 <div class="container">
   <main id="main-content">
     <section id="projects-index">
+      <% if @featured_project.present? %>
+        <%= render "featured_project", project: @featured_project %>
+      <% end %>
+
       <!-- Personal projects -->
       <p class="section-eyebrow mt-5">◆ Personal</p>
       <h2 class="section-heading mb-4">My projects</h2>

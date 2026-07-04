@@ -1,0 +1,36 @@
+<%# Featured post spotlight (Task 13b) — a single large glass-card above the
+    list, shown only on the plain unfiltered index (see
+    BlogPostsController#show_featured_post?). Reuses the same glass-card,
+    section-eyebrow/heading, chip and meta-line classes as the rest of the
+    design system — no new CSS needed, just a larger layout. Local: `post`. %>
+<section id="featured-post" class="mb-5">
+  <div class="glass-card glass-card--hover p-4 p-md-5">
+    <p class="section-eyebrow mb-3">◆ Featured</p>
+
+    <%= link_to blog_post_path(post), class: "text-decoration-none" do %>
+      <h2 class="section-heading mb-3"><%= post.title %></h2>
+    <% end %>
+
+    <% excerpt = post.blog_excerpt.presence || post.description %>
+    <% if excerpt.present? %>
+      <p class="text-body-soft fs-5 mb-3"><%= excerpt %></p>
+    <% end %>
+
+    <p class="project-tech-line mb-3">
+      <%= post.created_at.strftime("%B %d, %Y") %>
+      &middot; <%= post.reading_time %>
+      <% if post.ai_label.present? %> &middot; <%= post.ai_label %><% end %>
+    </p>
+
+    <% if post.tags.any? %>
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <% post.tags.each do |tag| %>
+          <span class="chip"><%= tag.name %></span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%= link_to "Read the full post", blog_post_path(post),
+          class: "btn btn-outline-light outline-d-btn rounded-4 px-4 py-2 fw-medium" %>
+  </div>
+</section>

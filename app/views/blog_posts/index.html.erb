@@ -1,9 +1,11 @@
 <!-- Blog posts index -->
-<%= render "blog_posts_hero_banner" %>
+<header>
+  <%= render "blog_index_hero" %>
+</header>
 <div class="container">
   <main id="main-content">
     <section id="blog-posts-index">
-      <h2 class="mt-5 mb-4">Blog Posts</h2>
+      <p class="section-eyebrow mt-5">◆ All Posts</p>
 
       <%# ===== SEARCH + TAG FILTER ===== %>
       <%= form_with url: blog_posts_path, method: :get,
@@ -39,6 +41,10 @@
 
       <%# Owner-only drag-to-reorder: the sortable container holds only card items. %>
       <% sortable_data = user_signed_in? ? { controller: "sortable", sortable_url_value: reorder_blog_posts_path } : {} %>
+
+      <% if @featured_post.present? %>
+        <%= render "featured_post", post: @featured_post %>
+      <% end %>
 
       <% if @blog_posts.any? %>
         <%= tag.div class: "row justify-content-start align-items-stretch", data: sortable_data do %>

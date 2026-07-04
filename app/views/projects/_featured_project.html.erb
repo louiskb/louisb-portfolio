@@ -1,0 +1,67 @@
+<%# Featured project spotlight (Task 13b) — a single large glass-card above
+    the personal-projects grid, shown on every visit (the projects index has
+    no search/filter to guard against). Reuses the same framed-media,
+    tech-chip-split and private-repo conventions as projects/show.html.erb,
+    just laid out as a card. Local: `project`. %>
+<section id="featured-project" class="mb-5">
+  <div class="glass-card glass-card--hover overflow-hidden">
+    <% if project.featured_image.attached? %>
+      <div class="framed-media">
+        <div class="ratio ratio-16x9">
+          <%= image_tag project.featured_image, alt: project.title, class: "w-100 h-100", style: "object-fit: cover;" %>
+        </div>
+      </div>
+    <% elsif project.img_url.present? %>
+      <div class="framed-media">
+        <div class="ratio ratio-16x9">
+          <%= image_tag project.img_url, alt: project.title, class: "w-100 h-100", style: "object-fit: cover;" %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="p-4 p-md-5">
+      <p class="section-eyebrow mb-3">◆ Featured</p>
+
+      <%= link_to project_path(project), class: "text-decoration-none" do %>
+        <h2 class="section-heading mb-3"><%= project.title.capitalize %></h2>
+      <% end %>
+
+      <% if project.description.present? %>
+        <p class="text-body-soft fs-5 mb-3"><%= project.description.capitalize %></p>
+      <% end %>
+
+      <% if project.tech_stack.present? %>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <% project.tech_stack.split(" . ").each do |tech| %>
+            <span class="chip"><%= tech.strip %></span>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <% if project.github_url.present? %>
+          <% if project.private_repo %>
+            <% if user_signed_in? %>
+              <%= link_to project.github_url, class: "btn btn-outline-light rounded-4 px-4 py-2", target: "_blank", rel: "noopener" do %>
+                <i class="fa-brands fa-github"></i> GitHub <span class="text-soft-muted small">(private)</span>
+              <% end %>
+            <% else %>
+              <span class="text-soft-muted">
+                <i class="fa-brands fa-github"></i> Private repository
+              </span>
+            <% end %>
+          <% else %>
+            <%= link_to project.github_url, class: "btn btn-outline-light rounded-4 px-4 py-2", target: "_blank", rel: "noopener" do %>
+              <i class="fa-brands fa-github"></i> GitHub
+            <% end %>
+          <% end %>
+        <% end %>
+        <% if project.project_url.present? %>
+          <%= link_to project.project_url, class: "btn btn-primary rounded-4 px-4 py-2", target: "_blank", rel: "noopener" do %>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
