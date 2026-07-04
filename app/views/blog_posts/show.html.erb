@@ -1,18 +1,58 @@
 <!-- Blog post show -->
 <%= render "blog_post_hero_banner", blog_post: @blog_post %>
 <div class="container">
-  <main>
-    <% if @blog_post.body.present? %>
-      <%# Manual post: render the Action Text rich-text body. %>
-      <article class="trix-content mt-5 mb-4">
-        <%= @blog_post.body %>
-      </article>
-    <% else %>
-      <article data-controller="html-inject" class="mt-5 mb-4" hidden>
-        <!-- textContent (HTML string) that's inside <article> element -->
-        <!-- Rails `sanitize` helper method cleans + marks safe → Rails ERB automatically converts any sanitized (or html_safe marked) HTML string to DOM → Stimulus just un-hides on connect(). This renders sanitized HTML directly on page load via Stimulus connect() -->
-        <%= sanitize @blog_post.html_content %>
-      </article>
-    <% end %>
+  <main id="main-content">
+    <%# Content column: capping the measure at 720px keeps long paragraphs
+        comfortable to read instead of stretching edge-to-edge on wide
+        screens — standard long-form-reading practice. %>
+    <div class="mx-auto" style="max-width: 720px;">
+      <%# Meta chips: date, reading time, AI involvement (nil when the post
+          was written manually — see BlogPost#ai_label), and tags. %>
+      <div class="d-flex flex-wrap gap-2 align-items-center mt-5 mb-4">
+        <span class="chip"><%= @blog_post.created_at.strftime("%B %d, %Y") %></span>
+        <span class="chip"><%= @blog_post.reading_time %></span>
+        <% if @blog_post.ai_label.present? %>
+          <span class="chip"><%= @blog_post.ai_label %></span>
+        <% end %>
+        <% @blog_post.tags.each do |tag| %>
+          <span class="chip"><%= tag.name %></span>
+        <% end %>
+      </div>
+
+      <% if @blog_post.body.present? %>
+        <%# Manual post: render the Action Text rich-text body. %>
+        <article class="trix-content mb-4">
+          <%= @blog_post.body %>
+        </article>
+      <% else %>
+        <%# AI/legacy post: same .trix-content typography as the manual body
+            above, so both content paths render with identical dark styling
+            (headings, paragraphs, pre/code, blockquotes, images). %>
+        <article data-controller="html-inject" class="trix-content mb-4" hidden>
+          <!-- textContent (HTML string) that's inside <article> element -->
+          <!-- Rails `sanitize` helper method cleans + marks safe → Rails ERB automatically converts any sanitized (or html_safe marked) HTML string to DOM → Stimulus just un-hides on connect(). This renders sanitized HTML directly on page load via Stimulus connect() -->
+          <%= sanitize @blog_post.html_content %>
+        </article>
+      <% end %>
+
+      <%# Up to 3 recently published posts sharing a tag — see BlogPost#related_posts. %>
+      <% if @blog_post.related_posts.any? %>
+        <section class="mt-5">
+          <p class="section-eyebrow">◆ Related posts</p>
+          <div class="d-flex flex-column gap-3">
+            <% @blog_post.related_posts.each do |related_post| %>
+              <div class="glass-card glass-card--hover p-3">
+                <h3 class="project-card-title mb-1">
+                  <%= link_to related_post.title, blog_post_path(related_post), class: "text-decoration-none" %>
+                </h3>
+                <div class="project-tech-line">
+                  <%= related_post.created_at.strftime("%b %-d, %Y") %> &middot; <%= related_post.reading_time %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+    </div>
   </main>
 </div>

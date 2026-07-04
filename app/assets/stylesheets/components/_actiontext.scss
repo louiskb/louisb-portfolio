@@ -444,56 +444,56 @@ trix-editor .attachment__metadata {
 // =====================================================
 
 trix-editor {
-  background-color: #080808;
-  color: #e2e2e2;
-  border-color: #3d3d3d;
+  background-color: $input-dark;
+  color: $text-bright;
+  border-color: $panel-border;
   border-radius: 0.5rem;
   min-height: 14em;
   font-size: 0.95rem;
   line-height: 1.7;
-  caret-color: #89d6cc;
+  caret-color: $sky-blue;
 
   &:focus {
-    border-color: rgba(137, 214, 204, 0.5);
+    border-color: rgba($sky-blue, 0.5);
     outline: none;
   }
 
   // Text selection
   ::selection {
-    background: rgba(137, 214, 204, 0.25);
+    background: rgba($sky-blue, 0.25);
   }
 }
 
 trix-toolbar {
   .trix-button-group {
-    background-color: #2d2d2d;
-    border-color: #3d3d3d;
-    border-top-color: #444;
-    border-bottom-color: #222;
+    background-color: $panel-bg;
+    border-color: $panel-border;
+    border-top-color: $panel-border;
+    border-bottom-color: $panel-border;
     border-radius: 0.4rem;
   }
 
   .trix-button {
-    color: rgba(226, 226, 226, 0.7);
+    color: rgba($text-bright, 0.7);
     background: transparent;
-    border-bottom-color: #3d3d3d;
+    border-bottom-color: $panel-border;
 
     &:not(:first-child) {
-      border-left-color: #3d3d3d;
+      border-left-color: $panel-border;
     }
 
     &.trix-active {
-      background: rgba(137, 214, 204, 0.15);
-      color: #89d6cc;
+      background: rgba($sky-blue, 0.15);
+      color: $sky-blue;
     }
 
     &:disabled {
-      color: rgba(226, 226, 226, 0.2);
+      color: rgba($text-bright, 0.2);
     }
 
     &:not(:disabled):hover {
-      background: rgba(226, 226, 226, 0.06);
-      color: #e2e2e2;
+      background: rgba($text-bright, 0.06);
+      color: $text-bright;
     }
   }
 
@@ -556,57 +556,70 @@ trix-toolbar {
 
   // Link dialog (dark)
   .trix-dialog {
-    background: #2d2d2d;
+    background: $panel-bg;
     box-shadow: 0 0.3em 1em rgba(0, 0, 0, 0.6);
-    border-top-color: #3d3d3d;
+    border-top-color: $panel-border;
   }
 
   .trix-input--dialog {
-    background-color: #1e1e1e;
-    border-color: #3d3d3d;
-    color: #e2e2e2;
+    background-color: $input-dark;
+    border-color: $panel-border;
+    color: $text-bright;
 
     &::placeholder {
-      color: rgba(226, 226, 226, 0.35);
+      color: rgba($text-bright, 0.35);
     }
   }
 
   .trix-button--dialog {
-    color: rgba(226, 226, 226, 0.7);
+    color: rgba($text-bright, 0.7);
 
     &.trix-active {
-      color: #89d6cc;
+      color: $sky-blue;
     }
   }
 }
 
-// Content styles (rendered output — blog show page)
+// Content styles (rendered output — blog show page). Applies to both the
+// manual Action Text `body` (article.trix-content) and the AI/legacy
+// `html_content` branch, which also carries the .trix-content class so both
+// paths share one readable dark typography treatment (see blog_posts/show).
 .trix-content {
-  color: rgba(226, 226, 226, 0.85);
+  color: $text-body;
 
   h1 {
-    color: #e2e2e2;
+    color: $text-bright;
+    font-family: $headers-font;
     margin-bottom: 0.5em;
   }
 
   blockquote {
-    border-left-color: #89d6cc;
-    color: rgba(226, 226, 226, 0.65);
+    border-left-color: $panel-border;
+    color: $text-muted;
   }
 
   pre {
-    background-color: #1e1e1e;
-    color: #89d6cc;
-    border: 1px solid #3d3d3d;
+    // Solid version of the glass-card fallback tone (rgb(11, 13, 18) — see
+    // .glass-card in _design_system.scss) so code blocks read as their own
+    // panel without relying on backdrop-filter.
+    background-color: rgb(11, 13, 18);
+    color: $sky-blue;
+    font-family: $mono-font;
+    border: 1px solid $panel-border;
     border-radius: 0.4rem;
   }
 
+  img {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
   .attachment--file {
-    color: #e2e2e2;
-    border-color: #3d3d3d;
+    color: $text-bright;
+    border-color: $panel-border;
   }
 
   .attachment--preview .attachment__caption {
-    color: rgba(226, 226, 226, 0.5);
+    color: $text-muted;
   }
 }
