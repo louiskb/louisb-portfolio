@@ -20,32 +20,7 @@ code {
   // color: $blue;
 }
 
-// "Dark background" variants — kept so older views using them still render.
-// Before this flip these were a separate lightened scale for use on
-// already-dark sections; now the base heading/paragraph colors above ARE
-// the dark-theme colors, so these simply alias them instead of keeping a
-// second hand-tuned scale in sync.
-.h1-d,
-.h2-d,
-.h3-d,
-.h4-d,
-.h5-d {
-  color: $text-bright;
-}
-
-.p-d {
-  color: $text-body;
-}
-
 // Custom text styles
-
-.lighter-gray {
-  color: #aca9a9;
-}
-
-.light-gray {
-  color: #7e7e7e;
-}
 
 .gray-non-link {
   color: $text-muted;
@@ -62,20 +37,8 @@ code {
   color: $text-bright;
 }
 
-.text-tech-stack {
-  letter-spacing: 1px;
-}
-
-.text-blog-tags {
-  letter-spacing: 1px;
-}
-
 .soft-orange {
   color: #e5782a;
-}
-
-.text-about {
-  color: #d4d4d8;
 }
 
 .purple {
