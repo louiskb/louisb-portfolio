@@ -1,66 +1,106 @@
 <!-- Project show -->
-<header>
-  <%= render "project_hero_banner", project: @project %>
-</header>
 <div class="container">
-  <main>
-    <section class="project-show">
-      <% if @project.personal_project %>
-        <h2 class="mt-5 mb-4">Personal project</h2>
-      <% else %>
-        <h2 class="mt-5 mb-4">Open source contributions</h2>
-      <% end %>
-      <ul class="fs-5">
-        <li class="text-dark">
-          <% if @project.personal_project %>
-            Personal project: <span class="text-success fw-semibold">YES</span>
-          <% else %>
-            Personal project: <span class="text-info fw-semibold">NO</span>
-          <% end %>
-        </li>
-        <li class="text-dark">
-          <% if @project.private_repo %>
-            Github repo: <span class="text-danger fw-semibold">Private</span>
-          <% else %>
-            Github repo: <span class="text-primary fw-semibold">Public</span>
-          <% end %>
-        </li>
-        <li class="text-dark">
-          <% if @project.featured %>
-            Featured project: <span class="text-success"><i class="fa-solid fa-eye"></i></span>
-          <% else %>
-            Featured project: <span class="text-warning"><i class="fa-solid fa-eye-slash"></i></span>
-          <% end %>
-        </li>
-        <li>
-          <span class="text-dark">Project description:</span> <%= @project.description&.capitalize %>
-        </li>
-        <li>
-          <span class="text-dark">Tech stack:</span> <%= @project.tech_stack %>
-        </li>
-        <li>
-          <span class="text-dark">Image url:</span> <%= @project.img_url %>
-        </li>
-        <li>
-          <span class="text-dark">Github url:</span> <%= @project.github_url %>
-        </li>
-        <li>
-          <span class="text-dark">Project url:</span> <%= @project.project_url %>
-        </li>
-      </ul>
-      <div class="d-flex justify-content-between align-items-center gap-3 mt-5 mb-3">
-        <div>
-          <%= link_to "Back to Projects", projects_path, class: "btn btn-outline-dark rounded-4" %>
+  <main id="main-content">
+    <%# padding-top clears the fixed navbar — this page has no hero banner
+        above it (unlike blog show), so the section itself must supply the
+        clearance that would otherwise come from the banner's own padding. %>
+    <section class="project-show" style="max-width: 720px; margin-inline: auto; padding-top: 140px;">
+      <p class="section-eyebrow">◆ <%= @project.personal_project ? "Personal Project" : "Open Source Contribution" %></p>
+      <h1 class="section-heading mb-4"><%= @project.title %></h1>
+
+      <% if @project.featured_image.attached? %>
+        <div class="framed-media mb-4">
+          <%= image_tag @project.featured_image, alt: @project.title, class: "w-100" %>
         </div>
-        <div class="d-flex gap-4 align-items-center">
-          <%= link_to edit_project_path(@project), class: "btn btn-primary rounded-4" do %>
+      <% elsif @project.img_url.present? %>
+        <div class="framed-media mb-4">
+          <%= image_tag @project.img_url, alt: @project.title, class: "w-100" %>
+        </div>
+      <% end %>
+
+      <% if @project.description.present? %>
+        <p class="text-body-soft fs-5 mb-4"><%= @project.description.capitalize %></p>
+      <% end %>
+
+      <% if @project.tech_stack.present? %>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <% @project.tech_stack.split(" . ").each do |tech| %>
+            <span class="chip"><%= tech.strip %></span>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="d-flex flex-wrap align-items-center gap-3 mb-5">
+        <% if @project.github_url.present? %>
+          <% if @project.private_repo %>
+            <% if user_signed_in? %>
+              <%= link_to @project.github_url, class: "btn btn-outline-light rounded-4 px-4 py-2", target: "_blank", rel: "noopener" do %>
+                <i class="fa-brands fa-github"></i> GitHub <span class="text-soft-muted small">(private)</span>
+              <% end %>
+            <% else %>
+              <span class="text-soft-muted">
+                <i class="fa-brands fa-github"></i> Private repository
+              </span>
+            <% end %>
+          <% else %>
+            <%= link_to @project.github_url, class: "btn btn-outline-light rounded-4 px-4 py-2", target: "_blank", rel: "noopener" do %>
+              <i class="fa-brands fa-github"></i> GitHub
+            <% end %>
+          <% end %>
+        <% end %>
+        <% if @project.project_url.present? %>
+          <%= link_to @project.project_url, class: "btn btn-primary rounded-4 px-4 py-2", target: "_blank", rel: "noopener" do %>
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+          <% end %>
+        <% end %>
+      </div>
+
+      <%# ===== OWNER-ONLY: admin metadata that visitors never need to see. ===== %>
+      <% if user_signed_in? %>
+        <div class="glass-card p-4 mb-4">
+          <p class="section-eyebrow mb-3">◆ Owner details</p>
+          <ul class="list-unstyled text-body-soft mb-0">
+            <li class="mb-2">
+              Personal project:
+              <% if @project.personal_project %>
+                <span class="text-success fw-semibold">YES</span>
+              <% else %>
+                <span class="text-info fw-semibold">NO</span>
+              <% end %>
+            </li>
+            <li class="mb-2">
+              Github repo:
+              <% if @project.private_repo %>
+                <span class="text-danger fw-semibold">Private</span>
+              <% else %>
+                <span class="text-primary fw-semibold">Public</span>
+              <% end %>
+            </li>
+            <li class="mb-2">
+              Featured project:
+              <% if @project.featured %>
+                <span class="text-success"><i class="fa-solid fa-eye"></i></span>
+              <% else %>
+                <span class="text-warning"><i class="fa-solid fa-eye-slash"></i></span>
+              <% end %>
+            </li>
+            <li class="mb-0">
+              Status: <span class="chip"><%= @project.status.capitalize %></span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3 mb-3">
+          <%= link_to edit_project_path(@project), class: "btn btn-outline-light btn-sm rounded-4" do %>
             <i class="fa-solid fa-pen-to-square"></i> Edit
           <% end %>
-          <%= link_to project_path(@project), data: { turbo_method: :delete, turbo_confirm: "Delete project ?" }  do %>
-            <i class="fa-regular fa-trash-can text-danger trash-grow fs-3"></i>
+          <%= link_to project_path(@project), class: "btn btn-outline-light btn-sm rounded-4", data: { turbo_method: :delete, turbo_confirm: "Delete project ?" } do %>
+            <i class="fa-regular fa-trash-can"></i> Delete
           <% end %>
         </div>
-      </div>
+      <% end %>
+
+      <%= link_to "Back to Projects", projects_path, class: "btn btn-outline-light rounded-4" %>
     </section>
   </main>
 </div>
