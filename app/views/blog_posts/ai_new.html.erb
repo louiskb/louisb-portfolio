@@ -1,5 +1,6 @@
 <% content_for :title, "Create blog post with AI" %>
 
+<main id="main-content">
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -19,46 +20,49 @@
       </div>
 
       <% if ai_configured? %>
-        <%= link_to "Write manually instead", new_blog_post_path, class: "btn btn-outline-dark btn-sm rounded-4 mb-4" %>
+        <%= link_to "Write manually instead", new_blog_post_path, class: "btn btn-outline-light btn-sm rounded-4 mb-4" %>
 
         <% if flash[:alert] %>
           <div class="alert alert-danger mb-4"><%= flash[:alert] %></div>
         <% end %>
 
-        <%= simple_form_for :blog_post, url: create_with_ai_blog_posts_path, method: :post,
-              html: { multipart: true } do |f| %>
+        <div class="glass-card p-4">
+          <%= simple_form_for :blog_post, url: create_with_ai_blog_posts_path, method: :post,
+                html: { multipart: true } do |f| %>
 
-          <%= f.input :prompt, as: :text,
-                input_html: { rows: 6, value: @prompt },
-                label: "What should the post be about?",
-                hint: "Be as specific or as broad as you like — Claude will handle the rest." %>
+            <%= f.input :prompt, as: :text,
+                  input_html: { rows: 6, value: @prompt },
+                  label: "What should the post be about?",
+                  hint: "Be as specific or as broad as you like — Claude will handle the rest." %>
 
-          <%= f.input :featured_image, as: :file,
-                label: "Featured image (optional)",
-                input_html: { accept: "image/*" },
-                hint: "Upload a hero image, or leave blank and the AI fetches a relevant photo from Unsplash." %>
+            <%= f.input :featured_image, as: :file,
+                  label: "Featured image (optional)",
+                  input_html: { accept: "image/*" },
+                  hint: "Upload a hero image, or leave blank and the AI fetches a relevant photo from Unsplash." %>
 
-          <%# Give an explicit value: image_url is a virtual field, so without one
-              simple_form calls @blog_post.image_url (no such column) and 500s the
-              422 re-render when a failed AI result is rendered back into this form. %>
-          <%= f.input :image_url,
-                label: "Fallback image URL (optional)",
-                placeholder: "https://example.com/photo.jpg",
-                input_html: { value: @blog_post&.img_url },
-                hint: "Used only if no file is uploaded and the Unsplash fetch fails." %>
+            <%# Give an explicit value: image_url is a virtual field, so without one
+                simple_form calls @blog_post.image_url (no such column) and 500s the
+                422 re-render when a failed AI result is rendered back into this form. %>
+            <%= f.input :image_url,
+                  label: "Fallback image URL (optional)",
+                  placeholder: "https://example.com/photo.jpg",
+                  input_html: { value: @blog_post&.img_url },
+                  hint: "Used only if no file is uploaded and the Unsplash fetch fails." %>
 
-          <%# Phase 3 keeps this simple — new AI posts are saved as drafts.
-              Phase 4 wires the split publish/schedule button. %>
-          <%= f.hidden_field :status, value: "draft" %>
+            <%# Phase 3 keeps this simple — new AI posts are saved as drafts.
+                Phase 4 wires the split publish/schedule button. %>
+            <%= f.hidden_field :status, value: "draft" %>
 
-          <div class="d-flex gap-3 my-4">
-            <%= f.button :submit, "Generate and save as draft", class: "btn btn-primary rounded-4 p-2" %>
-            <%= link_to "Cancel", blog_posts_path, class: "btn btn-outline-dark rounded-4 p-2" %>
-          </div>
-        <% end %>
+            <div class="d-flex gap-3 my-4">
+              <%= f.button :submit, "Generate and save as draft", class: "btn btn-primary rounded-4 p-2" %>
+              <%= link_to "Cancel", blog_posts_path, class: "btn btn-outline-light rounded-4 p-2" %>
+            </div>
+          <% end %>
+        </div>
       <% else %>
         <%= render "ai_not_configured" %>
       <% end %>
     </div>
   </div>
 </div>
+</main>

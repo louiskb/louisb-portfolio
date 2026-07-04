@@ -1,5 +1,6 @@
 <%# Shared blog post form. The split publish button (below) drives the
     status + scheduled_at fields via the publish-form Stimulus controller. %>
+<div class="glass-card p-4">
 <%= simple_form_for @blog_post, html: { multipart: true, data: {
       controller: "publish-form load-button",
       "publish-form-current-status-value": (@blog_post.persisted? ? @blog_post.status : "draft")
@@ -69,7 +70,7 @@
              data-tag-manager-target="nameInput"
              data-action="keydown.enter->tag-manager#addTag:prevent">
       <button type="button"
-              class="btn btn-outline-dark btn-sm text-nowrap"
+              class="btn btn-outline-light btn-sm text-nowrap"
               data-action="click->tag-manager#addTag"
               data-tag-manager-target="addButton">
         <i class="fa-solid fa-plus me-1"></i>Add tag
@@ -166,7 +167,7 @@
       </ul>
     </div>
 
-    <%= link_to "Cancel", blog_posts_path, class: "btn btn-outline-dark rounded-4 p-2" %>
+    <%= link_to "Cancel", blog_posts_path, class: "btn btn-outline-light rounded-4 p-2" %>
   </div>
 
   <%# ===== SCHEDULE MODAL ===== %>
@@ -197,7 +198,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
           <button type="button" class="btn btn-primary"
                   data-action="click->load-button#showSpinner click->publish-form#confirmSchedule"
                   data-load-button-loading-text-value="Scheduling...">
@@ -208,3 +209,4 @@
     </div>
   </div>
 <% end %>
+</div>

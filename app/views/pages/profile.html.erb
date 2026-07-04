@@ -3,48 +3,51 @@
   <%= render "profile_hero_banner" %>
 </header>
 <div class="container">
+  <main id="main-content">
   <section id="profile">
     <h2 class="mt-5 mb-4">Profile info</h2>
-    <div class="row align-items-top">
+    <div class="row align-items-stretch g-4">
       <!-- Avatar and info -->
-      <div class="col-12 col-md-6 d-flex align-items-center">
-        <%= image_tag "dog-pixar.jpg", alt: "Fun dog", class: "rounded-circle border border-dark avatar-profile me-3", style: "height: 20vh; width: auto;" %>
-        <div>
-          <p class="text-dark">Email: <span class="fst-italic purple"><%= @user.email %></span></p>
-          <ul>
-            <li class="purple"><span class="text-dark">Total projects created in app:</span> <%= @projects_total %></li>
-            <li class="purple"><span class="text-dark">Personal projects created:</span> <%= @personal_projects_count %></li>
-            <li class="purple"><span class="text-dark">Open source projects contributed to:</span> <%= @non_personal_projects_count %></li>
-            <li class="purple"><span class="text-dark">Public Github repos:</span> <%= @public_repo_count %></li>
-            <li class="purple"><span class="text-dark">Private Github repos:</span> <%= @private_repo_count %></li>
-          </ul>
-          <div class="d-flex justify-content-start">
-            <%= link_to "Edit", edit_user_registration_path, class: "btn btn-outline-dark rounded-4" %>
+      <div class="col-12 col-md-6">
+        <div class="glass-card p-4 h-100 d-flex align-items-center">
+          <%= image_tag "dog-pixar.jpg", alt: "Fun dog", class: "rounded-circle border border-secondary avatar-profile me-3", style: "height: 20vh; width: auto;" %>
+          <div>
+            <p class="text-body-soft">Email: <span class="fst-italic purple"><%= @user.email %></span></p>
+            <ul class="list-unstyled">
+              <li class="purple"><span class="text-body-soft">Total projects created in app:</span> <%= @projects_total %></li>
+              <li class="purple"><span class="text-body-soft">Personal projects created:</span> <%= @personal_projects_count %></li>
+              <li class="purple"><span class="text-body-soft">Open source projects contributed to:</span> <%= @non_personal_projects_count %></li>
+              <li class="purple"><span class="text-body-soft">Public Github repos:</span> <%= @public_repo_count %></li>
+              <li class="purple"><span class="text-body-soft">Private Github repos:</span> <%= @private_repo_count %></li>
+            </ul>
+            <div class="d-flex justify-content-start">
+              <%= link_to "Edit", edit_user_registration_path, class: "btn btn-outline-light rounded-4" %>
+            </div>
           </div>
         </div>
       </div>
       <!-- Project list -->
       <div class="col-12 col-md-6">
-        <div class="my-5">
+        <div class="glass-card p-4 h-100">
           <h3>List of all <span class="purple"><%= @projects_total %></span> projects</h3>
-          <p class="text-dark">
+          <p class="text-body-soft">
             <span class="text-success">Green</span> = Personal projects
-            <span class="text-black">|</span>
+            <span class="text-soft-muted">|</span>
             <span class="text-warning">Orange</span> = Open source projects
           </p>
-          <ul>
+          <ul class="list-unstyled">
             <% @projects.each do |project| %>
               <% if project.personal_project %>
                 <% if project.private_repo %>
-                  <li class="text-success"><%= project.title %> <span class="text-dark">-</span> <span class="text-danger">private</span></li>
+                  <li class="text-success"><%= project.title %> <span class="text-soft-muted">-</span> <span class="text-danger">private</span></li>
                 <% else %>
-                  <li class="text-success"><%= project.title %> <span class="text-dark">-</span> <span class="text-primary">public</span></li>
+                  <li class="text-success"><%= project.title %> <span class="text-soft-muted">-</span> <span class="text-primary">public</span></li>
                 <% end %>
               <% else %>
                 <% if project.private_repo %>
-                  <li class="text-warning"><%= project.title %> <span class="text-dark">-</span> <span class="text-danger">private</span></li>
+                  <li class="text-warning"><%= project.title %> <span class="text-soft-muted">-</span> <span class="text-danger">private</span></li>
                 <% else %>
-                  <li class="text-warning"><%= project.title %> <span class="text-dark">-</span> <span class="text-primary">public</span></li>
+                  <li class="text-warning"><%= project.title %> <span class="text-soft-muted">-</span> <span class="text-primary">public</span></li>
                 <% end %>
               <% end %>
             <% end %>
@@ -53,4 +56,5 @@
       </div>
     </div>
   </section>
+  </main>
 </div>

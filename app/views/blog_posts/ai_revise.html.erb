@@ -1,5 +1,6 @@
 <% content_for :title, "Revise with AI — #{@blog_post.title}" %>
 
+<main id="main-content">
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -50,47 +51,50 @@
           </div>
         </div>
 
-        <%= simple_form_for :blog_post, url: revise_with_ai_blog_post_path(@blog_post), method: :patch,
-              html: { multipart: true } do |f| %>
+        <div class="glass-card p-4">
+          <%= simple_form_for :blog_post, url: revise_with_ai_blog_post_path(@blog_post), method: :patch,
+                html: { multipart: true } do |f| %>
 
-          <%= f.input :prompt, as: :text,
-                input_html: { rows: 5, value: @prompt },
-                label: "How should the AI revise this post?",
-                hint: "Describe the changes you'd like — the AI will preserve the rest." %>
+            <%= f.input :prompt, as: :text,
+                  input_html: { rows: 5, value: @prompt },
+                  label: "How should the AI revise this post?",
+                  hint: "Describe the changes you'd like — the AI will preserve the rest." %>
 
-          <% if @blog_post.featured_image.attached? || @blog_post.img_url.present? %>
-            <div class="form-check mb-3">
-              <%= check_box_tag "blog_post[keep_featured_image]", "1", false,
-                    class: "form-check-input", id: "blog_post_keep_featured_image" %>
-              <%= label_tag "blog_post_keep_featured_image", "Keep the current image", class: "form-check-label" %>
+            <% if @blog_post.featured_image.attached? || @blog_post.img_url.present? %>
+              <div class="form-check mb-3">
+                <%= check_box_tag "blog_post[keep_featured_image]", "1", false,
+                      class: "form-check-input", id: "blog_post_keep_featured_image" %>
+                <%= label_tag "blog_post_keep_featured_image", "Keep the current image", class: "form-check-label" %>
+              </div>
+              <p class="form-text">
+                By default the AI fetches a fresh Unsplash photo. Tick the box to keep the current image,
+                or upload a replacement below (uploading always wins).
+              </p>
+            <% end %>
+
+            <%= f.input :featured_image, as: :file,
+                  label: "Replace featured image (optional)",
+                  input_html: { accept: "image/*" },
+                  hint: "Upload a photo to use instead of the AI's Unsplash pick." %>
+
+            <%= f.input :image_url,
+                  label: "Fallback image URL (optional)",
+                  input_html: { value: @blog_post.img_url },
+                  hint: "Used only if no upload and the Unsplash fetch fails." %>
+
+            <%# Keep the post's current status on revision (Phase 4 adds scheduling UI). %>
+            <%= f.hidden_field :status, value: @blog_post.status %>
+
+            <div class="d-flex gap-3 my-4">
+              <%= f.button :submit, "Revise post", class: "btn btn-primary rounded-4 p-2" %>
+              <%= link_to "Cancel", @blog_post, class: "btn btn-outline-light rounded-4 p-2" %>
             </div>
-            <p class="form-text">
-              By default the AI fetches a fresh Unsplash photo. Tick the box to keep the current image,
-              or upload a replacement below (uploading always wins).
-            </p>
           <% end %>
-
-          <%= f.input :featured_image, as: :file,
-                label: "Replace featured image (optional)",
-                input_html: { accept: "image/*" },
-                hint: "Upload a photo to use instead of the AI's Unsplash pick." %>
-
-          <%= f.input :image_url,
-                label: "Fallback image URL (optional)",
-                input_html: { value: @blog_post.img_url },
-                hint: "Used only if no upload and the Unsplash fetch fails." %>
-
-          <%# Keep the post's current status on revision (Phase 4 adds scheduling UI). %>
-          <%= f.hidden_field :status, value: @blog_post.status %>
-
-          <div class="d-flex gap-3 my-4">
-            <%= f.button :submit, "Revise post", class: "btn btn-primary rounded-4 p-2" %>
-            <%= link_to "Cancel", @blog_post, class: "btn btn-outline-dark rounded-4 p-2" %>
-          </div>
-        <% end %>
+        </div>
       <% else %>
         <%= render "ai_not_configured" %>
       <% end %>
     </div>
   </div>
 </div>
+</main>

@@ -34,7 +34,7 @@ personal_projects = []
 sipfolio = Project.create!(
   title: "Sipfolio",
   description: "A social cocktail app where users discover, create, and share AI-enhanced recipes, with gamified rewards to drive engagement.",
-  img_url: "sipfolio-cocktail-screenshot.jpg",
+  img_url: "sipfolio-cocktails-screenshot.jpg",
   tech_stack: "Ruby-on-Rails . Bootstrap . StimulusJS . PostgreSQL . Active Record",
   project_url: "https://www.sipfolio.rocks/",
   github_url: "https://github.com/louiskb/rails-mister-cocktail",
@@ -66,7 +66,7 @@ personal_projects << market_sensei
 dokodemo_fit = Project.create!(
   title: "Dokodemo Fit",
   description: "An AI-powered app creating personalized exercise routines based on home equipment, with multiple plans for any occasion.",
-  img_url: "dokodemo-fit-routines-screenshot.jpg",
+  img_url: "dokodemofit-routines-screenshot.jpg",
   tech_stack: "Ruby-on-Rails . Bootstrap . StimulusJS . PostgreSQL . Active Record . OpenAI",
   project_url: "https://dokodemo-fit-66811301c708.herokuapp.com/",
   github_url: "https://github.com/louiskb/DokodemoFit",
