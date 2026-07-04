@@ -47,6 +47,13 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "[data-count-up-target-value='#{stats[:technologies_count]}']"
   end
 
+  test "home renders a semantic footer element (black-hole end anchor)" do
+    get root_path
+    # The canvas engine parks the hole between the contact form and the
+    # footer at the end of scroll — it needs a real <footer> element.
+    assert_select "footer", 1
+  end
+
   test "privacy_policy is public and renders" do
     get privacy_policy_url
     assert_response :success

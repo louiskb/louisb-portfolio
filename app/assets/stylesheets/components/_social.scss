@@ -24,7 +24,7 @@
 }
 
 .social-horizontal a {
-  color: $gray;
+  color: $text-muted; // was $gray — too dark to read on $space-black.
   font-size: 1.3rem;
   transition: transform 0.3s, color 0.2s;
   display: block;

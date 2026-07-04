@@ -1,5 +1,8 @@
 .navbar-lb {
   justify-content: space-between;
+  background: linear-gradient(rgba(4, 5, 7, 0.8), rgba(4, 5, 7, 0));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .navbar-lb .navbar-collapse {
@@ -8,6 +11,13 @@
 
 .navbar-lb .navbar-brand img {
   width: 60px;
+}
+
+.navbar-wordmark {
+  font-family: $headers-font;
+  font-weight: 700;
+  font-size: 15.5px;
+  color: $text-bright;
 }
 
 .navbar {

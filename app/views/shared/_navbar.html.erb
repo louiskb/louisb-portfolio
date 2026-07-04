@@ -1,7 +1,8 @@
-<nav class="navbar navbar-expand-sm navbar-dark navbar-lb" style="background-color: rgba(0, 0, 0, 0.90);">
+<nav class="navbar navbar-expand-sm navbar-dark navbar-lb">
   <div class="container-fluid">
-    <%= link_to "/", class: "navbar-brand ms-2" do %>
+    <%= link_to "/", class: "navbar-brand ms-2 d-flex align-items-center gap-2" do %>
       <%= image_tag "lb-circle-logo-light-tp.png", alt: "Logo" %>
+      <span class="navbar-wordmark">Louis Bourne</span>
     <% end %>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -29,7 +30,7 @@
                 <%= link_to "Create Blog Post with AI", ai_new_blog_posts_path, class: nav_link_dropdown_class(ai_new_blog_posts_path) %>
               <% end %>
               <%= link_to "Profile", profile_path, class: nav_link_dropdown_class(profile_path) %>
-              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item text-dark fs-5" %>
+              <%= link_to "Log out", destroy_user_session_path, data: {turbo_method: :delete}, class: "dropdown-item fs-5" %>
             </div>
           </li>
         <% else %>
