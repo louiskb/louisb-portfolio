@@ -1,5 +1,6 @@
 <%# Shared project form. The split publish button (below) drives the
     status + scheduled_at fields via the publish-form Stimulus controller. %>
+<div class="glass-card p-4">
 <%= simple_form_for @project, html: { data: {
       controller: "publish-form load-button",
       "publish-form-current-status-value": (@project.persisted? ? @project.status : "draft")
@@ -9,7 +10,7 @@
   <%= f.input :private_repo, label: "Private Github Repo" %>
   <!-- Featured project start -->
   <%= f.input :featured, label: "Featured Project", hint: "Have up to 3 featured personal projects and 3 featured open source projects at anyone time for optimal homepage layout." %>
-  <p class="text muted small">Featured <span class="text-decoration-underline">Personal</span> Projects: <span class="text-success"><%= @featured_personal_projects_count %></span> <span class="text-dark">/ 3</span> | Featured <span class="text-decoration-underline">Open Source</span> Projects: <span class="text-success"><%= @featured_open_source_projects_count %></span> <span class="text-dark">/ 3</span> = <span class="text-decoration-underline">Total</span> Featured Projects: <span class="text-primary"><%= @featured_personal_projects_count + @featured_open_source_projects_count %></span> <span class="text-dark">/ 6</span></p>
+  <p class="text-muted small">Featured <span class="text-decoration-underline">Personal</span> Projects: <span class="text-success"><%= @featured_personal_projects_count %></span> <span class="text-soft-muted">/ 3</span> | Featured <span class="text-decoration-underline">Open Source</span> Projects: <span class="text-success"><%= @featured_open_source_projects_count %></span> <span class="text-soft-muted">/ 3</span> = <span class="text-decoration-underline">Total</span> Featured Projects: <span class="text-primary"><%= @featured_personal_projects_count + @featured_open_source_projects_count %></span> <span class="text-soft-muted">/ 6</span></p>
   <!-- Featured project end -->
   <%= f.input :description, as: :text, label: "Project Description", hint: "If more than 2 'non-personal' projects, describe briefly open source contribution focus." %>
   <%= f.input :tech_stack, label: "Tech Stack", hint: "Show 3-6 main technologies (capitalized) and separating each one with ' . '", placeholder: "Ruby-on-Rails . Bootstrap . StimulusJS . PostgreSQL . Active Record" %>
@@ -102,7 +103,7 @@
       </ul>
     </div>
 
-    <%= link_to "Cancel", projects_path, class: "btn btn-outline-dark rounded-4 p-2" %>
+    <%= link_to "Cancel", projects_path, class: "btn btn-outline-light rounded-4 p-2" %>
   </div>
 
   <%# ===== SCHEDULE MODAL ===== %>
@@ -133,7 +134,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
           <button type="button" class="btn btn-primary"
                   data-action="click->load-button#showSpinner click->publish-form#confirmSchedule"
                   data-load-button-loading-text-value="Scheduling...">
@@ -144,3 +145,4 @@
     </div>
   </div>
 <% end %>
+</div>
