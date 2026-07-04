@@ -10,15 +10,18 @@ class ContactsController < ApplicationController
     @contact = Contact.new(contact_params)
 
     if @contact.save
-      # flash[:notice] = "Contact saved! ID: #{@contact.id}" - Debug
-
-      ContactMailer.with(contact: @contact).received_email.deliver_now
-
-      # flash[:notice] += " | Received email sent" - Debug
-
-      ContactMailer.with(contact: @contact).confirmation_email.deliver_now
-
-      # flash[:notice] += " | Confirmation sent" - Debug
+      # Email delivery must never take down the public contact flow: the
+      # message is already saved at this point, so a transient SMTP failure
+      # (timeout, DNS, auth blip) is logged and skipped instead of raising —
+      # production sets raise_delivery_errors = true, so an unrescued failure
+      # here would show the visitor an error page for a submission that
+      # actually succeeded (and invite a duplicate resubmission).
+      begin
+        ContactMailer.with(contact: @contact).received_email.deliver_now
+        ContactMailer.with(contact: @contact).confirmation_email.deliver_now
+      rescue StandardError => e
+        Rails.logger.error "Contact mailer delivery failed: #{e.message}"
+      end
 
       # PostHog: track a successful (visitor-only) contact form submission.
       track_event("contact_submitted")

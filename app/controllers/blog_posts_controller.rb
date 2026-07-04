@@ -75,9 +75,28 @@ class BlogPostsController < ApplicationController
   # PATCH /blog_posts/reorder — persists drag-and-drop order (owner only).
   # Scoped to current_user.blog_posts so a request can only reorder records it
   # owns (defense-in-depth IDOR guard, even though this is a single-user app).
+  #
+  # The dragged grid is only a SLICE of the whole collection (one Pagy page),
+  # so writing raw 0..N indexes here would collide with rows outside the
+  # slice — page 2 would reuse page 1's 0..8 and ORDER BY position ties would
+  # then break arbitrarily. Instead we permute the slice's OWN position values
+  # among its members: collect the positions these records already hold, sort
+  # them, and hand them back out in the new drag order. Rows never positioned
+  # before (nil) take fresh values after the collection's current maximum,
+  # mirroring how Postgres already sorts NULLs last on ORDER BY position ASC.
   def reorder
-    reorder_params.fetch(:ids, []).map(&:to_i).each_with_index do |id, index|
-      current_user.blog_posts.where(id: id).update_all(position: index)
+    ids = reorder_params.fetch(:ids, []).map(&:to_i)
+    scoped = current_user.blog_posts.where(id: ids)
+
+    owned_ids = scoped.pluck(:id)
+    ordered_ids = ids.select { |id| owned_ids.include?(id) }
+
+    slots = scoped.pluck(:position).compact.sort
+    next_free = (current_user.blog_posts.maximum(:position) || -1) + 1
+    (ordered_ids.size - slots.size).times { |i| slots << next_free + i }
+
+    ordered_ids.each_with_index do |id, index|
+      scoped.where(id: id).update_all(position: slots[index])
     end
     head :ok
   end
@@ -303,10 +322,13 @@ class BlogPostsController < ApplicationController
     render render_action, status: :unprocessable_entity
   end
 
+  # :user_id and :position are deliberately NOT permitted: the owner is always
+  # assigned from current_user in #create, and position only ever changes
+  # through #reorder — neither should be settable from a form payload.
   def blog_post_params
     params.require(:blog_post).permit(:title, :description, :img_url, :html_content, :body,
-                                      :blog_excerpt, :featured_image_caption, :user_id,
-                                      :featured_image, :featured, :status, :scheduled_at, :position,
+                                      :blog_excerpt, :featured_image_caption,
+                                      :featured_image, :featured, :status, :scheduled_at,
                                       tag_ids: [], photos: [])
   end
 

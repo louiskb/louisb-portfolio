@@ -28,6 +28,13 @@ class BlogPost < ApplicationRecord
   validates :title, presence: true
   validates :status, presence: true
   validate :one_content_field_only
+  validate :attachments_are_reasonable_images
+
+  # Content types the upload fields accept. Everything the blog renders is a
+  # plain <img>, so only raster web formats belong here — notably NOT SVG,
+  # which can carry executable <script> when opened as a standalone document.
+  ALLOWED_IMAGE_TYPES = %w[image/png image/jpeg image/gif image/webp].freeze
+  MAX_IMAGE_BYTES = 10.megabytes
 
   # Returns estimated reading time as a string, e.g. "4 min read".
   # Strips HTML tags, counts words, assumes 200 wpm. Minimum 1 min.
@@ -78,6 +85,33 @@ class BlogPost < ApplicationRecord
   def one_content_field_only
     if html_content.present? && body.present?
       errors.add(:base, "A post can only have rich text content or HTML content, not both.")
+    end
+  end
+
+  # Upload hygiene: only real raster images, at a sane size. The upload surface
+  # is owner-only, so this is defence-in-depth rather than a hard security
+  # boundary — but it forecloses the classic "upload an SVG containing a
+  # <script>, open it as a standalone page" self-XSS, and stops a fat-fingered
+  # 200 MB original from being served to every visitor.
+  #
+  # Everything is normalised to raw blobs before checking, because the three
+  # upload paths expose three different interfaces: featured_image is an
+  # Attached::One (has .blob), photos is an Attached::Many (has .blobs), and
+  # Trix drag/paste images live on the rich-text body's OWN attachments —
+  # they never pass through featured_image/photos at all.
+  def attachments_are_reasonable_images
+    blobs = []
+    blobs << featured_image.blob if featured_image.attached?
+    blobs.concat(photos.blobs) if photos.attached?
+    blobs.concat(body.body.attachables.grep(ActiveStorage::Blob)) if body.present?
+
+    blobs.compact.each do |blob|
+      unless blob.content_type.in?(ALLOWED_IMAGE_TYPES)
+        errors.add(:base, "#{blob.filename} must be a PNG, JPEG, GIF, or WebP image")
+      end
+      if blob.byte_size > MAX_IMAGE_BYTES
+        errors.add(:base, "#{blob.filename} must be smaller than 10 MB")
+      end
     end
   end
 end

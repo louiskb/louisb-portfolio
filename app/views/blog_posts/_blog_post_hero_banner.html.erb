@@ -10,11 +10,15 @@
     <header>
       <h1 class="mt-5 mb-2 fs-1"><%= blog_post.title %></h1>
       <p class="text-light small">Posted on <%= blog_post.created_at.strftime("%B %d, %Y") %></p>
-      <!-- Share button -->
+      <!-- Share button. A real <button> (not a link_to "#"): the old href="#"
+           was followed after copying and scroll-jumped readers back to the top
+           of the page. aria-live announces the "Link Copied!" text swap to
+           screen readers, which otherwise get no confirmation. -->
       <div data-controller="clipboard">
-        <%= link_to "#", data: { action: "click->clipboard#copy", clipboard_target: "shareButton" }, class: "btn btn-outline-light rounded-4 p-2 my-2" do %>
-          <i class="fa-solid fa-arrow-up-from-bracket"></i> Share
-        <% end %>
+        <button type="button" data-action="clipboard#copy" data-clipboard-target="shareButton"
+                aria-live="polite" class="btn btn-outline-light rounded-4 p-2 my-2">
+          <i class="fa-solid fa-arrow-up-from-bracket" aria-hidden="true"></i> Share
+        </button>
         <input type="hidden" value="<%= blog_post_url(@blog_post) %>" data-clipboard-target="source">
       </div>
       <!-- Edit buttons for signed in user -->
@@ -26,8 +30,8 @@
             <% if ai_configured? %>
               <%= link_to "Revise with AI", ai_revise_blog_post_path(@blog_post), class: "btn btn-outline-light rounded-4 p-2 mt-3" %>
             <% end %>
-            <%= link_to blog_post_path(@blog_post), data: { turbo_method: :delete, turbo_confirm: "Delete blog post ?" } do %>
-              <i class="fa-regular fa-trash-can text-danger trash-grow fs-2 mt-3"></i>
+            <%= link_to blog_post_path(@blog_post), data: { turbo_method: :delete, turbo_confirm: "Delete blog post ?" }, "aria-label": "Delete post" do %>
+              <i class="fa-regular fa-trash-can text-danger trash-grow fs-2 mt-3" aria-hidden="true"></i>
             <% end %>
           </div>
         </div>

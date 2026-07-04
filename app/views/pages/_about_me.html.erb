@@ -12,18 +12,23 @@
     <p class="section-eyebrow">◆ About Me</p>
     <h2 class="section-heading mb-4">About me.</h2>
 
+    <%# width/height give the browser the intrinsic aspect ratio so it reserves
+        the box before the file loads (no layout shift); CSS still scales the
+        render. loading: lazy defers these below-the-fold downloads. %>
     <div class="framed-media mb-4">
-      <%= image_tag "lb-portfolio.jpeg", alt: "Louis web developer", class: "w-100" %>
+      <%= image_tag "lb-portfolio.jpeg", alt: "Louis Bourne portrait", class: "w-100", width: 5184, height: 3456, loading: "lazy" %>
     </div>
     <p class="text-body-soft mb-4" style="font-size: 16.5px;">Mixed British-Thai developer based in Thailand, which I now call home after growing up across multiple countries. Fluent in English and Thai, with a long-standing love of tech 🤓 that naturally led into full‑stack development. Also an independent trader and financial analyst, combining technical charting with a structured, risk‑first approach to the markets 📊.</p>
 
     <div class="framed-media mb-4">
-      <%= image_tag "mt-cook-ta.jpg", alt: "Louis web developer", class: "w-100" %>
+      <%= image_tag "mt-cook-ta.jpg", alt: "Louis hiking near Mount Cook on the Te Araroa trail", class: "w-100", width: 1280, height: 960, loading: "lazy" %>
     </div>
     <p class="text-body-soft mb-4" style="font-size: 16.5px;">Beyond code and charts, staying active is a big part of life - lifting, kitesurfing, running, and hiking - and that love of adventure took me all the way through New Zealand’s 3,000 km Te Araroa thru‑hike, which I completed over four months in 2024/2025 🚀.</p>
 
     <div class="framed-media mb-3">
-      <iframe height="350" src="https://www.youtube.com/embed/X427QTamroE?si=cIjvoF9l_rCW2GHn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" class="w-100" allowfullscreen></iframe>
+      <%# youtube-nocookie.com is YouTube's privacy-enhanced domain: no cookies
+          until the visitor presses play — keeps the site's cookieless promise. %>
+      <iframe height="350" src="https://www.youtube-nocookie.com/embed/X427QTamroE?si=cIjvoF9l_rCW2GHn" title="Thai PBS 2C climate change documentary, episode 4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" class="w-100" loading="lazy" allowfullscreen></iframe>
     </div>
     <h3 class="project-card-title mb-2">Thai PBS - 2C Climate Change Documentary Series (2019): Episode 4</h3>
     <p class="text-body-soft" style="font-size: 16.5px;">Served as a TV presenter for a five‑episode climate change documentary along the Gulf of Thailand, covering the coastlines of Thailand, Cambodia, and Vietnam. The series explores key environmental challenges across Southeast Asia and still airs on Thai national TV.</p>

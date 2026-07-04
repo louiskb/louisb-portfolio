@@ -421,7 +421,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_equal 5, louis_project.reload.position, "an intruder must not reorder louis's projects"
-    assert_equal 1, intruder_project.reload.position, "the intruder may reorder their own project"
+    # Reorder permutes the positions of the records the requester OWNS in the
+    # dragged set (see ProjectsController#reorder). The intruder owns only
+    # intruder_project, which had no position yet, so it takes the first free
+    # slot (0) — louis's id in the payload is ignored entirely.
+    assert_equal 0, intruder_project.reload.position, "the intruder may reorder their own project"
   end
 
   test "publish on a project owned by another user is not found for the intruder" do
@@ -454,5 +458,46 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch cancel_schedule_project_url(louis_project)
     assert_response :not_found
     assert louis_project.reload.scheduled?, "a non-owner must not be able to cancel the schedule"
+  end
+
+  # ---- Regression tests from the 2026-07-04 audit sweep ----
+
+  test "index renders for visitors even when a published project has no description" do
+    # Only :title is validated, so a description-less project is legal — the
+    # index used to call nil.capitalize and 500 the whole public page.
+    Project.create!(title: "No Description Yet", user: users(:louis),
+                    status: :published, personal_project: true)
+
+    get projects_url
+    assert_response :success
+    assert_match "No Description Yet", response.body
+  end
+
+  test "index renders no Live Demo link for a project without a project_url" do
+    # A block-form link_to with a nil URL silently links to the CURRENT page —
+    # the guard must drop the CTA entirely instead of rendering that broken link.
+    Project.create!(title: "No URL Project", user: users(:louis),
+                    status: :published, personal_project: true)
+
+    get projects_url
+    assert_response :success
+    assert_select "a[href=?]", projects_path, { text: /Live Demo/, count: 0 }
+  end
+
+  test "reorder permutes the dragged slice's own positions instead of resetting to 0..N" do
+    # The projects index has two sortable grids (and the blog index paginates),
+    # so a reorder request only ever carries a SLICE of the collection. Raw
+    # 0..N indexes would collide with rows outside the slice.
+    sign_in users(:louis)
+    a = Project.create!(title: "Slice A", user: users(:louis), status: :draft, position: 9)
+    b = Project.create!(title: "Slice B", user: users(:louis), status: :draft, position: 10)
+    c = Project.create!(title: "Slice C", user: users(:louis), status: :draft, position: 11)
+
+    patch reorder_projects_url, params: { ids: [ c.id, b.id, a.id ] }, as: :json
+    assert_response :success
+
+    assert_equal 9,  c.reload.position
+    assert_equal 10, b.reload.position
+    assert_equal 11, a.reload.position
   end
 end

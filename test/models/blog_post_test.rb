@@ -96,4 +96,59 @@ class BlogPostTest < ActiveSupport::TestCase
     assert_equal "my-first-rails-post", post.slug
     assert_equal post, BlogPost.friendly.find("my-first-rails-post")
   end
+
+  # ---- Upload validation (2026-07-04 audit sweep + PR #13 review) ----
+
+  test "rejects a non-image featured_image (SVG can carry scripts)" do
+    post = BlogPost.new(title: "Bad Upload", user: users(:louis))
+    post.featured_image.attach(
+      io: StringIO.new("<svg xmlns='http://www.w3.org/2000/svg'><script>alert(1)</script></svg>"),
+      filename: "evil.svg",
+      content_type: "image/svg+xml"
+    )
+
+    assert_not post.valid?
+    assert post.errors[:base].any? { |e| e.include?("must be a PNG, JPEG, GIF, or WebP image") }
+  end
+
+  test "rejects an oversized featured_image" do
+    # byte_size is a blob column computed from the io — persist a tiny blob,
+    # then fake a >10 MB original without actually writing 10 MB to disk.
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: StringIO.new("x"), filename: "huge.png", content_type: "image/png"
+    )
+    blob.update_column(:byte_size, 11.megabytes)
+
+    post = BlogPost.new(title: "Fat Upload", user: users(:louis))
+    post.featured_image.attach(blob.reload)
+
+    assert_not post.valid?
+    assert post.errors[:base].any? { |e| e.include?("must be smaller than 10 MB") }
+  end
+
+  test "accepts a normal PNG in the photos gallery (Attached::Many path)" do
+    post = BlogPost.new(title: "Gallery", user: users(:louis))
+    post.photos.attach(
+      io: File.open(Rails.root.join("test/fixtures/files/test_image.png")),
+      filename: "test_image.png",
+      content_type: "image/png"
+    )
+
+    assert post.valid?, post.errors.full_messages.to_sentence
+  end
+
+  test "rejects an SVG smuggled in through the Trix body's own attachments" do
+    # Trix drag/paste images attach to the rich-text body, NOT to
+    # featured_image/photos — the validation must walk that path too.
+    blob = ActiveStorage::Blob.create_and_upload!(
+      io: StringIO.new("<svg xmlns='http://www.w3.org/2000/svg'/>"),
+      filename: "sneaky.svg",
+      content_type: "image/svg+xml"
+    )
+    post = BlogPost.new(title: "Trix Smuggle", user: users(:louis))
+    post.body = ActionText::Content.new("<p>Hello</p>").append_attachables(blob)
+
+    assert_not post.valid?
+    assert post.errors[:base].any? { |e| e.include?("must be a PNG, JPEG, GIF, or WebP image") }
+  end
 end

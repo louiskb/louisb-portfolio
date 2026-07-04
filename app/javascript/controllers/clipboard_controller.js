@@ -4,11 +4,11 @@ import { Controller } from "@hotwired/stimulus";
 export default class extends Controller {
   static targets = ["shareButton", "source"];
 
-  connect() {
-    console.log("clipboard controller connected!");
-  }
-
-  copy() {
+  copy(event) {
+    // Belt-and-braces: the trigger is a <button type="button"> so there is no
+    // navigation to cancel, but preventDefault keeps this action safe if it is
+    // ever wired to a link again (an href="#" would scroll-jump to the top).
+    event.preventDefault();
     navigator.clipboard.writeText(this.sourceTarget.value);
     const button = this.shareButtonTarget;
     const originalHTML = button.innerHTML;

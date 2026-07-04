@@ -240,11 +240,19 @@ class BlogPostAiService
 
     return "" if image_url.blank?
 
+    # Unsplash reports the photo's intrinsic pixel size — passing it through as
+    # width/height lets the browser reserve the image's box before the file
+    # loads (no layout shift). to_i doubles as sanitisation: these two values
+    # can only ever render as integers.
+    width  = data["width"].to_i
+    height = data["height"].to_i
+    dimensions = width.positive? && height.positive? ? " width='#{width}' height='#{height}'" : ""
+
     # Unsplash terms require attribution — photographer name + Unsplash link.
     # Every interpolated field is HTML-escaped and every href scheme-checked,
     # even though the result is also sanitized on render (defense in depth).
     "<figure class='mb-4'>" \
-      "<img src='#{safe_href(image_url)}' alt='#{escape_html(query)}' class='img-fluid rounded' style='width:100%;max-height:420px;object-fit:cover;'>" \
+      "<img src='#{safe_href(image_url)}' alt='#{escape_html(query)}'#{dimensions} class='img-fluid rounded' style='width:100%;max-height:420px;object-fit:cover;'>" \
       "<figcaption class='text-muted mt-1' style='font-size:0.8em;'>" \
         "Photo by <a href='#{safe_href(photographer_url)}'>#{escape_html(photographer)}</a> on " \
         "<a href='#{safe_href(photo_url)}'>Unsplash</a>" \

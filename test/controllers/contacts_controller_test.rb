@@ -32,4 +32,21 @@ class ContactsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :redirect
   end
+
+  test "create still succeeds when email delivery fails" do
+    # The contact is saved BEFORE the mailer runs; an SMTP hiccup must not
+    # show the visitor an error page for a submission that succeeded.
+    ContactMailer.stub :with, ->(**) { raise "SMTP down" } do
+      assert_difference "Contact.count", 1 do
+        post contacts_url, params: { contact: {
+          first_name: "Sam",
+          last_name: "Visitor",
+          email: "sam@example.com",
+          message: "Hi Louis!"
+        } }
+      end
+    end
+    assert_response :redirect
+    assert_equal "Message sent! Check your email for confirmation.", flash[:notice]
+  end
 end
