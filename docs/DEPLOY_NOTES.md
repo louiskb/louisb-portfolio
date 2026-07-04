@@ -58,13 +58,17 @@ Eco/Basic dyno keep `JOB_CONCURRENCY=1` and watch for R14 after the first deploy
 2. **Confirm the homepage year constants** in `app/queries/home_stats.rb`:
    `CODING_SINCE_YEAR = 2024` (→ "2 years coding") and `TRADING_SINCE_YEAR = 2018`
    (→ "8 years in markets"). Your profile mentions ~6 years trading — adjust if 2018 is off.
-3. **Reset your dev user password.** A subagent's browser smoke set the dev login for
-   `nemo.m1cxw@8shield.net` to `SmokeTest123!` (the original hash couldn't be restored). Reset it
-   in the app, or re-run `rails db:seed` (which reads `USER_1_USERNAME`/`USER_1_PASSWORD`). Dev DB only.
+3. ~~Reset your dev user password.~~ **Resolved 2026-07-04:** the dev login for
+   `nemo.m1cxw@8shield.net` was restored to your `.env` `USER_1_PASSWORD` value at the end of the
+   design-implementation session (it was briefly a throwaway value during CMS browser smokes).
+   Dev DB only — nothing to do.
 
 ## 5. Not done here (by design)
 
 - The actual Heroku deploy (your call).
-- Final visual design / styling — that is the separate Claude Design handoff; this work delivers
-  the backend + a plain, working homepage stats section for it to restyle.
+- ~~Final visual design / styling — that is the separate Claude Design handoff; this work delivers
+  the backend + a plain, working homepage stats section for it to restyle.~~ **Done 2026-07-04:**
+  the Depth Charge design is fully implemented (PRs #8–#11 — dark theme, black-hole homepage
+  engine, typographic index heroes + featured cards, dark CMS/Trix). 199 tests green. Still NO
+  deploy until Louis greenlights the first v2 deploy.
 - Solid Cache / Solid Cable (unused), FriendlyId history redirects, AI-drafted project blurbs.

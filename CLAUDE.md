@@ -10,11 +10,14 @@ showcase, and an AI-assisted blog. It is a **single-owner CMS**: exactly one use
 `www.louisbourne.me`.
 
 **This is v2.** The live site is still v1 (the pre-overhaul Rails 7.1 app). v2 (this codebase) added
-the feature set below by porting proven patterns from Louis's `isarak-portfolio` client build, and is
-being stabilised before launch — bug-fixing plus an incoming Claude Design handoff that will layer the
-final visual design over the current plain scaffolding. See
-`docs/superpowers/specs/2026-07-01-portfolio-enhancements-design.md` and the matching plan +
-`docs/DEPLOY_NOTES.md`.
+the feature set below by porting proven patterns from Louis's `isarak-portfolio` client build. The
+**Claude Design "Depth Charge" visual design is now fully implemented** (2026-07-04) across public
+pages AND the owner CMS: dark space theme, Bricolage Grotesque / Instrument Serif / Space Grotesk /
+Space Mono type, glass panels, a canvas black-hole engine on the homepage, typographic index heroes
+with featured spotlight cards. Design source of truth: `docs/design-handoff/` (official mock +
+engine explainer). Specs/plans: `docs/superpowers/specs/2026-07-03-depth-charge-visual-design-design.md`
+(+ 2026-07-01 feature spec) and matching plans + `docs/DEPLOY_NOTES.md`. Awaiting the first v2 deploy
+greenlight.
 
 ## ⚠️ Deployment policy (do not deploy without a greenlight)
 
@@ -45,7 +48,7 @@ bin/rails db:prepare           # create + migrate
 bin/rails db:seed              # seeds the single user + projects/posts (reads USER_1_* env vars)
 bin/importmap pin <package>    # add a JS dependency
 
-bin/rails test                       # full suite (currently 185 runs, 0 failures)
+bin/rails test                       # full suite (currently 199 runs, 0 failures)
 bin/rails test test/models/blog_post_test.rb        # one file
 bin/rails test test/models/blog_post_test.rb:42     # one test by line
 ```
@@ -92,9 +95,21 @@ visitors (`distinct_id: "anonymous"`); the posthog-js snippet renders only when 
 cookieless (no consent banner). Owner is never tracked.
 
 **Homepage** `pages#home` exposes `@stats` from `app/queries/home_stats.rb` (published counts; technologies
-split on the canonical `" . "` separator; editable year constants). `scroll_reveal` + `count_up` Stimulus
-controllers animate the plain "by the numbers" section (reduced-motion gated). **Intentionally unstyled —
-the Claude Design handoff restyles it.**
+split on the canonical `" . "` separator; editable year constants) plus `@latest_posts` (3 newest
+**published** posts — published-only even for the owner). `scroll_reveal` + `count_up` Stimulus
+controllers animate the "by the numbers" tiles (reduced-motion gated). The whole home page is a
+single-scroll "Depth Charge" scene: a fixed canvas black hole (`black_hole_controller.js` — verbatim
+port of the design-handoff engine; depth camera reads `[data-sec]` sections, hover-charge morphs the
+hero `[data-morph]` text, `turbo:before-cache` resets it) behind ten `data-sec` sections.
+
+**Design system.** Tokens in `config/_colors.scss`/`_fonts.scss` (space palette + 4 Google font
+families loaded via `<link>` in the layout head); Bootstrap rethemed dark (`data-bs-theme="dark"` +
+variable overrides); reusable classes in `components/_design_system.scss` (`.glass-card`,
+`.section-eyebrow`, `.section-heading`, `.chip`, `.timeline-row`, `.navbar-clearance`, `.sec` …) and
+`_index_heroes.scss` (typographic index mastheads). Blog + projects indexes have **featured spotlight
+cards** (visitor-scoped picks; the pick is excluded from the list while its spotlight shows —
+page-stable pagination is regression-tested). Trix/Action Text has a hand-tuned dark block in
+`_actiontext.scss` (incl. the link dialog) — retoken it, never stack invert filters.
 
 **Other:** FriendlyId slugs on both models (`.friendly.find`); drag-reorder via SortableJS
 (`position` column, owner-scoped `reorder` action); Cloudinary `featured_image` attachments alongside the

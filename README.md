@@ -2,8 +2,10 @@
 
 Louis Bourne's personal portfolio, project showcase, and AI-assisted blog. Built with Ruby on Rails 8.1.
 
-> **v2 in progress.** The live site is v1; this is the v2 overhaul, being stabilised before launch
-> (bug-fixing + an incoming design handoff). See `docs/DEPLOY_NOTES.md`.
+> **v2 ready for launch review.** The live site is v1; this v2 overhaul now includes the full
+> "Depth Charge" visual design (dark space theme + canvas black-hole homepage, from the Claude
+> Design handoff in `docs/design-handoff/`), awaiting the first-deploy greenlight. See
+> `docs/DEPLOY_NOTES.md`.
 
 ## What it does
 
