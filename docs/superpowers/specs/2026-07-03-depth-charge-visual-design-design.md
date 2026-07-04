@@ -191,7 +191,9 @@ the homepage would be confusing; the owner sees drafts in the blog index).
   plus a **featured card** above the regular list: blog = latest published
   `featured` post (fallback: newest published), projects = first visible
   `featured` project. Featured picks are visitor-scoped like everything
-  else.
+  else. The featured pick is excluded from the list while its spotlight is
+  shown; projects fall back to the newest visible project when nothing is
+  flagged featured (blog already falls back to newest published).
 - **Blog show**: readable long-form column (~720 px max-width) — dark prose
   styles for both Action Text `body` and sanitized `html_content` (update
   `_actiontext.scss`: headings, code blocks, figures/figcaptions, links);

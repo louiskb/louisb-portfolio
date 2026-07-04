@@ -135,6 +135,28 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "#featured-post"
     assert_includes response.body, featured.title
+    # The featured pick must render exactly once: in the spotlight card, not
+    # duplicated as the first card in the list below it.
+    assert_select "#blog-posts-index .row .project-card-title", { text: featured.title, count: 0 },
+      "the featured post must not also render in the paged list while its spotlight is shown"
+  end
+
+  test "index still lists the featured post normally when its spotlight is hidden (search)" do
+    # The exclusion is tied to the spotlight actually being shown — searching
+    # hides the spotlight (see "index shows no featured card when searching"),
+    # so the featured post must remain findable in the results like any other.
+    featured = BlogPost.create!(
+      title: "Findable Spotlight Post",
+      html_content: "<p>Featured body.</p>",
+      user: users(:louis),
+      status: :published,
+      featured: true
+    )
+
+    get blog_posts_url(q: "Findable")
+    assert_response :success
+    assert_select "#featured-post", false
+    assert_select "#blog-posts-index .row .project-card-title", text: featured.title
   end
 
   test "index never picks a draft post as the featured spotlight for visitors" do

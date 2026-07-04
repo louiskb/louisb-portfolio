@@ -30,8 +30,6 @@ class BlogPostsController < ApplicationController
     # Eager-load what each card reads (tags, the Action Text body for reading_time,
     # the featured_image attachment) to avoid an N+1 across the paginated rows.
     scope = scope.includes(:tags, :rich_text_body).with_attached_featured_image
-    # Keep :position ordering so the Phase-1 drag-to-reorder stays meaningful.
-    @pagy, @blog_posts = pagy(scope.order(:position))
 
     # Featured spotlight card, rendered above the list — only on the plain,
     # unfiltered first page (no ?q, no ?tag_ids) so it never sits alongside a
@@ -44,7 +42,16 @@ class BlogPostsController < ApplicationController
       featured_scope = visitor_scope.includes(:tags, :rich_text_body).with_attached_featured_image
       @featured_post = featured_scope.where(featured: true).order(created_at: :desc).first ||
                         featured_scope.order(created_at: :desc).first
+      # Exclude the spotlighted post from the list below it so it never
+      # duplicates as the first card — applied BEFORE pagy so the page count
+      # stays coherent with what's actually shown. Only happens while the
+      # spotlight itself is shown: a search/filter/page>1 request never sets
+      # @featured_post, so the post surfaces normally there.
+      scope = scope.where.not(id: @featured_post.id) if @featured_post
     end
+
+    # Keep :position ordering so the Phase-1 drag-to-reorder stays meaningful.
+    @pagy, @blog_posts = pagy(scope.order(:position))
   end
 
   def show

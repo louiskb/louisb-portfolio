@@ -10,8 +10,6 @@ class ProjectsController < ApplicationController
     visitor_scope = user_signed_in? ? Project.all : Project.visible_to_visitors
     # Eager-load the attachment the cards now read (featured_image) to avoid an N+1 per row.
     scope = visitor_scope.with_attached_featured_image.order(:position)
-    @personal_projects = filter_personal_projects(scope)
-    @open_source_projects = filter_open_source_projects(scope)
 
     # Featured spotlight card, rendered above the personal-projects grid.
     # Prefers a personal project explicitly marked `featured` (the spotlight
@@ -23,6 +21,17 @@ class ProjectsController < ApplicationController
                                        .order(:position, created_at: :desc).first ||
                          featured_scope.where(featured: true).order(:position, created_at: :desc).first ||
                          featured_scope.order(:position, created_at: :desc).first
+
+    @personal_projects = filter_personal_projects(scope)
+    @open_source_projects = filter_open_source_projects(scope)
+    # Exclude the spotlighted project from whichever group list would contain
+    # it, so it never duplicates as the first card in that grid below it. The
+    # spotlight has no search/filter to hide behind on this index, so this
+    # exclusion applies unconditionally whenever a featured project exists.
+    if @featured_project
+      @personal_projects = @personal_projects.reject { |project| project.id == @featured_project.id }
+      @open_source_projects = @open_source_projects.reject { |project| project.id == @featured_project.id }
+    end
   end
 
   def show

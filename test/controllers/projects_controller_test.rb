@@ -197,6 +197,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "#featured-project"
     assert_includes response.body, projects(:sipfolio).title.capitalize
+    # The featured pick must render exactly once: in the spotlight card, not
+    # duplicated as a card in the personal-projects grid below it.
+    assert_select "#projects-index .row .project-card-title", { text: projects(:sipfolio).title, count: 0 },
+      "the featured project must not also render in the grid while its spotlight is shown"
   end
 
   test "index never picks a draft project as the featured spotlight for visitors" do
