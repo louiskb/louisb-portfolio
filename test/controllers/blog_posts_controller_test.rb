@@ -640,7 +640,11 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     assert_equal 5, louis_post.reload.position, "an intruder must not reorder louis's posts"
-    assert_equal 1, intruder_post.reload.position, "the intruder may reorder their own post"
+    # Reorder permutes the positions of the records the requester OWNS in the
+    # dragged set (see BlogPostsController#reorder). The intruder owns only
+    # intruder_post, which had no position yet, so it takes the first free
+    # slot (0) — louis's id in the payload is ignored entirely.
+    assert_equal 0, intruder_post.reload.position, "the intruder may reorder their own post"
   end
 
   test "publish on a post owned by another user is not found for the intruder" do
@@ -715,5 +719,24 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :not_found
     assert louis_post.reload.title == "Louis Only Revise With AI", "a non-owner must not revise the post"
+  end
+
+  # ---- Regression tests from the 2026-07-04 audit sweep ----
+
+  test "reorder permutes the dragged slice's own positions instead of resetting to 0..N" do
+    # The blog index paginates at 9/page, so a drag on page 2+ posts only that
+    # page's ids. Raw 0..N indexes would collide with page 1's positions and
+    # scramble the ordering across pages.
+    sign_in users(:louis)
+    a = BlogPost.create!(title: "Slice A", user: users(:louis), status: :draft, position: 9)
+    b = BlogPost.create!(title: "Slice B", user: users(:louis), status: :draft, position: 10)
+    c = BlogPost.create!(title: "Slice C", user: users(:louis), status: :draft, position: 11)
+
+    patch reorder_blog_posts_url, params: { ids: [ c.id, b.id, a.id ] }, as: :json
+    assert_response :success
+
+    assert_equal 9,  c.reload.position
+    assert_equal 10, b.reload.position
+    assert_equal 11, a.reload.position
   end
 end

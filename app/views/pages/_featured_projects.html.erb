@@ -17,44 +17,51 @@
       <% @personal_projects.each do |project| %>
         <div class="glass-card glass-card--hover p-3 d-flex gap-3 mb-3">
           <% if project.featured_image.attached? %>
-            <%= image_tag project.featured_image, alt: project.title, class: "project-thumb" %>
+            <%= image_tag project.featured_image, alt: project.title, class: "project-thumb", loading: "lazy" %>
           <% elsif project.img_url.present? %>
-            <%= image_tag project.img_url, alt: project.title, class: "project-thumb" %>
+            <%= image_tag project.img_url, alt: project.title, class: "project-thumb", loading: "lazy" %>
           <% end %>
           <div class="d-flex flex-column">
             <h3 class="project-card-title"><%= project.title.capitalize %></h3>
             <p class="text-body-soft mb-2"><%= project.description %></p>
             <div class="mt-auto project-tech-line mb-2"><%= project.tech_stack %></div>
             <div class="d-flex align-items-center gap-3">
+              <%# Blank URLs must render NO link (a block link_to with a nil URL
+                  links back to the current page); icon-only links need
+                  aria-labels because they have no visible text. %>
               <% if project.private_repo %>
-                <% if user_signed_in? %>
-                  <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
-                    <i class="fa-brands fa-github fs-5"></i>
+                <% if user_signed_in? && project.github_url.present? %>
+                  <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener", "aria-label": "#{project.title} on GitHub (private repository)" do %>
+                    <i class="fa-brands fa-github fs-5" aria-hidden="true"></i>
                   <% end %>
                   <span class="text-soft-muted small">private</span>
                 <% else %>
-                  <i class="fa-brands fa-github fs-5 text-soft-muted"></i>
+                  <i class="fa-brands fa-github fs-5 text-soft-muted" aria-hidden="true"></i>
                   <span class="text-soft-muted small">private</span>
                 <% end %>
-              <% else %>
-                <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
-                  <i class="fa-brands fa-github fs-5"></i>
+              <% elsif project.github_url.present? %>
+                <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener", "aria-label": "#{project.title} on GitHub" do %>
+                  <i class="fa-brands fa-github fs-5" aria-hidden="true"></i>
                 <% end %>
               <% end %>
-              <%= link_to project.project_url, class: "gray-link text-decoration-none", target: "_blank", rel: "noopener" do %>
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+              <% if project.project_url.present? %>
+                <%= link_to project.project_url, class: "gray-link text-decoration-none", target: "_blank", rel: "noopener" do %>
+                  <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Live Demo
+                <% end %>
               <% end %>
             </div>
           </div>
         </div>
       <% end %>
-      <%= link_to "See more projects...", projects_path, class: "gray-link text-decoration-none fs-5 d-inline-block mt-2 mb-4" %>
+      <%= link_to "See more projects…", projects_path, class: "gray-link text-decoration-none fs-5 d-inline-block mt-2 mb-4" %>
     <% end %>
 
     <% if @open_source_projects.present? %>
       <p class="mono-label mt-4">Open source</p>
       <p class="text-body-soft mb-3">
-        Setup <%= link_to "Storybook", "https://storybook.js.org/", class: "gray-link text-decoration-none", target: "_blank", rel: "noopener" %>
+        <%# In-text links keep their underline: color alone (1.73:1 vs the
+            surrounding text) isn't enough to distinguish them (WCAG 1.4.1). %>
+        Setup <%= link_to "Storybook", "https://storybook.js.org/", class: "gray-link text-decoration-underline", target: "_blank", rel: "noopener" %>
         for Find a Doc Japan (an open-source project) and built out an initial set of components for the
         design system, conducted snapshot testing with <span class="fst-italic">Jest</span> and
         <span class="fst-italic">Vitest</span> while collaborating with developers worldwide.
@@ -62,32 +69,35 @@
       <% @open_source_projects.each do |project| %>
         <div class="glass-card glass-card--hover p-3 d-flex gap-3 mb-3">
           <% if project.featured_image.attached? %>
-            <%= image_tag project.featured_image, alt: project.title, class: "project-thumb" %>
+            <%= image_tag project.featured_image, alt: project.title, class: "project-thumb", loading: "lazy" %>
           <% elsif project.img_url.present? %>
-            <%= image_tag project.img_url, alt: project.title, class: "project-thumb" %>
+            <%= image_tag project.img_url, alt: project.title, class: "project-thumb", loading: "lazy" %>
           <% end %>
           <div class="d-flex flex-column">
             <h3 class="project-card-title"><%= project.title.capitalize %></h3>
             <p class="text-body-soft mb-2"><%= project.description %></p>
             <div class="mt-auto project-tech-line mb-2"><%= project.tech_stack %></div>
             <div class="d-flex align-items-center gap-3">
+              <%# Same blank-URL guards + aria-labels as the personal list above. %>
               <% if project.private_repo %>
-                <% if user_signed_in? %>
-                  <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
-                    <i class="fa-brands fa-github fs-5"></i>
+                <% if user_signed_in? && project.github_url.present? %>
+                  <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener", "aria-label": "#{project.title} on GitHub (private repository)" do %>
+                    <i class="fa-brands fa-github fs-5" aria-hidden="true"></i>
                   <% end %>
                   <span class="text-soft-muted small">private</span>
                 <% else %>
-                  <i class="fa-brands fa-github fs-5 text-soft-muted"></i>
+                  <i class="fa-brands fa-github fs-5 text-soft-muted" aria-hidden="true"></i>
                   <span class="text-soft-muted small">private</span>
                 <% end %>
-              <% else %>
-                <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
-                  <i class="fa-brands fa-github fs-5"></i>
+              <% elsif project.github_url.present? %>
+                <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener", "aria-label": "#{project.title} on GitHub" do %>
+                  <i class="fa-brands fa-github fs-5" aria-hidden="true"></i>
                 <% end %>
               <% end %>
-              <%= link_to project.project_url, class: "gray-link text-decoration-none", target: "_blank", rel: "noopener" do %>
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> View Project
+              <% if project.project_url.present? %>
+                <%= link_to project.project_url, class: "gray-link text-decoration-none", target: "_blank", rel: "noopener" do %>
+                  <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> View Project
+                <% end %>
               <% end %>
             </div>
           </div>

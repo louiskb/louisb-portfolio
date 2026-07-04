@@ -49,9 +49,29 @@ class ProjectsController < ApplicationController
   # PATCH /projects/reorder — persists drag-and-drop order (owner only).
   # Scoped to current_user.projects so a request can only reorder records it
   # owns (defense-in-depth IDOR guard, even though this is a single-user app).
+  #
+  # The dragged grid is only a SLICE of the whole collection (the projects
+  # index has TWO separate sortable grids — personal and open-source — each
+  # posting only its own ids here), so writing raw 0..N indexes would make the
+  # two grids collide on the same position values. Instead we permute the
+  # slice's OWN position values among its members: collect the positions these
+  # records already hold, sort them, and hand them back out in the new drag
+  # order. Rows never positioned before (nil) take fresh values after the
+  # collection's current maximum, mirroring how Postgres already sorts NULLs
+  # last on ORDER BY position ASC.
   def reorder
-    reorder_params.fetch(:ids, []).map(&:to_i).each_with_index do |id, index|
-      current_user.projects.where(id: id).update_all(position: index)
+    ids = reorder_params.fetch(:ids, []).map(&:to_i)
+    scoped = current_user.projects.where(id: ids)
+
+    owned_ids = scoped.pluck(:id)
+    ordered_ids = ids.select { |id| owned_ids.include?(id) }
+
+    slots = scoped.pluck(:position).compact.sort
+    next_free = (current_user.projects.maximum(:position) || -1) + 1
+    (ordered_ids.size - slots.size).times { |i| slots << next_free + i }
+
+    ordered_ids.each_with_index do |id, index|
+      scoped.where(id: id).update_all(position: slots[index])
     end
     head :ok
   end
@@ -185,10 +205,13 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # :user_id and :position are deliberately NOT permitted: the owner is always
+  # assigned from current_user in #create, and position only ever changes
+  # through #reorder — neither should be settable from a form payload.
   def project_params
     params.require(:project).permit(:title, :description, :img_url, :tech_stack, :project_url, :github_url,
-                                    :user_id, :personal_project, :private_repo, :featured,
-                                    :featured_image, :status, :scheduled_at, :position)
+                                    :personal_project, :private_repo, :featured,
+                                    :featured_image, :status, :scheduled_at)
   end
 
   def reorder_params

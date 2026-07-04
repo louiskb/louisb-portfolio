@@ -1,4 +1,9 @@
 <!-- Blog post show -->
+<%# Per-post meta description for search results: prefer the hand-written
+    excerpt, fall back to the description column, truncated to Google's
+    ~160-character snippet length. strip_tags guards against stray HTML. %>
+<% content_for :meta_description,
+     strip_tags((@blog_post.blog_excerpt.presence || @blog_post.description).to_s).truncate(160) %>
 <%= render "blog_post_hero_banner", blog_post: @blog_post %>
 <div class="container">
   <main id="main-content">
@@ -27,10 +32,14 @@
       <% else %>
         <%# AI/legacy post: same .trix-content typography as the manual body
             above, so both content paths render with identical dark styling
-            (headings, paragraphs, pre/code, blockquotes, images). %>
-        <article data-controller="html-inject" class="trix-content mb-4" hidden>
-          <!-- textContent (HTML string) that's inside <article> element -->
-          <!-- Rails `sanitize` helper method cleans + marks safe → Rails ERB automatically converts any sanitized (or html_safe marked) HTML string to DOM → Stimulus just un-hides on connect(). This renders sanitized HTML directly on page load via Stimulus connect() -->
+            (headings, paragraphs, pre/code, blockquotes, images).
+            Rails' `sanitize` helper cleans the raw HTML against the allowlist
+            (see config/initializers/sanitize.rb) and marks it safe, so ERB
+            renders it directly. It used to render `hidden` and be un-hidden by
+            a Stimulus controller on connect — that made the article pop in
+            after JS loaded (a 0.44 Cumulative Layout Shift) and left the post
+            invisible without JavaScript, for no benefit. %>
+        <article class="trix-content mb-4">
           <%= sanitize @blog_post.html_content %>
         </article>
       <% end %>
