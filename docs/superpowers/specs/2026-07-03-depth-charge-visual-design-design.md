@@ -184,6 +184,14 @@ the homepage would be confusing; the owner sees drafts in the blog index).
 - **Flashes**: Bootstrap alerts inherit the dark theme; still dismissible.
 - **Blog index**: dark glass post cards; search field + tag-pill filter
   restyled (controller logic untouched); Pagy nav dark.
+- **Typography-art index heroes (Louis, 2026-07-04):** the blog index and
+  projects index drop their image hero banners entirely. Each gets an
+  editorial, typography-first hero — oversized Bricolage display headline
+  with an Instrument Serif italic accent word and mono eyebrow, no images —
+  plus a **featured card** above the regular list: blog = latest published
+  `featured` post (fallback: newest published), projects = first visible
+  `featured` project. Featured picks are visitor-scoped like everything
+  else.
 - **Blog show**: readable long-form column (~720 px max-width) — dark prose
   styles for both Action Text `body` and sanitized `html_content` (update
   `_actiontext.scss`: headings, code blocks, figures/figcaptions, links);
