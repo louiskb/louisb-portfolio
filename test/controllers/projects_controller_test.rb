@@ -188,6 +188,41 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  # ---- Task 13b: featured spotlight card ----
+
+  test "index shows a featured spotlight card for visitors" do
+    # sipfolio is the only fixture that is both personal_project and featured,
+    # so it is the deterministic pick (see ProjectsController#index).
+    get projects_url
+    assert_response :success
+    assert_select "#featured-project"
+    assert_includes response.body, projects(:sipfolio).title.capitalize
+    # The featured pick must render exactly once: in the spotlight card, not
+    # duplicated as a card in the personal-projects grid below it.
+    assert_select "#projects-index .row .project-card-title", { text: projects(:sipfolio).title, count: 0 },
+      "the featured project must not also render in the grid while its spotlight is shown"
+  end
+
+  test "index never picks a draft project as the featured spotlight for visitors" do
+    # The draft carries personal_project + featured: true, but visitor_scope
+    # (visible_to_visitors) excludes drafts entirely before the featured pick
+    # ever runs — so the spotlight must fall back to a published project.
+    Project.create!(
+      title: "Draft Featured Project",
+      description: "Should never show.",
+      tech_stack: "Ruby",
+      project_url: "https://example.com/draft-featured",
+      personal_project: true,
+      featured: true,
+      status: :draft,
+      user: users(:louis)
+    )
+
+    get projects_url
+    assert_response :success
+    assert_not_includes response.body, "Draft Featured Project"
+  end
+
   test "index renders drag handles for the signed-in owner" do
     sign_in users(:louis)
     get projects_url

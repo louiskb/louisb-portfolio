@@ -1,0 +1,46 @@
+// Typographic index masthead — shared by the blog index and projects index
+// hero partials (Task 13b: app/views/blog_posts/_blog_index_hero.html.erb,
+// app/views/projects/_projects_index_hero.html.erb). Replaces the old
+// image-banner treatment on both pages: no background photo, no scrim — the
+// display type itself carries the visual weight, echoing the homepage
+// hero's Bricolage 800 + Instrument Serif italic pairing (see
+// #hero-banner in _landing_hero_banner.scss). The mono eyebrow above the
+// headline reuses `.section-eyebrow` from _design_system.scss directly, so
+// it isn't redefined here.
+.index-hero {
+  padding-bottom: 48px;
+
+  .index-hero-headline { margin: 18px 0 0; }
+
+  // Both words share the same fluid scale and tight line-height; only the
+  // font family/weight/color differ (Bricolage display vs. serif italic).
+  .index-hero-display,
+  .index-hero-accent {
+    display: block;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 0.9;
+  }
+
+  .index-hero-display {
+    font-family: $headers-font;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: $text-bright;
+  }
+
+  .index-hero-accent {
+    font-family: $accent-font;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: #e9f0ff;
+  }
+
+  .index-hero-standfirst {
+    margin-top: 28px;
+    font-size: 18px;
+    max-width: 560px;
+  }
+
+  .index-hero-actions { margin-top: 32px; }
+}

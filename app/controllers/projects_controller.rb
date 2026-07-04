@@ -3,13 +3,35 @@ class ProjectsController < ApplicationController
   before_action :set_owned_project, only: %i[ publish schedule cancel_schedule ]
 
   def index
-    # Owner sees everything; visitors only see published projects. Eager-load the
-    # attachment the cards now read (featured_image) to avoid an N+1 per row.
-    scope = (user_signed_in? ? Project.all : Project.visible_to_visitors)
-            .with_attached_featured_image
-            .order(:position)
+    # Owner sees everything; visitors only see published projects. Kept as its
+    # own variable (not folded straight into `scope`) so the featured-project
+    # pick below can reuse the exact same visibility rule — a signed-out
+    # visitor must never be offered a draft/scheduled project as the spotlight.
+    visitor_scope = user_signed_in? ? Project.all : Project.visible_to_visitors
+    # Eager-load the attachment the cards now read (featured_image) to avoid an N+1 per row.
+    scope = visitor_scope.with_attached_featured_image.order(:position)
+
+    # Featured spotlight card, rendered above the personal-projects grid.
+    # Prefers a personal project explicitly marked `featured` (the spotlight
+    # showcases Louis's own work first), position/recency ordered; falls back
+    # to any featured project, then to the most recent visible project of any
+    # kind, so the spotlight never goes empty.
+    featured_scope = visitor_scope.with_attached_featured_image
+    @featured_project = featured_scope.where(personal_project: true, featured: true)
+                                       .order(:position, created_at: :desc).first ||
+                         featured_scope.where(featured: true).order(:position, created_at: :desc).first ||
+                         featured_scope.order(:position, created_at: :desc).first
+
     @personal_projects = filter_personal_projects(scope)
     @open_source_projects = filter_open_source_projects(scope)
+    # Exclude the spotlighted project from whichever group list would contain
+    # it, so it never duplicates as the first card in that grid below it. The
+    # spotlight has no search/filter to hide behind on this index, so this
+    # exclusion applies unconditionally whenever a featured project exists.
+    if @featured_project
+      @personal_projects = @personal_projects.reject { |project| project.id == @featured_project.id }
+      @open_source_projects = @open_source_projects.reject { |project| project.id == @featured_project.id }
+    end
   end
 
   def show

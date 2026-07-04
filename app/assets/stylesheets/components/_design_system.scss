@@ -23,6 +23,9 @@
 // Anchor jumps must clear the fixed navbar.
 section[id] { scroll-margin-top: 90px; }
 
+// Pages without a full-viewport hero need clearance under the fixed navbar.
+.navbar-clearance { padding-top: 140px; }
+
 // Glass panel card — blur + faint border; solid fallback color first so
 // browsers without backdrop-filter still get a readable panel.
 .glass-card {
@@ -77,6 +80,13 @@ section[id] { scroll-margin-top: 90px; }
   background: transparent;
   border-style: dashed;
   border-color: rgba(255, 255, 255, 0.2);
+}
+
+// Selected state for the blog index's tag-filter pills (a .chip acting as a
+// toggle label around a hidden checkbox — see blog_posts/index.html.erb).
+.chip--active {
+  border-color: $sky-blue;
+  color: $sky-blue;
 }
 
 // Education timeline row: mono year column | detail column.

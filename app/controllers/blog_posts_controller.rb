@@ -8,8 +8,12 @@ class BlogPostsController < ApplicationController
   before_action :require_ai_configured, only: %i[ create_with_ai revise_with_ai ]
 
   def index
-    # Owner sees everything; visitors only see published posts.
-    scope = user_signed_in? ? BlogPost.all : BlogPost.visible_to_visitors
+    # Owner sees everything; visitors only see published posts. Kept as its
+    # own variable (not folded straight into `scope`) so the featured-post
+    # pick below can reuse the exact same visibility rule — a signed-out
+    # visitor must never be offered a draft/scheduled post as the spotlight.
+    visitor_scope = user_signed_in? ? BlogPost.all : BlogPost.visible_to_visitors
+    scope = visitor_scope
 
     # Title search (case-insensitive).
     if params[:q].present?
@@ -26,6 +30,30 @@ class BlogPostsController < ApplicationController
     # Eager-load what each card reads (tags, the Action Text body for reading_time,
     # the featured_image attachment) to avoid an N+1 across the paginated rows.
     scope = scope.includes(:tags, :rich_text_body).with_attached_featured_image
+
+    # Featured post pick + list exclusion happen whenever the listing is
+    # unfiltered (no ?q, no ?tag_ids) — on EVERY page, not just page 1. This
+    # is deliberately decoupled from whether the spotlight *card* is actually
+    # rendered (see show_featured_post? below): the list scope must stay one
+    # coherent sequence across all pages, or pagy's page boundaries drift
+    # between requests. Concretely — before this fix, page 1 excluded the
+    # featured post (N-1 scope) while page 2+ did not (full N scope), so a
+    # post sitting at the page boundary rendered on BOTH pages. Prefers a post
+    # explicitly marked `featured`, falling back to the most recent visible
+    # post so the spotlight never goes empty. Same eager-loads as the list
+    # above: this is a fresh query against `visitor_scope`, not necessarily
+    # the same object as a row already loaded into @blog_posts, so it needs
+    # its own preload.
+    if unfiltered_listing?
+      featured_scope = visitor_scope.includes(:tags, :rich_text_body).with_attached_featured_image
+      @featured_post = featured_scope.where(featured: true).order(created_at: :desc).first ||
+                        featured_scope.order(created_at: :desc).first
+      # Exclude the spotlighted post from the list below it so it never
+      # duplicates as the first card — applied BEFORE pagy so the page count
+      # stays coherent with what's actually shown, on every page.
+      scope = scope.where.not(id: @featured_post.id) if @featured_post
+    end
+
     # Keep :position ordering so the Phase-1 drag-to-reorder stays meaningful.
     @pagy, @blog_posts = pagy(scope.order(:position))
   end
@@ -285,6 +313,28 @@ class BlogPostsController < ApplicationController
   def load_tags
     @all_tags = Tag.order(:name)
   end
+
+  # True whenever the index has no search/tag filter applied, regardless of
+  # page. Drives the featured-post pick + list exclusion in #index so that
+  # scope stays identical across every page of the unfiltered listing — a
+  # search or tag filter is the only thing allowed to change what set of
+  # posts is being paginated.
+  def unfiltered_listing?
+    params[:q].blank? && params[:tag_ids].blank?
+  end
+  helper_method :unfiltered_listing?
+
+  # True only on the plain, unfiltered index's first page — the featured
+  # spotlight *card* is a "front page" element, not part of the paginated or
+  # filtered list, so it disappears the moment either is active. Note this is
+  # narrower than unfiltered_listing?: @featured_post is still picked (and
+  # excluded from the list) on page 2+, it just isn't rendered as a card
+  # there — see the view, which gates the card on this method rather than on
+  # @featured_post's mere presence.
+  def show_featured_post?
+    unfiltered_listing? && (params[:page].blank? || params[:page].to_i <= 1)
+  end
+  helper_method :show_featured_post?
 
   def reorder_params
     params.permit(ids: [])

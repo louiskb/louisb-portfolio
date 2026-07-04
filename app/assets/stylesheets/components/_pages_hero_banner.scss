@@ -1,7 +1,19 @@
+// NOTE (Task 13, Depth Charge; updated Task 13b): terms_of_service and
+// privacy_policy no longer render this class — those two static pages moved
+// to the eyebrow + `.section-heading` pattern with `.navbar-clearance` for
+// top clearance (see `_design_system.scss`). Task 13b did the same for the
+// blog index and projects index: both now render a typographic
+// `.index-hero` masthead (see `_index_heroes.scss`) instead of `.banner`.
+// `.banner` itself is kept here because it is still the active
+// background/clearance styling for several not-yet-restyled views: the blog
+// post SHOW hero banner, the owner-only profile hero, the Devise auth
+// screens, and the blog/project CMS forms (new/edit). Deleting these rules
+// now would silently break those pages' navbar clearance (no test covers
+// this — it's pure CSS), so they stay until each of those views gets its own
+// restyle task and stops depending on `.banner`.
 .banner {
   background-size: cover;
   background-position: center;
-  // padding: 150px 0;
   padding: 200px 0;
 }
 

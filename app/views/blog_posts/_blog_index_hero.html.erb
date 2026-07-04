@@ -1,0 +1,25 @@
+<%# Blog index hero — typographic masthead (Task 13b). No background image or
+    scrim: the display type itself is the visual, echoing the homepage hero's
+    Bricolage 800 + Instrument Serif italic pairing (see
+    pages/_landing_hero_banner.html.erb). Shared styles live in
+    components/_index_heroes.scss (also used by the projects index hero). %>
+<div class="index-hero navbar-clearance">
+  <div class="container">
+    <p class="section-eyebrow">◆ Writing</p>
+    <h1 class="index-hero-headline">
+      <span class="index-hero-display">Practical</span>
+      <span class="index-hero-accent">tutorials.</span>
+    </h1>
+    <p class="index-hero-standfirst text-body-soft">
+      Explore practical tutorials and coding insights from my blog.
+    </p>
+    <% if user_signed_in? %>
+      <div class="index-hero-actions d-flex gap-3 flex-wrap">
+        <%= link_to "Create", new_blog_post_path, class: "btn btn-primary rounded-4 px-4 py-2" %>
+        <% if ai_configured? %>
+          <%= link_to "Create with AI", ai_new_blog_posts_path, class: "btn btn-outline-light rounded-4 px-4 py-2" %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

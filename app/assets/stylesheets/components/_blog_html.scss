@@ -6,3 +6,14 @@ pre code[style*="display:block"] {
 }
 
 // This rule pre code[style*="display:block"] selects <code> elements inside <pre> tags whose style attribute contains the substring "display:block" anywhere within it. The [style*="display:block"] is an attribute substring selector—the *= means "attribute value contains this text," matching HTML with inline style like style='display:block; padding:1rem; ...'.
+
+// AI-generated posts (BlogPostAiService) bake a light-theme inline
+// background/border straight into the <code> tag's style attribute. Inline
+// styles beat any stylesheet rule on specificity, so the .trix-content dark
+// retoken in _actiontext.scss can't reach it — without this override, AI
+// posts show a bright white code box on the dark page. !important is
+// necessary here specifically to win over that inline style.
+.trix-content pre code[style*="display:block"] {
+  background-color: rgb(11, 13, 18) !important;
+  border-color: $panel-border !important;
+}

@@ -1,70 +1,79 @@
 <!-- Projects index -->
 <header>
-  <%= render "projects_hero_banner" %>
+  <%= render "projects_index_hero" %>
 </header>
 <div class="container">
-  <main>
+  <main id="main-content">
     <section id="projects-index">
+      <% if @featured_project.present? %>
+        <%= render "featured_project", project: @featured_project %>
+      <% end %>
+
       <!-- Personal projects -->
-      <h2 class="mt-5 mb-4">My projects</h2>
+      <p class="section-eyebrow mt-5">◆ Personal</p>
+      <h2 class="section-heading mb-4">My projects</h2>
       <%# Owner-only drag-to-reorder: the sortable container holds only card items. %>
       <% personal_sortable = user_signed_in? ? { controller: "sortable", sortable_url_value: reorder_projects_path } : {} %>
-      <%= tag.div class: "row justify-content-start align-items-center", data: personal_sortable do %>
+      <%= tag.div class: "row justify-content-start align-items-stretch", data: personal_sortable do %>
         <% @personal_projects.each do |project| %>
-          <div class="col-12 col-md-6 col-lg-4 mb-2" data-id="<%= project.id %>">
-            <div class="card card-project shadow-sm rounded-4 mb-4">
-              <div class="card-body p-4">
+          <div class="col-12 col-md-6 col-lg-4 mb-4" data-id="<%= project.id %>">
+            <div class="glass-card glass-card--hover overflow-hidden h-100 d-flex flex-column">
+              <% if project.featured_image.attached? %>
+                <div class="ratio ratio-16x9">
+                  <%= image_tag project.featured_image, alt: "Project screenshot", class: "w-100 h-100", style: "object-fit: cover;" %>
+                </div>
+              <% elsif project.img_url.present? %>
+                <div class="ratio ratio-16x9">
+                  <%= image_tag project.img_url, alt: "Project screenshot", class: "w-100 h-100", style: "object-fit: cover;" %>
+                </div>
+              <% end %>
+              <div class="p-4 d-flex flex-column flex-grow-1">
                 <% if user_signed_in? %>
-                  <span class="drag-handle text-muted mb-2 d-inline-block" style="cursor: grab;" title="Drag to reorder">
+                  <span class="drag-handle text-soft-muted mb-2 d-inline-block" style="cursor: grab;" title="Drag to reorder">
                     <i class="fa-solid fa-grip-vertical"></i>
                   </span>
                 <% end %>
-                <h3 class="card-title fw-bold mb-2"><%= project.title %></h3>
-                <p class="card-text small text-muted mb-3">
+                <h3 class="project-card-title mb-2"><%= project.title %></h3>
+                <p class="text-body-soft mb-3">
                   <%= project.description.capitalize %>
                 </p>
-                <% if project.featured_image.attached? %>
-                  <%= image_tag project.featured_image, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-                <% elsif project.img_url.present? %>
-                  <%= image_tag project.img_url, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-                <% end %>
-                <p class="mb-4 text-secondary text-tech-stack">
+                <p class="project-tech-line mt-auto mb-3">
                   <%= project.tech_stack %>
                 </p>
                 <div class="d-flex justify-content-between align-items-center mt-2">
                   <% if project.private_repo %>
                     <% if user_signed_in? %>
                       <div class="d-flex justify-content-start align-items-start gap-2">
-                        <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                          <i class="fa-brands fa-github fs-3 text-dark"></i>
+                        <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
+                          <i class="fa-brands fa-github fs-3"></i>
                         <% end %>
-                        <p class="small text-dark">private</p>
+                        <p class="small text-soft-muted">private</p>
                       </div>
                     <% else %>
                       <div class="d-flex justify-content-start align-items-start gap-2">
-                        <i class="fa-brands fa-github fs-3 light-gray"></i>
-                        <p class="small light-gray">private</p>
+                        <i class="fa-brands fa-github fs-3 text-soft-muted"></i>
+                        <p class="small text-soft-muted">private</p>
                       </div>
                     <% end %>
                   <% else %>
-                    <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                      <i class="fa-brands fa-github fs-3 text-dark"></i>
+                    <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
+                      <i class="fa-brands fa-github fs-3"></i>
                     <% end %>
                   <% end %>
-                  <%= link_to project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" do %>
+                  <%= link_to project.project_url, class: "btn btn-outline-light outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" do %>
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
                   <% end %>
                 </div>
                 <!-- If user is signed-in show the 'Edit' button and if 'Project' is featured. -->
                 <% if user_signed_in? %>
-                  <div class="d-flex justify-content-between mt-4 mb-2">
+                  <div class="d-flex justify-content-between align-items-center mt-4">
                     <% if project.featured %>
-                      <p class="text-success small"><i class="fa-solid fa-eye"></i> Featured</p>
+                      <span class="chip chip--active"><i class="fa-solid fa-eye"></i> Featured</span>
                     <% else %>
-                      <p class="text-warning small"><i class="fa-solid fa-eye-slash"></i> Not Featured</p>
+                      <span class="chip chip--learning"><i class="fa-solid fa-eye-slash"></i> Not Featured</span>
                     <% end %>
-                    <%= link_to project_path(project), class: "btn btn-secondary rounded-4" do %>
-                      <i class="fa-solid fa-pen-to-square fs-5"></i>
+                    <%= link_to project_path(project), class: "btn btn-outline-light btn-sm rounded-4" do %>
+                      <i class="fa-solid fa-pen-to-square"></i>
                     <% end %>
                   </div>
                 <% end %>
@@ -75,64 +84,69 @@
       <% end %>
       <hr class="mt-5 mb-3">
       <!-- Open source project contributions-->
-      <h2 class="mt-5 mb-4">Open source contributions</h2>
+      <p class="section-eyebrow mt-5">◆ Open Source</p>
+      <h2 class="section-heading mb-4">Open source contributions</h2>
       <% open_source_sortable = user_signed_in? ? { controller: "sortable", sortable_url_value: reorder_projects_path } : {} %>
-      <%= tag.div class: "row justify-content-start align-items-center", data: open_source_sortable do %>
+      <%= tag.div class: "row justify-content-start align-items-stretch", data: open_source_sortable do %>
         <% @open_source_projects.each do |project| %>
-          <div class="col-12 col-md-6 col-lg-4 mb-2" data-id="<%= project.id %>">
-            <div class="card card-project shadow-sm rounded-4 mb-4">
-              <div class="card-body p-4">
+          <div class="col-12 col-md-6 col-lg-4 mb-4" data-id="<%= project.id %>">
+            <div class="glass-card glass-card--hover overflow-hidden h-100 d-flex flex-column">
+              <% if project.featured_image.attached? %>
+                <div class="ratio ratio-16x9">
+                  <%= image_tag project.featured_image, alt: "Open source project screenshot", class: "w-100 h-100", style: "object-fit: cover;" %>
+                </div>
+              <% elsif project.img_url.present? %>
+                <div class="ratio ratio-16x9">
+                  <%= image_tag project.img_url, alt: "Open source project screenshot", class: "w-100 h-100", style: "object-fit: cover;" %>
+                </div>
+              <% end %>
+              <div class="p-4 d-flex flex-column flex-grow-1">
                 <% if user_signed_in? %>
-                  <span class="drag-handle text-muted mb-2 d-inline-block" style="cursor: grab;" title="Drag to reorder">
+                  <span class="drag-handle text-soft-muted mb-2 d-inline-block" style="cursor: grab;" title="Drag to reorder">
                     <i class="fa-solid fa-grip-vertical"></i>
                   </span>
                 <% end %>
-                <h3 class="card-title fw-bold mb-2"><%= project.title %></h3>
-                <p class="card-text small text-muted mb-3">
+                <h3 class="project-card-title mb-2"><%= project.title %></h3>
+                <p class="text-body-soft mb-3">
                   <%= project.description.capitalize %>
                 </p>
-                <% if project.featured_image.attached? %>
-                  <%= image_tag project.featured_image, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-                <% elsif project.img_url.present? %>
-                  <%= image_tag project.img_url, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-                <% end %>
-                <p class="mb-4 text-secondary text-tech-stack">
+                <p class="project-tech-line mt-auto mb-3">
                   <%= project.tech_stack %>
                 </p>
                 <div class="d-flex justify-content-between align-items-center mt-2">
                   <% if project.private_repo %>
                     <% if user_signed_in? %>
                       <div class="d-flex justify-content-start align-items-start gap-2">
-                        <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                          <i class="fa-brands fa-github fs-3 text-dark"></i>
+                        <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
+                          <i class="fa-brands fa-github fs-3"></i>
                         <% end %>
-                        <p class="small text-dark">private</p>
+                        <p class="small text-soft-muted">private</p>
                       </div>
                     <% else %>
                       <div class="d-flex justify-content-start align-items-start gap-2">
-                        <i class="fa-brands fa-github fs-3 light-gray"></i>
-                        <p class="small light-gray">private</p>
+                        <i class="fa-brands fa-github fs-3 text-soft-muted"></i>
+                        <p class="small text-soft-muted">private</p>
                       </div>
                     <% end %>
                   <% else %>
-                    <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                      <i class="fa-brands fa-github fs-3 text-dark"></i>
+                    <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
+                      <i class="fa-brands fa-github fs-3"></i>
                     <% end %>
                   <% end %>
-                  <%= link_to project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" do %>
+                  <%= link_to project.project_url, class: "btn btn-outline-light outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" do %>
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> View Project
                   <% end %>
                 </div>
                 <!-- If user is signed-in show the 'Edit' button and if 'Project' is featured. -->
                 <% if user_signed_in? %>
-                  <div class="d-flex justify-content-between mt-4 mb-2">
+                  <div class="d-flex justify-content-between align-items-center mt-4">
                     <% if project.featured %>
-                      <p class="text-success small"><i class="fa-solid fa-eye"></i> Featured</p>
+                      <span class="chip chip--active"><i class="fa-solid fa-eye"></i> Featured</span>
                     <% else %>
-                      <p class="text-warning small"><i class="fa-solid fa-eye-slash"></i> Not Featured</p>
+                      <span class="chip chip--learning"><i class="fa-solid fa-eye-slash"></i> Not Featured</span>
                     <% end %>
-                    <%= link_to project_path(project), class: "btn btn-secondary rounded-4" do %>
-                      <i class="fa-solid fa-pen-to-square fs-5"></i>
+                    <%= link_to project_path(project), class: "btn btn-outline-light btn-sm rounded-4" do %>
+                      <i class="fa-solid fa-pen-to-square"></i>
                     <% end %>
                   </div>
                 <% end %>
