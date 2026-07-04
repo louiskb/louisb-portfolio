@@ -23,6 +23,9 @@
 // Anchor jumps must clear the fixed navbar.
 section[id] { scroll-margin-top: 90px; }
 
+// Pages without a full-viewport hero need clearance under the fixed navbar.
+.navbar-clearance { padding-top: 140px; }
+
 // Glass panel card — blur + faint border; solid fallback color first so
 // browsers without backdrop-filter still get a readable panel.
 .glass-card {

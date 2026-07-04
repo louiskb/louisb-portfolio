@@ -1,7 +1,17 @@
+// NOTE (Task 13, Depth Charge): terms_of_service and privacy_policy no longer
+// render this class — those two static pages moved to the eyebrow +
+// `.section-heading` pattern with `.navbar-clearance` for top clearance (see
+// `_design_system.scss`). `.banner` itself is kept here because it is still
+// the active background/clearance styling for several not-yet-restyled
+// views on this branch and later phases: the blog index/show hero banners,
+// the projects index hero, the owner-only profile hero, the Devise auth
+// screens, and the blog/project CMS forms. Deleting these rules now would
+// silently break those pages' navbar clearance (no test covers this — it's
+// pure CSS), so they stay until each of those views gets its own restyle
+// task (Phase 3/4) and stops depending on `.banner`.
 .banner {
   background-size: cover;
   background-position: center;
-  // padding: 150px 0;
   padding: 200px 0;
 }
 

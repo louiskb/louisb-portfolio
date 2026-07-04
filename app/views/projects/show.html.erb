@@ -1,10 +1,10 @@
 <!-- Project show -->
 <div class="container">
   <main id="main-content">
-    <%# padding-top clears the fixed navbar — this page has no hero banner
+    <%# navbar-clearance clears the fixed navbar — this page has no hero banner
         above it (unlike blog show), so the section itself must supply the
         clearance that would otherwise come from the banner's own padding. %>
-    <section class="project-show" style="max-width: 720px; margin-inline: auto; padding-top: 140px;">
+    <section class="project-show navbar-clearance" style="max-width: 720px; margin-inline: auto;">
       <p class="section-eyebrow">◆ <%= @project.personal_project ? "Personal Project" : "Open Source Contribution" %></p>
       <h1 class="section-heading mb-4"><%= @project.title %></h1>
 
