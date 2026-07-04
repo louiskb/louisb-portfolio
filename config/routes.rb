@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
 
-  devise_for :users
+  # Registrations are routed to a guard controller that refuses sign-up
+  # outright (see Users::RegistrationsController) — the single owner account
+  # is created by db:seed, never through the web. edit/update stay live.
+  devise_for :users, controllers: { registrations: "users/registrations" }
 
   root to: "pages#home"
 

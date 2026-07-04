@@ -61,6 +61,9 @@ gem "ruby_llm"
 # Contact-form spam protection
 gem "invisible_captcha"
 
+# Request throttling - rate-limits login attempts (see config/initializers/rack_attack.rb)
+gem "rack-attack"
+
 # Cookieless, visitor-only product analytics
 gem "posthog-ruby", "~> 3.6"
 gem "posthog-rails", "~> 3.6"
