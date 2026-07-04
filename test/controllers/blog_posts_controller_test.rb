@@ -739,4 +739,16 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 10, b.reload.position
     assert_equal 11, a.reload.position
   end
+
+  test "show falls back to the site-wide meta description when a post has no excerpt or description" do
+    post = BlogPost.create!(title: "Bare Post", user: users(:louis), status: :published)
+
+    get blog_post_url(post)
+    assert_response :success
+    # content_for(:meta_description, "") stores an EMPTY string, which would
+    # beat the || fallback in the layout — .presence in the layout guards this.
+    assert_select "meta[name=description]" do |metas|
+      assert metas.first["content"].present?, "meta description must fall back, not render empty"
+    end
+  end
 end

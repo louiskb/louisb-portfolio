@@ -11,7 +11,10 @@
         projects set one from their own content; everything else gets this
         site-wide default. theme-color paints mobile browser chrome (address
         bar) in the site's space-black instead of default white. %>
-    <meta name="description" content="<%= content_for(:meta_description) || "Louis Bourne — full-stack developer building production Ruby on Rails products from Thailand. Portfolio, projects, and an AI-assisted dev blog." %>">
+    <%# .presence turns a BLANK override into nil so the default still wins —
+        content_for(:x, "") stores an empty string, and "" || default returns
+        "" in Ruby (only nil/false are falsy). %>
+    <meta name="description" content="<%= content_for(:meta_description).presence || "Louis Bourne — full-stack developer building production Ruby on Rails products from Thailand. Portfolio, projects, and an AI-assisted dev blog." %>">
     <meta name="theme-color" content="#040507">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
