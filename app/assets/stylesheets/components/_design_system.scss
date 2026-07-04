@@ -89,6 +89,15 @@ section[id] { scroll-margin-top: 90px; }
   color: $sky-blue;
 }
 
+// Keyboard focus ring for those same tag-filter pills: the checkbox inside is
+// visually-hidden, so without this a keyboard user tabbing the filters gets no
+// visible indication of where they are. :focus-visible (not :focus) keeps the
+// ring off mouse clicks.
+.chip:has(:focus-visible) {
+  outline: 2px solid $sky-blue;
+  outline-offset: 2px;
+}
+
 // Education timeline row: mono year column | detail column.
 .timeline-row {
   display: grid;

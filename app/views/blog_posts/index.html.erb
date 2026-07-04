@@ -6,11 +6,20 @@
   <main id="main-content">
     <section id="blog-posts-index">
       <p class="section-eyebrow mt-5">◆ All Posts</p>
+      <%# Visually-hidden h2 keeps the heading hierarchy intact (h1 in the hero
+          → h2 here → h3 post cards) without altering the eyebrow-only design.
+          Without it, filtered/searched pages jumped straight from h1 to h3. %>
+      <h2 class="visually-hidden">All posts</h2>
 
       <%# ===== SEARCH + TAG FILTER ===== %>
+      <%# This GET filter form deliberately uses form_with, not simple_form_for:
+          it has no model object — it only reflects params into the URL. %>
       <%= form_with url: blog_posts_path, method: :get,
             data: { controller: "blog-filter", turbo_action: "replace" } do |f| %>
         <div class="mb-3 position-relative">
+          <%# A placeholder is not a label — it disappears on input and isn't
+              reliably announced by assistive tech, hence the hidden label. %>
+          <%= f.label :q, "Search posts by title", class: "visually-hidden" %>
           <%= f.search_field :q, value: params[:q],
                 placeholder: "Search posts by title…",
                 class: "form-control rounded-4",
@@ -64,10 +73,16 @@
                   <h3 class="project-card-title mb-3"><%= blog_post.title %></h3>
                 <% end %>
 
+                <%# .ratio reserves the thumbnail's box before the image loads
+                    (no layout shift), matching the projects-index card pattern. %>
                 <% if blog_post.featured_image.attached? %>
-                  <%= image_tag blog_post.featured_image, alt: blog_post.title, class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                  <div class="ratio ratio-16x9 mb-3">
+                    <%= image_tag blog_post.featured_image, alt: blog_post.title, class: "rounded-4 border border-secondary w-100 h-100", style: "object-fit: cover;", loading: "lazy" %>
+                  </div>
                 <% elsif blog_post.img_url.present? %>
-                  <%= image_tag blog_post.img_url, alt: blog_post.title, class: "img-fluid rounded-4 mb-3 border border-secondary" %>
+                  <div class="ratio ratio-16x9 mb-3">
+                    <%= image_tag blog_post.img_url, alt: blog_post.title, class: "rounded-4 border border-secondary w-100 h-100", style: "object-fit: cover;", loading: "lazy" %>
+                  </div>
                 <% end %>
 
                 <p class="project-tech-line mb-2">

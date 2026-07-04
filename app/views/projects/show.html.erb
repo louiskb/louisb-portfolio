@@ -1,4 +1,8 @@
 <!-- Project show -->
+<%# Per-project meta description for search results (see layout head). %>
+<% if @project.description.present? %>
+  <% content_for :meta_description, strip_tags(@project.description).truncate(160) %>
+<% end %>
 <div class="container">
   <main id="main-content">
     <%# navbar-clearance clears the fixed navbar — this page has no hero banner

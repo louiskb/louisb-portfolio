@@ -16,6 +16,18 @@ html {
   width: 100%;
 }
 
+// color-scheme tells the browser this page is dark-only, so native UI the
+// theme can't reach (scrollbars, form-control chrome, date pickers) renders
+// dark instead of clashing white.
 html {
-  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+// Smooth anchor scrolling is an animation like any other — users who set
+// prefers-reduced-motion get instant jumps, matching how every JS animation
+// in the app (count-up, scroll-reveal, black hole) already gates itself.
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }

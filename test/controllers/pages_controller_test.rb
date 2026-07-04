@@ -99,4 +99,16 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "AI-assisted", "terms must disclose AI-assisted content"
   end
+
+  # ---- Layout head regression tests (2026-07-04 audit sweep) ----
+
+  test "layout declares the page language and a meta description" do
+    get root_url
+    assert_response :success
+    assert_select "html[lang=en]"
+    assert_select "meta[name=description]" do |metas|
+      assert metas.first["content"].present?, "meta description must not be empty"
+    end
+    assert_select "meta[name=theme-color]"
+  end
 end
