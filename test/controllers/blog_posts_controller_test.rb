@@ -59,15 +59,23 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     get blog_posts_url
     assert_response :success
     # Scoped to the card grid, not the whole body: "Paginated Post 11" is the
-    # most recently created post here, so it may legitimately also appear
-    # above the grid as the featured spotlight (Task 13b) — that's expected,
-    # not a pagination bug. The grid itself must still stop at position 8.
+    # most recently created post here, so it's picked as the featured
+    # spotlight (Task 13b) and excluded from the grid — that's expected, not
+    # a pagination bug. The grid itself must still stop at position 8.
     assert_select "#blog-posts-index .row .project-card-title", text: "Paginated Post 00"
     assert_select "#blog-posts-index .row .project-card-title", text: "Paginated Post 11", count: 0
 
     get blog_posts_url(page: 2)
     assert_response :success
-    assert_includes response.body, "Paginated Post 11"
+    # The featured pick is excluded from the list scope on EVERY page (not
+    # just page 1) so the underlying scope stays one coherent sequence across
+    # pages — see the cross-page-duplicate regression test below. "Paginated
+    # Post 11" therefore stays excluded here too: it never resurfaces on
+    # page 2, and the spotlight card itself doesn't render past page 1
+    # either (show_featured_post?), so it's absent from the response
+    # entirely.
+    assert_not_includes response.body, "Paginated Post 11"
+    assert_includes response.body, "Paginated Post 10"
   end
 
   test "index eager-loads tags so the post list is not an N+1" do
@@ -226,6 +234,47 @@ class BlogPostsControllerTest < ActionDispatch::IntegrationTest
     get blog_posts_url(page: 2)
     assert_response :success
     assert_select "#featured-post", false
+  end
+
+  test "index list scope stays page-stable when the spotlight is active (no cross-page duplicate)" do
+    # Regression for the bug fixed alongside Task 13b: the featured-post
+    # exclusion was gated on show_featured_post?, which is false on page 2.
+    # That meant page 1 queried an N-1 scope (spotlight excluded) while page 2
+    # queried the full N scope — two different pagination universes — so a
+    # post sitting at the page boundary rendered on BOTH pages. Same fixture
+    # shape as "index shows no featured card on page 2": a featured post at
+    # position 0 plus 12 filler posts at positions 1..12, split across pages
+    # by the fixed 9-per-page limit.
+    BlogPost.create!(
+      title: "Featured Cross Page",
+      html_content: "<p>Featured body.</p>",
+      user: users(:louis),
+      status: :published,
+      featured: true,
+      position: 0
+    )
+    12.times do |i|
+      BlogPost.create!(
+        title: format("Filler Post %02d", i),
+        html_content: "<p>Body #{i}.</p>",
+        user: users(:louis),
+        status: :published,
+        position: i + 1
+      )
+    end
+
+    get blog_posts_url
+    assert_response :success
+    page_one_titles = css_select("#blog-posts-index .row .project-card-title").map(&:text)
+
+    get blog_posts_url(page: 2)
+    assert_response :success
+    page_two_titles = css_select("#blog-posts-index .row .project-card-title").map(&:text)
+
+    overlap = page_one_titles & page_two_titles
+    assert_empty overlap,
+      "the list scope must stay page-stable while the spotlight is active — " \
+      "found #{overlap.inspect} rendered on both page 1 and page 2"
   end
 
   test "creating a manual rich-text post (body, no html_content) saves and renders" do

@@ -42,7 +42,7 @@
       <%# Owner-only drag-to-reorder: the sortable container holds only card items. %>
       <% sortable_data = user_signed_in? ? { controller: "sortable", sortable_url_value: reorder_blog_posts_path } : {} %>
 
-      <% if @featured_post.present? %>
+      <% if show_featured_post? && @featured_post.present? %>
         <%= render "featured_post", post: @featured_post %>
       <% end %>
 
