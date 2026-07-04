@@ -1,106 +1,98 @@
-<!-- Featured projects -->
-<section id="featured-projects">
-  <div class="container">
-    <div class="row justify-content-start align-items-center">
-      <!-- Personal projects -->
-      <h2 class="mt-5 mb-4">Featured projects</h2>
+<%#
+  Featured projects — Depth Charge restyle (Task 8). Personal projects render
+  first as horizontal glass cards (thumbnail + title + description + tech
+  stack + links), then open-source contributions below their own group
+  label. project.title.capitalize is load-bearing: a controller test renders
+  a draft project and asserts on this exact string, so keep the .capitalize
+  call even though it looks redundant on already-capitalized titles.
+%>
+<section id="featured-projects" class="sec justify-content-end"
+         data-sec data-role="work" data-ax="0.34" data-label="Featured Projects">
+  <div class="section-inner" style="max-width: 640px;">
+    <p class="section-eyebrow">◆ Selected Work</p>
+    <h2 class="section-heading mb-4">Featured projects.</h2>
+
+    <% if @personal_projects.present? %>
+      <p class="mono-label">Personal</p>
       <% @personal_projects.each do |project| %>
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="card card-project shadow-sm rounded-4 mb-4">
-            <div class="card-body p-4">
-              <h3 class="card-title fw-bold mb-2"><%= project.title.capitalize %></h3>
-              <p class="card-text small text-muted mb-3">
-                <%= project.description %>
-              </p>
-              <%= image_tag project.img_url, alt: "Project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-              <!-- <p class="mb-4 text-secondary text-tech-stack">
-              Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
-            </p> -->
-              <p class="mb-4 text-secondary text-tech-stack">
-                <%= project.tech_stack %>
-              </p>
-              <div class="d-flex justify-content-between align-items-center mt-2">
-                <% if project.private_repo %>
-                  <% if user_signed_in? %>
-                    <div class="d-flex justify-content-start align-items-start gap-2">
-                      <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                        <i class="fa-brands fa-github fs-3 text-dark"></i>
-                      <% end %>
-                      <p class="small text-dark">private</p>
-                    </div>
-                  <% else %>
-                    <div class="d-flex justify-content-start align-items-start gap-2">
-                      <i class="fa-brands fa-github fs-3 light-gray"></i>
-                      <p class="small light-gray">private</p>
-                    </div>
+        <div class="glass-card glass-card--hover p-3 d-flex gap-3 mb-3">
+          <% if project.featured_image.attached? %>
+            <%= image_tag project.featured_image, alt: project.title, class: "project-thumb" %>
+          <% elsif project.img_url.present? %>
+            <%= image_tag project.img_url, alt: project.title, class: "project-thumb" %>
+          <% end %>
+          <div class="d-flex flex-column">
+            <h3 class="project-card-title"><%= project.title.capitalize %></h3>
+            <p class="text-body-soft mb-2"><%= project.description %></p>
+            <div class="mt-auto project-tech-line mb-2"><%= project.tech_stack %></div>
+            <div class="d-flex align-items-center gap-3">
+              <% if project.private_repo %>
+                <% if user_signed_in? %>
+                  <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
+                    <i class="fa-brands fa-github fs-5"></i>
                   <% end %>
+                  <span class="text-soft-muted small">private</span>
                 <% else %>
-                  <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                    <i class="fa-brands fa-github fs-3 text-dark"></i>
-                  <% end %>
+                  <i class="fa-brands fa-github fs-5 text-soft-muted"></i>
+                  <span class="text-soft-muted small">private</span>
                 <% end %>
-                <%= link_to project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" do %>
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+              <% else %>
+                <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
+                  <i class="fa-brands fa-github fs-5"></i>
                 <% end %>
-              </div>
+              <% end %>
+              <%= link_to project.project_url, class: "gray-link text-decoration-none", target: "_blank", rel: "noopener" do %>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+              <% end %>
             </div>
           </div>
         </div>
       <% end %>
-    </div>
-    <div>
-      <%= link_to "See more projects...", projects_path, class: "text-decoration-none fs-5" %>
-    </div>
-    <hr class="my-5">
-    <!-- Open source project contributions-->
-    <div class="row justify-content-center align-items-top">
+      <%= link_to "See more projects...", projects_path, class: "gray-link text-decoration-none fs-5 d-inline-block mt-2 mb-4" %>
+    <% end %>
+
+    <% if @open_source_projects.present? %>
+      <p class="mono-label mt-4">Open source</p>
+      <p class="text-body-soft mb-3">
+        Setup <%= link_to "Storybook", "https://storybook.js.org/", class: "gray-link text-decoration-none", target: "_blank", rel: "noopener" %>
+        for Find a Doc Japan (an open-source project) and built out an initial set of components for the
+        design system, conducted snapshot testing with <span class="fst-italic">Jest</span> and
+        <span class="fst-italic">Vitest</span> while collaborating with developers worldwide.
+      </p>
       <% @open_source_projects.each do |project| %>
-        <div class="col-12 col-md-6">
-          <h2 class="text-start mb-3">Open source contributions</h2>
-          <h4 class="text-start mb-5">Setup <%= link_to "Storybook", "https://storybook.js.org/", class: "text-decoration-none", target: "_blank", rel: "noopener" %> for Find a Doc Japan (an open-source project) and built out an initial set of components for the design system, conducted snapshot testing with <span class="fst-italic">Jest</span> and <span class="fst-italic">Vitest</span> while collaborating with developers worldwide.</h4>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="card card-project shadow-sm rounded-4 mb-4">
-            <div class="card-body p-4">
-              <h3 class="card-title fw-bold mb-2"><%= project.title.capitalize %></h3>
-              <p class="card-text small text-muted mb-3">
-                <%= project.description %>
-              </p>
-              <%= image_tag project.img_url, alt: "Open source project screenshot", class: "img-fluid rounded-4 mb-3 border border-secondary" %>
-              <!-- <p class="mb-4 text-secondary text-tech-stack">
-              Ruby-on-Rails &nbsp;.&nbsp; JavaScript &nbsp;.&nbsp; Ruby &nbsp;.&nbsp; PostgreSQL
-            </p> -->
-              <p class="mb-4 text-secondary text-tech-stack">
-                <%= project.tech_stack %>
-              </p>
-              <div class="d-flex justify-content-between align-items-center mt-2">
-                <% if project.private_repo %>
-                  <% if user_signed_in? %>
-                    <div class="d-flex justify-content-start align-items-start gap-2">
-                      <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                        <i class="fa-brands fa-github fs-3 text-dark"></i>
-                      <% end %>
-                      <p class="small text-dark">private</p>
-                    </div>
-                  <% else %>
-                    <div class="d-flex justify-content-start align-items-start gap-2">
-                      <i class="fa-brands fa-github fs-3 light-gray"></i>
-                      <p class="small light-gray">private</p>
-                    </div>
+        <div class="glass-card glass-card--hover p-3 d-flex gap-3 mb-3">
+          <% if project.featured_image.attached? %>
+            <%= image_tag project.featured_image, alt: project.title, class: "project-thumb" %>
+          <% elsif project.img_url.present? %>
+            <%= image_tag project.img_url, alt: project.title, class: "project-thumb" %>
+          <% end %>
+          <div class="d-flex flex-column">
+            <h3 class="project-card-title"><%= project.title.capitalize %></h3>
+            <p class="text-body-soft mb-2"><%= project.description %></p>
+            <div class="mt-auto project-tech-line mb-2"><%= project.tech_stack %></div>
+            <div class="d-flex align-items-center gap-3">
+              <% if project.private_repo %>
+                <% if user_signed_in? %>
+                  <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
+                    <i class="fa-brands fa-github fs-5"></i>
                   <% end %>
+                  <span class="text-soft-muted small">private</span>
                 <% else %>
-                  <%= link_to project.github_url, class: "btn btn-link github-btn p-0", target: "_blank", rel: "noopener" do %>
-                    <i class="fa-brands fa-github fs-3 text-dark"></i>
-                  <% end %>
+                  <i class="fa-brands fa-github fs-5 text-soft-muted"></i>
+                  <span class="text-soft-muted small">private</span>
                 <% end %>
-                <%= link_to project.project_url, class: "btn btn-outline-dark outline-d-btn rounded-4 px-4 py-2 fw-medium", target: "_blank", rel: "noopener" do %>
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i> View Project
+              <% else %>
+                <%= link_to project.github_url, class: "gray-link github-btn text-decoration-none", target: "_blank", rel: "noopener" do %>
+                  <i class="fa-brands fa-github fs-5"></i>
                 <% end %>
-              </div>
+              <% end %>
+              <%= link_to project.project_url, class: "gray-link text-decoration-none", target: "_blank", rel: "noopener" do %>
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> View Project
+              <% end %>
             </div>
           </div>
         </div>
       <% end %>
-    </div>
+    <% end %>
   </div>
 </section>

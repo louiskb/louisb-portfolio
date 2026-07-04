@@ -1,14 +1,25 @@
-<!-- Portfolio home -->
-<header>
-  <%= render "landing_hero_banner" %>
-</header>
-<main>
-  <%= render "featured_projects" %>
-  <%= render "by_the_numbers" %>
-  <%= render "demo_day" %>
-  <%= render "tech_stack" %>
-  <%= render "related_skills" %>
-  <%= render "education" %>
-  <%= render "about_me" %>
-  <%= render "contact" %>
-</main>
+<%# Portfolio home — the Depth Charge single-page scroll scene. One fixed
+    canvas renders the black hole behind every section; each section carries
+    data-sec attributes the engine's depth camera reads. %>
+<div class="bh-scene"
+     data-controller="black-hole"
+     data-black-hole-intensity-value="70"
+     data-black-hole-animate-value="true"
+     data-black-hole-starfield-value="true">
+  <canvas class="black-hole-canvas" data-black-hole-target="canvas"></canvas>
+
+  <header>
+    <%= render "landing_hero_banner" %>
+  </header>
+  <main id="main-content">
+    <%= render "featured_projects" %>
+    <%= render "by_the_numbers" %>
+    <%= render "demo_day" %>
+    <%= render "tech_stack" %>
+    <%= render "related_skills" %>
+    <%= render "education" %>
+    <%= render "about_me" %>
+    <%= render "latest_posts" %>
+    <%= render "contact" %>
+  </main>
+</div>

@@ -1,5 +1,19 @@
 // Specific CSS for your home-page
 
+// Small mono uppercase label used for sub-groupings inside a Depth Charge
+// section — tech-stack's "What I know"/"Learning" and featured-projects'
+// "Personal"/"Open source" group headers. Same family as .section-eyebrow
+// (Task 2) but smaller and unaccented, since it's a secondary label rather
+// than the section's headline eyebrow.
+.mono-label {
+  font-family: $mono-font;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: $text-muted;
+  margin-bottom: 12px;
+}
+
 // ===== SCROLL-REVEAL ANIMATIONS =====
 // scroll_reveal_controller.js adds .reveal-visible when the section enters the
 // viewport. All of this is gated behind prefers-reduced-motion: no-preference,

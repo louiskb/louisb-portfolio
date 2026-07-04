@@ -1,0 +1,15 @@
+// Fixed full-viewport canvas behind the homepage sections.
+.black-hole-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  display: block;
+}
+
+// The homepage scroll scene: content layers above the fixed canvas.
+.bh-scene {
+  position: relative;
+  overflow-x: hidden;
+}

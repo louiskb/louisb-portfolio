@@ -47,11 +47,45 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "[data-count-up-target-value='#{stats[:technologies_count]}']"
   end
 
+  test "home renders the black-hole scene wiring" do
+    get root_path
+    assert_select "[data-controller='black-hole']", 1
+    assert_select "canvas[data-black-hole-target='canvas']", 1
+    # Skip-link target from the layout must exist on the page.
+    assert_select "main#main-content", 1
+  end
+
   test "home renders a semantic footer element (black-hole end anchor)" do
     get root_path
     # The canvas engine parks the hole between the contact form and the
     # footer at the end of scroll — it needs a real <footer> element.
     assert_select "footer", 1
+  end
+
+  test "home shows up to three latest published posts and never drafts" do
+    get root_path
+    assert_select "section#latest-posts" do
+      # Only published posts may appear, newest first, max 3.
+      assert_select ".latest-post-card", { maximum: 3 }
+    end
+    draft_titles = BlogPost.where.not(status: :published).pluck(:title)
+    draft_titles.each { |title| assert_no_match title, response.body }
+  end
+
+  test "home hides drafts in latest posts even for the signed-in owner" do
+    sign_in users(:louis)
+    get root_path
+    draft_titles = BlogPost.where.not(status: :published).pluck(:title)
+    draft_titles.each { |title| assert_no_match title, response.body }
+  end
+
+  test "home sections carry the depth-camera data attributes" do
+    get root_path
+    # 10 sections: hero, work, numbers, demo, stack, background, education,
+    # about, blog (2 published fixture posts exist), contact.
+    assert_select "[data-sec]", 10
+    assert_select "[data-sec][data-role][data-ax]", 10
+    assert_select "#contact form", 1 # engine end-anchor contract
   end
 
   test "privacy_policy is public and renders" do

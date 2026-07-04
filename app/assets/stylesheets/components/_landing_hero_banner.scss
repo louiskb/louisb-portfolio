@@ -1,49 +1,58 @@
+// Hero — Depth Charge. A radial scrim keeps the headline readable over the
+// black-hole canvas without hiding it.
 #hero-banner {
-  width: 100%;
-  height: 100vh; // Full viewport height
-  // background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
-  //   image-url("black-hole-3-zoom-out-s.jpg"); // Original background-image settings.
-  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)),
-    image-url("black-hole-3-zoom-out-s.jpg");
-  background-size: cover;
-  background-position: center;
-  position: relative;
-}
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(90% 120% at 22% 50%, rgba(4, 5, 7, 0.8) 4%, rgba(4, 5, 7, 0) 62%);
+  }
 
-.chevron-scroll {
-  position: absolute;
-  left: 50%;
-  bottom: 30px;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0);
-  z-index: 10;
-}
+  .hero-content { max-width: 620px; position: relative; z-index: 1; }
 
-.chevron-scroll a {
-  color: #f5f5f5;
-  font-size: 1.55rem;
-  transition: transform 0.3s, color 0.2s;
-  display: block;
-}
+  .hero-kicker {
+    font-family: $mono-font;
+    font-size: 12.5px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: $text-muted;
+  }
 
-.chevron-scroll a:hover,
-.chevron-scroll a:focus {
-  color: #bebebe;
-  transform: scale(1.2);
-}
+  .hero-headline { margin: 20px 0 0; color: $text-bright; }
 
-// Demo day section
-.bg-waves-1 {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)),
-    image-url("abstract-waves-purple.jpg");
-  background-size: cover;
-  background-position: center;
-}
+  // Morph targets get fixed metrics so text scrambling never reflows.
+  .hero-word-display {
+    display: block;
+    font-family: $headers-font;
+    font-weight: 800;
+    font-size: clamp(3rem, 9vw, 132px);
+    line-height: 0.86;
+    letter-spacing: -0.045em;
+  }
 
-// About me section
-.bg-waves-2 {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)),
-    image-url("abstract-waves.jpg");
-  background-size: cover;
-  background-position: center;
+  .hero-word-accent {
+    display: block;
+    font-family: $accent-font;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(3.2rem, 9.5vw, 138px);
+    line-height: 0.82;
+    letter-spacing: -0.01em;
+    color: #e9f0ff;
+    margin-top: 2px;
+  }
+
+  .hero-sub { margin-top: 26px; font-size: 18px; max-width: 470px; min-height: 56px; }
+
+  .hero-social a { color: $text-muted; font-size: 18px; transition: color 0.2s; &:hover { color: $text-bright; } }
+
+  .hero-hint {
+    margin-top: 24px;
+    font-family: $mono-font;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #5a6572;
+  }
 }
