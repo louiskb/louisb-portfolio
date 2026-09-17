@@ -4,6 +4,9 @@ ruby "3.3.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.2"
+# json 3.0 (2026-09-07) breaks Rails 8.1.x session cookies (JSON.parse options became keyword-only), so
+# every sign-in/sign-up 500s. Remove once the Rails version above includes rails/rails#58601.
+gem "json", "< 3"
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
