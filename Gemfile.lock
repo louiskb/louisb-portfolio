@@ -408,6 +408,7 @@ DEPENDENCIES
   importmap-rails
   invisible_captcha
   jbuilder
+  json (< 3)
   pagy (~> 43.3)
   pg (~> 1.1)
   posthog-rails (~> 3.6)
